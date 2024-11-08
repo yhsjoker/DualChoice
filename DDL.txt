@@ -1,6 +1,4 @@
--- Database creation
-CREATE DATABASE DualChoice;
-USE DualChoice;
+-- Database dcdb
 
 -- Academic Leader Table
 CREATE TABLE AcademicLeader (
