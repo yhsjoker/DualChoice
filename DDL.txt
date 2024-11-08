@@ -1,161 +1,147 @@
 -- Database dcdb
 
--- Academic Leader Table
-CREATE TABLE AcademicLeader (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50),
-    CollegeID INT,
-    GraduateSecretaryID INT,
-    FOREIGN KEY (CollegeID) REFERENCES College(ID),
-    FOREIGN KEY (GraduateSecretaryID) REFERENCES GraduateSecretary(ID)
+CREATE TABLE DisciplineHead (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    college_id INT,
+    graduate_management_secretary_id INT,
+    FOREIGN KEY (college_id) REFERENCES College(id),
+    FOREIGN KEY (graduate_management_secretary_id) REFERENCES GraduateManagementSecretary(id)
 );
 
--- Mentor Table
-CREATE TABLE Mentor (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50),
-    Phone VARCHAR(20),
-    Qualification VARCHAR(50),
-    Image BLOB,
-    Email VARCHAR(100),
-    Title VARCHAR(50),
-    Bio TEXT,
-    AcademicQuota INT,
-    ProfessionalQuota INT,
-    DirectPhDQuota INT,
-    VolunteerRound INT,
-    AcademicLeaderID INT,
-    FOREIGN KEY (AcademicLeaderID) REFERENCES AcademicLeader(ID)
-);
-
--- Selection Table
-CREATE TABLE Selection (
-    MentorID INT,
-    CandidateID INT,
-    Type VARCHAR(50),
-    Priority INT,
-    FOREIGN KEY (MentorID) REFERENCES Mentor(ID),
-    FOREIGN KEY (CandidateID) REFERENCES Candidate(ID)
-);
-
--- Candidate Table
-CREATE TABLE Candidate (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50),
-    Phone VARCHAR(20),
-    EmergencyPhone VARCHAR(20),
-    Email VARCHAR(100),
-    UndergradMajor VARCHAR(50),
-    UndergradSchool VARCHAR(100),
-    SourceLocation VARCHAR(50),
-    UndergradType VARCHAR(50),
-    Resume TEXT,
-    BirthDate DATE,
-    GraduationDate DATE,
-    ExamID VARCHAR(20),
-    IDCard VARCHAR(20),
-    Category VARCHAR(50),
-    VolunteerStatus VARCHAR(50),
-    GraduateSecretaryID INT,
-    InterviewGroupID INT,
-    FOREIGN KEY (GraduateSecretaryID) REFERENCES GraduateSecretary(ID),
-    FOREIGN KEY (InterviewGroupID) REFERENCES InterviewGroup(ID)
-);
-
--- Exam Table
-CREATE TABLE Exam (
-    SubjectID INT,
-    CandidateID INT,
-    Category VARCHAR(50),
-    Score DECIMAL(5, 2),
-    FOREIGN KEY (SubjectID) REFERENCES Subject(ID),
-    FOREIGN KEY (CandidateID) REFERENCES Candidate(ID)
-);
-
--- Subject Table
-CREATE TABLE Subject (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50),
-    Category VARCHAR(50)
-);
-
--- Assessment Table
-CREATE TABLE Assessment (
-    SubjectID INT,
-    DisciplineID INT,
-    Category VARCHAR(50),
-    Score DECIMAL(5, 2),
-    FOREIGN KEY (SubjectID) REFERENCES Subject(ID),
-    FOREIGN KEY (DisciplineID) REFERENCES Discipline(ID)
-);
-
--- Discipline Table
-CREATE TABLE Discipline (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50),
-    Type VARCHAR(50),
-    Indicator VARCHAR(50),
-    Overview TEXT,
-    SuperiorDiscipline VARCHAR(50),
-    Level VARCHAR(50),
-    CollegeID INT,
-    FOREIGN KEY (CollegeID) REFERENCES College(ID)
-);
-
--- Application Table
-CREATE TABLE Application (
-    DisciplineID INT,
-    CandidateID INT,
-    Category VARCHAR(50),
-    FOREIGN KEY (DisciplineID) REFERENCES Discipline(ID),
-    FOREIGN KEY (CandidateID) REFERENCES Candidate(ID)
-);
-
--- College Table
 CREATE TABLE College (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50),
-    Type VARCHAR(50),
-    Website VARCHAR(100)
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    type VARCHAR(50),
+    website VARCHAR(100)
 );
 
--- Graduate Secretary Table
-CREATE TABLE GraduateSecretary (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50),
-    CollegeID INT,
-    FOREIGN KEY (CollegeID) REFERENCES College(ID)
-);
-
--- Interview Group Table
-CREATE TABLE InterviewGroup (
-    ID INT PRIMARY KEY,
-    GraduateSecretaryID INT,
-    FOREIGN KEY (GraduateSecretaryID) REFERENCES GraduateSecretary(ID)
-);
-
--- Discipline Secretary Table
 CREATE TABLE DisciplineSecretary (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50),
-    CollegeID INT,
-    FOREIGN KEY (CollegeID) REFERENCES College(ID)
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    college_id INT,
+    FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
--- Graduate Director Table
-CREATE TABLE GraduateDirector (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50)
+CREATE TABLE GraduateManagementSecretary (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    college_id INT,
+    FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
--- Supervisor Table
+CREATE TABLE InterviewGroup (
+    id INT PRIMARY KEY,
+    graduate_management_secretary_id INT,
+    FOREIGN KEY (graduate_management_secretary_id) REFERENCES GraduateManagementSecretary(id)
+);
+
+CREATE TABLE Discipline (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    type VARCHAR(50),
+    quota INT,
+    overview TEXT,
+    parent_discipline INT,
+    level INT,
+    college_id INT,
+    FOREIGN KEY (college_id) REFERENCES College(id)
+);
+
+CREATE TABLE Teacher (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    phone VARCHAR(20),
+    qualification VARCHAR(50),
+    image BLOB,
+    email VARCHAR(50),
+    title VARCHAR(50),
+    profile TEXT,
+    academic_quota INT,
+    professional_quota INT,
+    direct_phd_quota INT,
+    volunteer_round INT,
+    discipline_head_id INT,
+    college_id INT,
+    FOREIGN KEY (discipline_head_id) REFERENCES DisciplineSecretary(id),
+    FOREIGN KEY (college_id) REFERENCES College(id)
+);
+
+CREATE TABLE Student (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    phone VARCHAR(20),
+    emergency_phone VARCHAR(20),
+    email VARCHAR(50),
+    undergraduate_major VARCHAR(100),
+    undergraduate_school VARCHAR(100),
+    origin VARCHAR(100),
+    undergraduate_type VARCHAR(50),
+    resume TEXT,
+    birth_date DATE,
+    graduation_date DATE,
+    exam_ticket_number VARCHAR(50),
+    id_card_number VARCHAR(50),
+    category VARCHAR(50),
+    volunteer_status VARCHAR(50),
+    graduate_management_secretary_id INT,
+    interview_group_id INT,
+    discipline_id INT,
+    FOREIGN KEY (graduate_management_secretary_id) REFERENCES GraduateManagementSecretary(id),
+    FOREIGN KEY (interview_group_id) REFERENCES InterviewGroup(id),
+    FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
+);
+
+CREATE TABLE Choice (
+    teacher_id INT,
+    student_id INT,
+    type VARCHAR(50),
+    priority INT,
+    FOREIGN KEY (teacher_id) REFERENCES Teacher(id),
+    FOREIGN KEY (student_id) REFERENCES Student(id)
+);
+
+CREATE TABLE Exam (
+    subject_id INT,
+    student_id INT,
+    type VARCHAR(50),
+    score FLOAT,
+    FOREIGN KEY (subject_id) REFERENCES Subject(id),
+    FOREIGN KEY (student_id) REFERENCES Student(id)
+);
+
+CREATE TABLE Assessment (
+    subject_id INT,
+    discipline_id INT,
+    type VARCHAR(50),
+    FOREIGN KEY (subject_id) REFERENCES Subject(id),
+    FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
+);
+
+CREATE TABLE Teaching (
+    discipline_id INT,
+    teacher_id INT,
+    FOREIGN KEY (discipline_id) REFERENCES Discipline(id),
+    FOREIGN KEY (teacher_id) REFERENCES Teacher(id)
+);
+
+CREATE TABLE GraduateManager (
+    id INT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
 CREATE TABLE Supervisor (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50)
+    id INT PRIMARY KEY,
+    name VARCHAR(50)
 );
 
--- Administrator Table
 CREATE TABLE Administrator (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50)
+    id INT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+CREATE TABLE Subject (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    type VARCHAR(50)
 );
