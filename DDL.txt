@@ -107,7 +107,11 @@ CREATE TABLE Exam (
     student_id INT,
     type VARCHAR(50),
     score FLOAT,
-    PRIMARY KEY (subject_id, student_id),  -- 定义联合主键
+    time DATETIME,
+    location VARCHAR(255),
+    comment TEXT,
+    signature VARCHAR(255), 
+    PRIMARY KEY (subject_id, student_id),
     FOREIGN KEY (subject_id) REFERENCES Subject(id),
     FOREIGN KEY (student_id) REFERENCES Student(id)
 );
