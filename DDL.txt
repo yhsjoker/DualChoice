@@ -97,6 +97,7 @@ CREATE TABLE Choice (
     student_id INT,
     type VARCHAR(50),
     priority INT,
+    PRIMARY KEY (teacher_id, student_id),
     FOREIGN KEY (teacher_id) REFERENCES Teacher(id),
     FOREIGN KEY (student_id) REFERENCES Student(id)
 );
@@ -106,6 +107,7 @@ CREATE TABLE Exam (
     student_id INT,
     type VARCHAR(50),
     score FLOAT,
+    PRIMARY KEY (subject_id, student_id),  -- 定义联合主键
     FOREIGN KEY (subject_id) REFERENCES Subject(id),
     FOREIGN KEY (student_id) REFERENCES Student(id)
 );
@@ -114,6 +116,7 @@ CREATE TABLE Assessment (
     subject_id INT,
     discipline_id INT,
     type VARCHAR(50),
+    PRIMARY KEY (subject_id, discipline_id),
     FOREIGN KEY (subject_id) REFERENCES Subject(id),
     FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
 );
@@ -121,6 +124,7 @@ CREATE TABLE Assessment (
 CREATE TABLE Teaching (
     discipline_id INT,
     teacher_id INT,
+    PRIMARY KEY (discipline_id, teacher_id),
     FOREIGN KEY (discipline_id) REFERENCES Discipline(id),
     FOREIGN KEY (teacher_id) REFERENCES Teacher(id)
 );
