@@ -12,7 +12,6 @@ CREATE TABLE DisciplineHead (
 CREATE TABLE College (
     id INT PRIMARY KEY,
     name VARCHAR(100),
-    type VARCHAR(50),
     website VARCHAR(100)
 );
 
@@ -84,6 +83,7 @@ CREATE TABLE Student (
     id_card_number VARCHAR(50),
     category VARCHAR(50),
     volunteer_status VARCHAR(50),
+    graduate_type VARCHAR(50),
     graduate_management_secretary_id INT,
     interview_group_id INT,
     discipline_id INT,
@@ -95,11 +95,19 @@ CREATE TABLE Student (
 CREATE TABLE Choice (
     teacher_id INT,
     student_id INT,
-    type VARCHAR(50),
     priority INT,
     PRIMARY KEY (teacher_id, student_id),
     FOREIGN KEY (teacher_id) REFERENCES Teacher(id),
     FOREIGN KEY (student_id) REFERENCES Student(id)
+);
+
+CREATE TABLE Application (
+    student_id INT,
+    discipline_id INT,
+    preference_order INT,
+    PRIMARY KEY (student_id, discipline_id),
+    FOREIGN KEY (student_id) REFERENCES Student(id),
+    FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
 );
 
 CREATE TABLE Exam (
