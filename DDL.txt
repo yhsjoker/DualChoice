@@ -48,7 +48,7 @@ CREATE TABLE Discipline (
     overview TEXT NOT NULL,
     parent_discipline INT NOT NULL,
     level INT NOT NULL,
-    college_id INT NOT NULL,
+    college_id INT,
     FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
