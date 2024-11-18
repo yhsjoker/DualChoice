@@ -65,7 +65,7 @@ CREATE TABLE Teacher (
     name VARCHAR(50) NOT NULL,
     phone VARCHAR(20) NOT NULL,
     qualification VARCHAR(50) NOT NULL,
-    image BLOB NOT NULL,
+    image BLOB,
     email VARCHAR(50) NOT NULL,
     title VARCHAR(50) NOT NULL,
     profile TEXT NOT NULL,
