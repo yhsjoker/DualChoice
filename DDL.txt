@@ -1,5 +1,5 @@
 -- Database dcdb
-
+--学科负责人
 CREATE TABLE DisciplineHead (
     id INT PRIMARY KEY,
     name VARCHAR(50),
@@ -9,12 +9,15 @@ CREATE TABLE DisciplineHead (
     FOREIGN KEY (graduate_management_secretary_id) REFERENCES GraduateManagementSecretary(id)
 );
 
+--学院
 CREATE TABLE College (
     id INT PRIMARY KEY,
     name VARCHAR(100),
     website VARCHAR(100)
 );
 
+
+--学院秘书
 CREATE TABLE DisciplineSecretary (
     id INT PRIMARY KEY,
     name VARCHAR(50),
@@ -22,6 +25,7 @@ CREATE TABLE DisciplineSecretary (
     FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
+--研究生管理秘书
 CREATE TABLE GraduateManagementSecretary (
     id INT PRIMARY KEY,
     name VARCHAR(50),
@@ -29,12 +33,14 @@ CREATE TABLE GraduateManagementSecretary (
     FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
+--复试组
 CREATE TABLE InterviewGroup (
     id INT PRIMARY KEY,
     graduate_management_secretary_id INT,
     FOREIGN KEY (graduate_management_secretary_id) REFERENCES GraduateManagementSecretary(id)
 );
 
+--学科
 CREATE TABLE Discipline (
     id INT PRIMARY KEY,
     name VARCHAR(100),
@@ -47,6 +53,14 @@ CREATE TABLE Discipline (
     FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
+--科目
+CREATE TABLE Subject (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    type VARCHAR(50)
+);
+
+--导师
 CREATE TABLE Teacher (
     id INT PRIMARY KEY,
     name VARCHAR(50),
@@ -66,6 +80,7 @@ CREATE TABLE Teacher (
     FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
+--考生
 CREATE TABLE Student (
     id INT PRIMARY KEY,
     name VARCHAR(50),
@@ -92,6 +107,7 @@ CREATE TABLE Student (
     FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
 );
 
+--选择
 CREATE TABLE Choice (
     teacher_id INT,
     student_id INT,
@@ -101,6 +117,7 @@ CREATE TABLE Choice (
     FOREIGN KEY (student_id) REFERENCES Student(id)
 );
 
+--报考
 CREATE TABLE Application (
     student_id INT,
     discipline_id INT,
@@ -110,6 +127,7 @@ CREATE TABLE Application (
     FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
 );
 
+--考试
 CREATE TABLE Exam (
     subject_id INT,
     student_id INT,
@@ -124,6 +142,7 @@ CREATE TABLE Exam (
     FOREIGN KEY (student_id) REFERENCES Student(id)
 );
 
+--考核
 CREATE TABLE Assessment (
     subject_id INT,
     discipline_id INT,
@@ -133,6 +152,7 @@ CREATE TABLE Assessment (
     FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
 );
 
+--教学
 CREATE TABLE Teaching (
     discipline_id INT,
     teacher_id INT,
@@ -141,23 +161,20 @@ CREATE TABLE Teaching (
     FOREIGN KEY (teacher_id) REFERENCES Teacher(id)
 );
 
+--研究生主管领导
 CREATE TABLE GraduateManager (
     id INT PRIMARY KEY,
     name VARCHAR(50)
 );
 
+--监督人员
 CREATE TABLE Supervisor (
     id INT PRIMARY KEY,
     name VARCHAR(50)
 );
 
+--管理员
 CREATE TABLE Administrator (
     id INT PRIMARY KEY,
     name VARCHAR(50)
-);
-
-CREATE TABLE Subject (
-    id INT PRIMARY KEY,
-    name VARCHAR(100),
-    type VARCHAR(50)
 );
