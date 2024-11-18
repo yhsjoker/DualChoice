@@ -178,3 +178,11 @@ CREATE TABLE Administrator (
     id INT PRIMARY KEY,
     name VARCHAR(50)
 );
+
+--用户
+CREATE TABLE Administrator (
+id INT PRIMARY KEY,
+user_name VARCHAR(50)，
+password VARCHAR(100)，
+    user_identity ENUM
+);
