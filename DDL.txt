@@ -1,107 +1,106 @@
 -- Database dcdb
 --学科负责人
 CREATE TABLE DisciplineHead (
-    id INT PRIMARY KEY,
-    name VARCHAR(50),
-    college_id INT,
-    graduate_management_secretary_id INT,
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    college_id INT NOT NULL,
+    graduate_management_secretary_id INT NOT NULL,
     FOREIGN KEY (college_id) REFERENCES College(id),
     FOREIGN KEY (graduate_management_secretary_id) REFERENCES GraduateManagementSecretary(id)
 );
 
 --学院
 CREATE TABLE College (
-    id INT PRIMARY KEY,
-    name VARCHAR(100),
-    website VARCHAR(100)
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    website VARCHAR(100) NOT NULL
 );
-
 
 --学院秘书
 CREATE TABLE DisciplineSecretary (
-    id INT PRIMARY KEY,
-    name VARCHAR(50),
-    college_id INT,
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    college_id INT NOT NULL,
     FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
 --研究生管理秘书
 CREATE TABLE GraduateManagementSecretary (
-    id INT PRIMARY KEY,
-    name VARCHAR(50),
-    college_id INT,
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    college_id INT NOT NULL,
     FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
 --复试组
 CREATE TABLE InterviewGroup (
-    id INT PRIMARY KEY,
-    graduate_management_secretary_id INT,
+    id INT NOT NULL PRIMARY KEY,
+    graduate_management_secretary_id INT NOT NULL,
     FOREIGN KEY (graduate_management_secretary_id) REFERENCES GraduateManagementSecretary(id)
 );
 
 --学科
 CREATE TABLE Discipline (
-    id INT PRIMARY KEY,
-    name VARCHAR(100),
-    type VARCHAR(50),
-    quota INT,
-    overview TEXT,
-    parent_discipline INT,
-    level INT,
-    college_id INT,
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    quota INT NOT NULL,
+    overview TEXT NOT NULL,
+    parent_discipline INT NOT NULL,
+    level INT NOT NULL,
+    college_id INT NOT NULL,
     FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
 --科目
 CREATE TABLE Subject (
-    id INT PRIMARY KEY,
-    name VARCHAR(100),
-    type VARCHAR(50)
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    type VARCHAR(50) NOT NULL
 );
 
 --导师
 CREATE TABLE Teacher (
-    id INT PRIMARY KEY,
-    name VARCHAR(50),
-    phone VARCHAR(20),
-    qualification VARCHAR(50),
-    image BLOB,
-    email VARCHAR(50),
-    title VARCHAR(50),
-    profile TEXT,
-    academic_quota INT,
-    professional_quota INT,
-    direct_phd_quota INT,
-    volunteer_round INT,
-    discipline_head_id INT,
-    college_id INT,
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    qualification VARCHAR(50) NOT NULL,
+    image BLOB NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    title VARCHAR(50) NOT NULL,
+    profile TEXT NOT NULL,
+    academic_quota INT NOT NULL,
+    professional_quota INT NOT NULL,
+    direct_phd_quota INT NOT NULL,
+    volunteer_round INT NOT NULL,
+    discipline_head_id INT NOT NULL,
+    college_id INT NOT NULL,
     FOREIGN KEY (discipline_head_id) REFERENCES DisciplineSecretary(id),
     FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
 --考生
 CREATE TABLE Student (
-    id INT PRIMARY KEY,
-    name VARCHAR(50),
-    phone VARCHAR(20),
-    emergency_phone VARCHAR(20),
-    email VARCHAR(50),
-    undergraduate_major VARCHAR(100),
-    undergraduate_school VARCHAR(100),
-    origin VARCHAR(100),
-    undergraduate_type VARCHAR(50),
-    resume TEXT,
-    birth_date DATE,
-    graduation_date DATE,
-    exam_ticket_number VARCHAR(50),
-    id_card_number VARCHAR(50),
-    category VARCHAR(50),
-    volunteer_status VARCHAR(50),
-    graduate_type VARCHAR(50),
-    graduate_management_secretary_id INT,
-    interview_group_id INT,
-    discipline_id INT,
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    emergency_phone VARCHAR(20) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    undergraduate_major VARCHAR(100) NOT NULL,
+    undergraduate_school VARCHAR(100) NOT NULL,
+    origin VARCHAR(100) NOT NULL,
+    undergraduate_type VARCHAR(50) NOT NULL,
+    resume TEXT NOT NULL,
+    birth_date DATE NOT NULL,
+    graduation_date DATE NOT NULL,
+    exam_ticket_number VARCHAR(50) NOT NULL,
+    id_card_number VARCHAR(50) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    volunteer_status VARCHAR(50) NOT NULL,
+    graduate_type VARCHAR(50) NOT NULL,
+    graduate_management_secretary_id INT NOT NULL,
+    interview_group_id INT NOT NULL,
+    discipline_id INT NOT NULL,
     FOREIGN KEY (graduate_management_secretary_id) REFERENCES GraduateManagementSecretary(id),
     FOREIGN KEY (interview_group_id) REFERENCES InterviewGroup(id),
     FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
@@ -109,9 +108,9 @@ CREATE TABLE Student (
 
 --选择
 CREATE TABLE Choice (
-    teacher_id INT,
-    student_id INT,
-    priority INT,
+    teacher_id INT NOT NULL,
+    student_id INT NOT NULL,
+    priority INT NOT NULL,
     PRIMARY KEY (teacher_id, student_id),
     FOREIGN KEY (teacher_id) REFERENCES Teacher(id),
     FOREIGN KEY (student_id) REFERENCES Student(id)
@@ -119,9 +118,9 @@ CREATE TABLE Choice (
 
 --报考
 CREATE TABLE Application (
-    student_id INT,
-    discipline_id INT,
-    preference_order INT,
+    student_id INT NOT NULL,
+    discipline_id INT NOT NULL,
+    preference_order INT NOT NULL,
     PRIMARY KEY (student_id, discipline_id),
     FOREIGN KEY (student_id) REFERENCES Student(id),
     FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
@@ -129,14 +128,14 @@ CREATE TABLE Application (
 
 --考试
 CREATE TABLE Exam (
-    subject_id INT,
-    student_id INT,
-    type VARCHAR(50),
-    score FLOAT,
-    time DATETIME,
-    location VARCHAR(255),
-    comment TEXT,
-    signature VARCHAR(255), 
+    subject_id INT NOT NULL,
+    student_id INT NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    score FLOAT NOT NULL,
+    time DATETIME NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    comment TEXT NOT NULL,
+    signature VARCHAR(255) NOT NULL, 
     PRIMARY KEY (subject_id, student_id),
     FOREIGN KEY (subject_id) REFERENCES Subject(id),
     FOREIGN KEY (student_id) REFERENCES Student(id)
@@ -144,9 +143,9 @@ CREATE TABLE Exam (
 
 --考核
 CREATE TABLE Assessment (
-    subject_id INT,
-    discipline_id INT,
-    type VARCHAR(50),
+    subject_id INT NOT NULL,
+    discipline_id INT NOT NULL,
+    type VARCHAR(50) NOT NULL,
     PRIMARY KEY (subject_id, discipline_id),
     FOREIGN KEY (subject_id) REFERENCES Subject(id),
     FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
@@ -154,8 +153,8 @@ CREATE TABLE Assessment (
 
 --教学
 CREATE TABLE Teaching (
-    discipline_id INT,
-    teacher_id INT,
+    discipline_id INT NOT NULL,
+    teacher_id INT NOT NULL,
     PRIMARY KEY (discipline_id, teacher_id),
     FOREIGN KEY (discipline_id) REFERENCES Discipline(id),
     FOREIGN KEY (teacher_id) REFERENCES Teacher(id)
@@ -163,26 +162,27 @@ CREATE TABLE Teaching (
 
 --研究生主管领导
 CREATE TABLE GraduateManager (
-    id INT PRIMARY KEY,
-    name VARCHAR(50)
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
 );
 
 --监督人员
 CREATE TABLE Supervisor (
-    id INT PRIMARY KEY,
-    name VARCHAR(50)
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
 );
 
 --管理员
 CREATE TABLE Administrator (
-    id INT PRIMARY KEY,
-    name VARCHAR(50)
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
 );
 
 --用户
-CREATE TABLE Administrator (
-id INT PRIMARY KEY,
-user_name VARCHAR(50)，
-password VARCHAR(100)，
-    user_identity ENUM
+CREATE TABLE User (
+    id INT NOT NULL PRIMARY KEY,
+    user_name VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    user_identity ENUM NOT NULL
 );
+
