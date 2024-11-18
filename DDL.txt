@@ -90,7 +90,7 @@ CREATE TABLE Student (
     undergraduate_school VARCHAR(100) NOT NULL,
     origin VARCHAR(100) NOT NULL,
     undergraduate_type VARCHAR(50) NOT NULL,
-    resume TEXT NOT NULL,
+    resume BLOB,
     birth_date DATE NOT NULL,
     graduation_date DATE NOT NULL,
     exam_ticket_number VARCHAR(50) NOT NULL,
