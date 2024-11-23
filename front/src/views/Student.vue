@@ -200,7 +200,7 @@ export default {
     addRequestInterceptor() {
       axios.interceptors.request.use(
           config => {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('student_token');
             if (token) {
               config.headers.Authorization = `Bearer ${token}`;
             }

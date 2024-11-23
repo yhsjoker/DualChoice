@@ -1,11 +1,12 @@
 <template>
   <div class="re-exam-group">
+    <h2>复试组负责的一级学科：{{ primarySubject }}</h2>
     <el-table :data="studentList" style="width: 100%">
-      <el-table-column prop="id" label="学生ID" width="120"></el-table-column>
       <el-table-column prop="name" label="姓名" width="120"></el-table-column>
-      <el-table-column prop="subject" label="复试学科专业"></el-table-column>
+      <el-table-column prop="examNumber" label="准考证号" width="150"></el-table-column>
+      <el-table-column prop="studentType" label="考生类别"></el-table-column>
       <el-table-column label="操作" width="180">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button
               type="primary"
               @click="openDialog(scope.row)"
@@ -21,7 +22,7 @@
         :title="`填写 ${currentStudent.name} 的复试信息`"
         width="500px"
     >
-      <el-form :model="formData" :rules="rules" ref="formRef" label-width="120px">
+      <el-form :model="formData" :rules="rules" ref="formRef" label-width="150px">
         <el-form-item label="复试时间" prop="reExamTime">
           <el-date-picker
               v-model="formData.reExamTime"
@@ -78,8 +79,10 @@
 import axios from 'axios';
 
 export default {
+  name: 'ReExamGroup',
   data() {
     return {
+      primarySubject: '', // 复试组负责的一级学科
       studentList: [], // 学生列表
       dialogVisible: false, // 对话框显示状态
       currentStudent: {}, // 当前选中的学生
@@ -103,13 +106,34 @@ export default {
     };
   },
   methods: {
-    // 获取学生列表
-    async fetchStudentList() {
+    addRequestInterceptor() {
+      axios.interceptors.request.use(
+          config => {
+            const token = sessionStorage.getItem('interview_token');
+            if (token) {
+              config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+          },
+          error => Promise.reject(error)
+      );
+    },
+    // 获取复试组信息和学生列表
+    async fetchGroupInfo() {
       try {
-        const response = await axios.get('/api/students'); // 假设接口为 /api/students
-        this.studentList = response.data.data;
+        const response = await axios.get('/api/interviewGroup/list');
+        const data = response.data.data;
+        this.primarySubject = data.primarySubject;
+        this.studentList = data.studentList.map(student => {
+          return {
+            name: student.name,
+            examNumber: student.examNumber,
+            studentType: student.studentType || '暂未填写', // 如果为空，标注“暂未填写”
+            id: student.id, // 用于后续请求
+          };
+        });
       } catch (error) {
-        this.$message.error('获取学生列表失败');
+        this.$message.error('获取复试组信息失败');
       }
     },
     // 打开对话框
@@ -128,7 +152,7 @@ export default {
       };
       try {
         // 从后端获取该学生的复试信息
-        const response = await axios.get(`/api/student/reExamInfo/${student.id}`);
+        const response = await axios.get(`/api/interviewGroup/reExamInfo/${student.id}`);
         if (response.data.data) {
           Object.assign(this.formData, response.data.data);
           // 如果复试地点不为空，设置为只读模式
@@ -146,7 +170,7 @@ export default {
         if (valid) {
           try {
             // 提交数据到后端
-            await axios.post(`/api/student/updateReExamInfo/${this.currentStudent.id}`, this.formData);
+            await axios.post(`/api/interviewGroup/updateReExamInfo/${this.currentStudent.id}`, this.formData);
             this.$message.success('复试信息提交成功');
             this.dialogVisible = false;
           } catch (error) {
@@ -159,7 +183,8 @@ export default {
     },
   },
   created() {
-    this.fetchStudentList();
+    this.addRequestInterceptor();
+    this.fetchGroupInfo();
   },
 };
 </script>
@@ -171,5 +196,13 @@ export default {
 
 .dialog-footer {
   text-align: right;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+::v-deep(.el-table .el-button) {
+  margin-right: 10px;
 }
 </style>

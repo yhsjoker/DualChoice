@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import qs from 'qs'
 import axios from "axios";
 
 export default {
@@ -32,17 +31,18 @@ export default {
       try {
         //console.log(this.loginForm)
         const response = await axios.post('/api/user/login', this.loginForm);
-
         const {user_identity, token} = response.data.data
-        localStorage.setItem('user_identity', user_identity)
-        localStorage.setItem('token', token)
-        console.log(user_identity)
+
         if (user_identity === 'Student') {
-          this.$router.push('/student')
+          sessionStorage.setItem('student_token', token);
+          sessionStorage.setItem('student_identity', user_identity);
+          this.$router.push('/student');
         } else if (user_identity === 'InterviewGroup') {
-          this.$router.push('/interview-group')
+          sessionStorage.setItem('interview_token', token);
+          sessionStorage.setItem('interview_identity', user_identity);
+          this.$router.push('/interview-group');
         } else {
-          this.$router.push('/dashboard')
+          this.$router.push('/dashboard');
         }
       } catch (error) {
         console.log(error)
