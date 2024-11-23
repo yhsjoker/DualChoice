@@ -15,7 +15,7 @@ CREATE TABLE College (
     website VARCHAR(100) NOT NULL
 );
 
---学院秘书
+--学科秘书
 CREATE TABLE DisciplineSecretary (
     id INT NOT NULL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
@@ -72,9 +72,7 @@ CREATE TABLE Teacher (
     professional_quota INT NOT NULL,
     direct_phd_quota INT NOT NULL,
     volunteer_round INT NOT NULL,
-    discipline_head_id INT NOT NULL,
     college_id INT NOT NULL,
-    FOREIGN KEY (discipline_head_id) REFERENCES DisciplineSecretary(id),
     FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
@@ -96,13 +94,7 @@ CREATE TABLE Student (
     id_card_number VARCHAR(50) NOT NULL,
     category VARCHAR(50) NOT NULL,
     volunteer_status VARCHAR(50) NOT NULL,
-    graduate_type VARCHAR(50) NOT NULL,
-    graduate_management_secretary_id INT NOT NULL,
-    interview_group_id INT NOT NULL,
-    discipline_id INT NOT NULL,
-    FOREIGN KEY (graduate_management_secretary_id) REFERENCES GraduateManagementSecretary(id),
-    FOREIGN KEY (interview_group_id) REFERENCES InterviewGroup(id),
-    FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
+    graduate_type VARCHAR(50) NOT NULL
 );
 
 --选择
