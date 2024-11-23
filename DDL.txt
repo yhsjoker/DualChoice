@@ -3,10 +3,9 @@
 CREATE TABLE DisciplineHead (
     id INT NOT NULL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    college_id INT NOT NULL,
+    discipline_id INT NOT NULL,
     graduate_management_secretary_id INT NOT NULL,
-    FOREIGN KEY (college_id) REFERENCES College(id),
-    FOREIGN KEY (graduate_management_secretary_id) REFERENCES GraduateManagementSecretary(id)
+    FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
 );
 
 --学院
@@ -20,8 +19,8 @@ CREATE TABLE College (
 CREATE TABLE DisciplineSecretary (
     id INT NOT NULL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    college_id INT NOT NULL,
-    FOREIGN KEY (college_id) REFERENCES College(id)
+    discipline_id INT NOT NULL,
+    FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
 );
 
 --研究生管理秘书
@@ -35,8 +34,8 @@ CREATE TABLE GraduateManagementSecretary (
 --复试组
 CREATE TABLE InterviewGroup (
     id INT NOT NULL PRIMARY KEY,
-    graduate_management_secretary_id INT NOT NULL,
-    FOREIGN KEY (graduate_management_secretary_id) REFERENCES GraduateManagementSecretary(id)
+    discipline_id INT NOT NULL,
+    FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
 );
 
 --学科
@@ -46,9 +45,9 @@ CREATE TABLE Discipline (
     type VARCHAR(50) NOT NULL,
     quota INT NOT NULL,
     overview TEXT NOT NULL,
-    parent_discipline INT NOT NULL,
+    parent_discipline INT,
     level INT NOT NULL,
-    college_id INT,
+    college_id INT NOT NULL,
     FOREIGN KEY (college_id) REFERENCES College(id)
 );
 
@@ -185,4 +184,3 @@ CREATE TABLE User (
     password VARCHAR(100) NOT NULL,
     user_identity ENUM NOT NULL
 );
-
