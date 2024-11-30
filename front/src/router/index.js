@@ -6,6 +6,7 @@ import Router from 'vue-router'
 import Login from '../views/Login.vue'
 import Student from "../views/Student.vue";
 import InterviewGroup from "../views/InterviewGroup.vue";
+import Supervisor from "../views/DisciplineHead.vue";
 
 const routes = [
   {
@@ -24,6 +25,12 @@ const routes = [
     name: 'InterviewGroup',
     component: InterviewGroup,
     meta: { requiresAuth: true, role: 'interview-group' }
+  },
+  {
+    path: '/discipline-head',
+    name: 'DisciplineHead',
+    component: Supervisor,
+    meta: { requiresAuth: true, role: 'discipline-head' }
   }
 ]
 

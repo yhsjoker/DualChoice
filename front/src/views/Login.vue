@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       loginForm: {
-        username: '',
+        userName: '',
         password: ''
       }
     }
@@ -41,6 +41,9 @@ export default {
           sessionStorage.setItem('interview_token', token);
           sessionStorage.setItem('interview_identity', user_identity);
           this.$router.push('/interview-group');
+        } else if (user_identity === 'DisciplineHead'){
+          sessionStorage.setItem('disciplineHead_token', token);
+          sessionStorage.setItem('disciplineHead_identity', user_identity);
         } else {
           this.$router.push('/dashboard');
         }

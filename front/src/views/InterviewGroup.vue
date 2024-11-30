@@ -1,11 +1,13 @@
 <template>
+  <div class="page-container">
+
   <div class="re-exam-group">
     <h2>复试组负责的一级学科：{{ primarySubject }}</h2>
-    <el-table :data="studentList" style="width: 100%">
-      <el-table-column prop="name" label="姓名" width="120"></el-table-column>
-      <el-table-column prop="examNumber" label="准考证号" width="150"></el-table-column>
-      <el-table-column prop="studentType" label="考生类别"></el-table-column>
-      <el-table-column label="操作" width="180">
+    <el-table :data="studentList" size="large" style="width: 100%">
+      <el-table-column prop="name" label="姓名" width="220"></el-table-column>
+      <el-table-column prop="examNumber" label="准考证号" width="250"></el-table-column>
+      <el-table-column prop="studentType" label="考生类别" width="220"></el-table-column>
+      <el-table-column label="操作" width="220">
         <template #default="scope">
           <el-button
               type="primary"
@@ -18,7 +20,7 @@
 
     <!-- 复试信息的对话框 -->
     <el-dialog
-        :visible.sync="dialogVisible"
+        v-model = "dialogVisible"
         :title="`填写 ${currentStudent.name} 的复试信息`"
         width="500px"
     >
@@ -73,6 +75,8 @@
       </div>
     </el-dialog>
   </div>
+
+  </div>
 </template>
 
 <script>
@@ -82,8 +86,21 @@ export default {
   name: 'ReExamGroup',
   data() {
     return {
-      primarySubject: '', // 复试组负责的一级学科
-      studentList: [], // 学生列表
+      primarySubject: '计算机科学与技术', // 复试组负责的一级学科
+      studentList: [
+        {
+          "id": "1",
+          "name": "张三",
+          "examNumber": "123456789",
+          "studentType": "应届生"
+        },
+        {
+          "id": "2",
+          "name": "李四",
+          "examNumber": "987654321",
+          "studentType": ''
+        }
+      ], // 学生列表
       dialogVisible: false, // 对话框显示状态
       currentStudent: {}, // 当前选中的学生
       formData: {
@@ -143,26 +160,26 @@ export default {
       this.isReadOnly = false; // 默认可编辑
       // 初始化表单数据
       this.formData = {
-        reExamTime: '',
-        reExamLocation: '',
-        overallEvaluation: '',
-        englishScore: '',
-        professionalScore: '',
-        interviewScore: '',
+        reExamTime: "2023-10-01 09:00:00",
+        reExamLocation: "教室101",
+        overallEvaluation: "优秀",
+        englishScore: "90",
+        professionalScore: "95",
+        interviewScore: "93"
       };
-      try {
-        // 从后端获取该学生的复试信息
-        const response = await axios.get(`/api/interviewGroup/reExamInfo/${student.id}`);
-        if (response.data.data) {
-          Object.assign(this.formData, response.data.data);
-          // 如果复试地点不为空，设置为只读模式
-          if (this.formData.reExamLocation) {
-            this.isReadOnly = true;
-          }
-        }
-      } catch (error) {
-        this.$message.error('获取复试信息失败');
-      }
+      // try {
+      //   // 从后端获取该学生的复试信息
+      //   const response = await axios.get(`/api/interviewGroup/reExamInfo/${student.id}`);
+      //   if (response.data.data) {
+      //     Object.assign(this.formData, response.data.data);
+      //     // 如果复试地点不为空，设置为只读模式
+      //     if (this.formData.reExamLocation) {
+      //       this.isReadOnly = true;
+      //     }
+      //   }
+      // } catch (error) {
+      //   this.$message.error('获取复试信息失败');
+      // }
     },
     // 提交表单
     submitForm() {
@@ -200,9 +217,20 @@ export default {
 
 h2 {
   margin-bottom: 20px;
+  font-size: 24px;
+}
+
+::v-deep(.el-table th,.el-table td,.el-table-column) {
+  font-size: 20px;
 }
 
 ::v-deep(.el-table .el-button) {
   margin-right: 10px;
+}
+
+.page-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 </style>
