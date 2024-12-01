@@ -44,8 +44,9 @@ export default {
         } else if (user_identity === 'DisciplineHead'){
           sessionStorage.setItem('disciplineHead_token', token);
           sessionStorage.setItem('disciplineHead_identity', user_identity);
-        } else {
-          this.$router.push('/dashboard');
+        } else if(user_identity === 'GraduateManagementSecretary'){
+          sessionStorage.setItem('graduateManagementSecretary_token', token);
+          sessionStorage.setItem('graduateManagementSecretary_identity', user_identity);
         }
       } catch (error) {
         console.log(error)

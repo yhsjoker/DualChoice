@@ -95,33 +95,10 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      primarySubject: '计算机科学与技术', // 一级学科名称（字符串）
-      quotaIndicator: 100, // 名额指标（数字）
-      secondarySubjects: ['软件工程', '计算机应用技术'], // 二级学科列表（字符串数组）
-      teacherQuota: [
-        [
-          {
-            name: '张三',
-            academicQuota: 10,
-            professionalQuota: 5,
-            phdQuota: 2,
-          },
-          {
-            name: '李四',
-            academicQuota: 8,
-            professionalQuota: 7,
-            phdQuota: 1,
-          },
-        ],
-        [
-          {
-            name: '王五',
-            academicQuota: 15,
-            professionalQuota: 10,
-            phdQuota: 3,
-          },
-        ],
-      ], // 导师名额列表（二维数组）
+      primarySubject: '', // 一级学科名称（字符串）
+      quotaIndicator: 0, // 名额指标（数字）
+      secondarySubjects: [], // 二级学科列表（字符串数组）
+      teacherQuota: [], // 导师名额列表（二维数组）
       isReadOnly: false, // 页面是否只读
     };
   },

@@ -86,24 +86,12 @@ export default {
   name: 'ReExamGroup',
   data() {
     return {
-      primarySubject: '计算机科学与技术', // 复试组负责的一级学科
-      studentList: [
-        {
-          "id": "1",
-          "name": "张三",
-          "examNumber": "123456789",
-          "studentType": "应届生"
-        },
-        {
-          "id": "2",
-          "name": "李四",
-          "examNumber": "987654321",
-          "studentType": ''
-        }
-      ], // 学生列表
+      primarySubject: '', // 复试组负责的一级学科
+      studentList: [], // 学生列表
       dialogVisible: false, // 对话框显示状态
       currentStudent: {}, // 当前选中的学生
       formData: {
+        id: '',
         reExamTime: '',
         reExamLocation: '',
         overallEvaluation: '',
@@ -159,27 +147,19 @@ export default {
       this.dialogVisible = true;
       this.isReadOnly = false; // 默认可编辑
       // 初始化表单数据
-      this.formData = {
-        reExamTime: "2023-10-01 09:00:00",
-        reExamLocation: "教室101",
-        overallEvaluation: "优秀",
-        englishScore: "90",
-        professionalScore: "95",
-        interviewScore: "93"
-      };
-      // try {
-      //   // 从后端获取该学生的复试信息
-      //   const response = await axios.get(`/api/interviewGroup/reExamInfo/${student.id}`);
-      //   if (response.data.data) {
-      //     Object.assign(this.formData, response.data.data);
-      //     // 如果复试地点不为空，设置为只读模式
-      //     if (this.formData.reExamLocation) {
-      //       this.isReadOnly = true;
-      //     }
-      //   }
-      // } catch (error) {
-      //   this.$message.error('获取复试信息失败');
-      // }
+      try {
+        // 从后端获取该学生的复试信息
+        const response = await axios.get(`/api/interviewGroup/reExamInfo/${student.id}`);
+        if (response.data.data) {
+          Object.assign(this.formData, response.data.data);
+          // 如果复试地点不为空，设置为只读模式
+          if (this.formData.reExamLocation) {
+            this.isReadOnly = true;
+          }
+        }
+      } catch (error) {
+        this.$message.error('获取复试信息失败');
+      }
     },
     // 提交表单
     submitForm() {
@@ -187,7 +167,8 @@ export default {
         if (valid) {
           try {
             // 提交数据到后端
-            await axios.post(`/api/interviewGroup/updateReExamInfo/${this.currentStudent.id}`, this.formData);
+            this.formData.id = this.currentStudent.id;
+            await axios.post(`/api/interviewGroup/updateReExamInfo`, this.formData);
             this.$message.success('复试信息提交成功');
             this.dialogVisible = false;
           } catch (error) {

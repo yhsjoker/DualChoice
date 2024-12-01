@@ -218,7 +218,7 @@ export default {
         this.formData = { ...this.formData, ...data };
 
         // 如果身份证号不为空，则设置为只读
-        this.isReadOnly = this.formData.idNumber !== '';
+        this.isReadOnly = this.formData.examNumber !== '';
       } catch (error) {
         this.$message.error('获取考生信息失败');
       }

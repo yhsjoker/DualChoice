@@ -140,6 +140,44 @@
           </el-form-item>
         </template>
 
+        <el-divider></el-divider>
+        <el-form-item label="复试时间">
+          <el-date-picker
+              v-model="formData.reExamTime"
+              type="datetime"
+              readonly
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="复试地点">
+          <el-input
+              v-model="formData.reExamLocation"
+              readonly
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="综合评价">
+          <el-input
+              v-model="formData.overallEvaluation"
+              readonly
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="外语听力及口语成绩">
+          <el-input
+              v-model="formData.englishScore"
+              readonly
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="专业知识测试成绩">
+          <el-input
+              v-model="formData.professionalScore"
+              readonly
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="综合素质面试成绩">
+          <el-input
+              v-model="formData.interviewScore"
+              readonly
+          ></el-input>
+        </el-form-item>
       </el-form>
     </el-main>
   </el-container>
@@ -173,6 +211,14 @@ export default {
         researchDirection: '', // 拟报研究方向（其他专业）
         graduateType: '', // 研究生类型
         subSubjectOptions: [], // 二级学科选项，从后端获取
+
+        // 新增的复试信息
+        reExamTime: '', // 复试时间
+        reExamLocation: '', // 复试地点
+        overallEvaluation: '', // 综合评价
+        englishScore: '', // 外语听力及口语成绩
+        professionalScore: '', // 专业知识测试成绩
+        interviewScore: '', // 综合素质面试成绩
       },
     };
   },
@@ -182,21 +228,18 @@ export default {
       const studentId = this.$route.params.studentId; // 获取路由参数中的 studentId
       try {
         // 从后端获取学生信息
-        const response = await axios.get(`/api/student/form/${studentId}`);
+        const response = await axios.get(`/api/graduateManagementSecretary/studentForm/${studentId}`);
         const data = response.data.data;
 
         // 将返回的数据填充到 formData 中
         this.formData = { ...this.formData, ...data };
 
-        // 如果 subSubjectOptions 在返回的数据中，则直接赋值
-        if (data.subSubjectOptions && data.subSubjectOptions.length > 0) {
-          this.formData.subSubjectOptions = data.subSubjectOptions;
-        }
       } catch (error) {
         this.$message.error('获取学生信息失败');
       }
     },
   },
+
   created() {
     this.fetchStudentInfo();
   },
@@ -240,5 +283,9 @@ h2 {
   font-size: 18px;
   width: 100%;
   padding: 10px;
+}
+
+::v-deep(.el-divider) {
+  margin: 30px 0;
 }
 </style>
