@@ -1,0 +1,151 @@
+package cn.edu.bjfu.dualchoice.controller;
+
+import cn.edu.bjfu.dualchoice.pojo.*;
+import cn.edu.bjfu.dualchoice.service.*;
+import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/student")
+public class StudentController {
+    @Autowired
+    private StudentService studentService;
+
+    @Autowired
+    ApplicationService applicationService;
+
+    @Autowired
+    DisciplineService disciplineService;
+
+    @Autowired
+    ChoiceService choiceService;
+
+    @Autowired
+    TeacherService teacherService;
+
+    @Autowired
+    StuBaseInfoService stuBaseInfoService;
+
+    @Autowired
+    DisciplineInfoService disciplineInfoService;
+
+    @GetMapping("/info")
+    public Result info(){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        int studentId = (Integer) map.get("id");
+
+        //查找学生基本信息
+        StuBaseInfo stuBaseInfo = stuBaseInfoService.getStuBaseInfoById(studentId);
+        //System.out.println(stuBaseInfo);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("subject", stuBaseInfo.getDiscipline());
+        jsonObject.put("examNumber", stuBaseInfo.getExamNumber());
+        jsonObject.put("name", stuBaseInfo.getName());
+        jsonObject.put("studentType", stuBaseInfo.getStudentType());
+        jsonObject.put("graduationSchool", stuBaseInfo.getGraduationSchool());
+        jsonObject.put("graduationTime", stuBaseInfo.getGraduationTime());
+        jsonObject.put("graduatedMajor", stuBaseInfo.getGraduatedMajor());
+        jsonObject.put("email", stuBaseInfo.getEmail());
+        jsonObject.put("contact", stuBaseInfo.getContact());
+        jsonObject.put("emergencyContact", stuBaseInfo.getEmergencyContact());
+        jsonObject.put("origin", stuBaseInfo.getOrigin());
+        jsonObject.put("idNumber", stuBaseInfo.getIdNumber());
+        jsonObject.put("graduateType", stuBaseInfo.getGraduateType());
+
+        //查找学生选择老师情况
+        String teacher1 = studentService.selectTeacherName(studentId, 1);
+        String teacher2 = studentService.selectTeacherName(studentId, 2);
+        String teacher3 = studentService.selectTeacherName(studentId, 3);
+        jsonObject.put("supervisor1", teacher1);
+        jsonObject.put("supervisor2", teacher2);
+        jsonObject.put("supervisor3", teacher3);
+
+        //查找学生志愿情况
+        List<String> applications = studentService.selectDisciplineName(studentId);
+        if(applications.size() >= 2){
+            jsonObject.put("acceptAdjustment", "是");
+            jsonObject.put("preferredSubjects", applications);
+            jsonObject.put("singleSubSubject", null);
+            jsonObject.put("researchDirection", null);
+        }
+        else if(applications.size() == 1){
+            if(stuBaseInfo.getDiscipline().equals("电子信息（全日制）")){
+                jsonObject.put("acceptAdjustment", "否");
+                jsonObject.put("preferredSubjects", null);
+                jsonObject.put("singleSubSubject", applications.get(0));
+                jsonObject.put("researchDirection", null);
+            }
+            else {
+                jsonObject.put("acceptAdjustment", null);
+                jsonObject.put("preferredSubjects", null);
+                jsonObject.put("singleSubSubject", null);
+                jsonObject.put("researchDirection", applications.get(0));
+            }
+        }
+        else {
+            jsonObject.put("acceptAdjustment", null);
+            jsonObject.put("preferredSubjects", null);
+            jsonObject.put("singleSubSubject", null);
+            jsonObject.put("researchDirection", null);
+        }
+
+        //查找二级学科
+        List<String> disciplines = disciplineInfoService.findNameByDiscipline(stuBaseInfo.getDiscipline());
+        jsonObject.put("subSubjectOptions", disciplines);
+
+        return Result.success(jsonObject);
+    }
+
+    @PutMapping("/submitForm")
+    public Result submitForm(@RequestBody StuDetailDTO stuDetailDTO){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        int studentId = (Integer) map.get("id");
+        //插入学生基本信息
+        studentService.updateStudent(stuDetailDTO.getContact(), stuDetailDTO.getEmergencyContact(), stuDetailDTO.getEmail(), stuDetailDTO.getGraduatedMajor(), stuDetailDTO.getGraduationSchool(), stuDetailDTO.getOrigin(), stuDetailDTO.getGraduationTime(), stuDetailDTO.getExamNumber(), stuDetailDTO.getStudentType(), stuDetailDTO.getGraduateType(), studentId);
+
+        //插入学生选择导师情况
+        String supervisor1 = stuDetailDTO.getSupervisor1();
+        String supervisor2 = stuDetailDTO.getSupervisor2();
+        String supervisor3 = stuDetailDTO.getSupervisor3();
+        int supervisor1Id = teacherService.getTeacherIdByName(supervisor1);
+        int supervisor2Id = teacherService.getTeacherIdByName(supervisor2);
+        int supervisor3Id = teacherService.getTeacherIdByName(supervisor3);
+        choiceService.insertChoice(supervisor1Id, studentId, 1);
+        choiceService.insertChoice(supervisor2Id, studentId, 2);
+        choiceService.insertChoice(supervisor3Id, studentId, 3);
+
+        //插入学生选择学科情况
+        String acceptAdjustment = stuDetailDTO.getAcceptAdjustment();
+        if(acceptAdjustment != null){
+            if(acceptAdjustment.equals("是")){
+                List<String> preferredSubjects = stuDetailDTO.getPreferredSubjects();
+                int preference_order = 1;
+                for(String preferredSubject : preferredSubjects) {
+                    int discipline_id = disciplineService.selectIdByName(preferredSubject);
+                    applicationService.insertApplication(studentId, discipline_id, preference_order);
+                    preference_order++;
+                }
+            }
+            else if(acceptAdjustment.equals("否")){
+                String singleSubSubject = stuDetailDTO.getSingleSubSubject();
+                int discipline_id = disciplineService.selectIdByName(singleSubSubject);
+                applicationService.insertApplication(studentId, discipline_id, 1);
+            }
+        }
+        else{
+            String researchDirection = stuDetailDTO.getResearchDirection();
+            int discipline_id = disciplineService.selectIdByName(researchDirection);
+            applicationService.insertApplication(studentId, discipline_id, 1);
+        }
+
+        return Result.success("信息提交成功");
+    }
+
+}
