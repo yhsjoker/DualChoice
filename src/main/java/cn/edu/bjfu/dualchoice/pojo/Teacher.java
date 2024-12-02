@@ -23,12 +23,6 @@ public class Teacher {
 
     private String profile;
 
-    private int academicQuota;
-
-    private int professionalQuota;
-
-    private int directPhdQuota;
-
     private int volunteerRound;
 
     private int collegeId;
