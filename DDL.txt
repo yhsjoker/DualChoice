@@ -43,7 +43,7 @@ CREATE TABLE Discipline (
     id INT NOT NULL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     type VARCHAR(50) NOT NULL,
-    quota INT NOT NULL,
+    quota INT,
     overview TEXT NOT NULL,
     parent_discipline INT,
     level INT NOT NULL,
@@ -68,9 +68,6 @@ CREATE TABLE Teacher (
     email VARCHAR(50) NOT NULL,
     title VARCHAR(50) NOT NULL,
     profile TEXT NOT NULL,
-    academic_quota INT NOT NULL,
-    professional_quota INT NOT NULL,
-    direct_phd_quota INT NOT NULL,
     volunteer_round INT NOT NULL,
     college_id INT NOT NULL,
     FOREIGN KEY (college_id) REFERENCES College(id)
@@ -80,21 +77,21 @@ CREATE TABLE Teacher (
 CREATE TABLE Student (
     id INT NOT NULL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    phone VARCHAR(20) NOT NULL,
-    emergency_phone VARCHAR(20) NOT NULL,
-    email VARCHAR(50) NOT NULL,
-    undergraduate_major VARCHAR(100) NOT NULL,
-    undergraduate_school VARCHAR(100) NOT NULL,
-    origin VARCHAR(100) NOT NULL,
-    undergraduate_type VARCHAR(50) NOT NULL,
+    phone VARCHAR(20),
+    emergency_phone VARCHAR(20),
+    email VARCHAR(50),
+    undergraduate_major VARCHAR(100),
+    undergraduate_school VARCHAR(100),
+    origin VARCHAR(100),
+    undergraduate_type VARCHAR(50),
     resume VARCHAR(255),
-    birth_date DATE NOT NULL,
-    graduation_date DATE NOT NULL,
-    exam_ticket_number VARCHAR(50) NOT NULL,
+    birth_date DATE,
+    graduation_date DATE,
+    exam_ticket_number VARCHAR(50),
     id_card_number VARCHAR(50) NOT NULL,
-    category VARCHAR(50) NOT NULL,
-    volunteer_status VARCHAR(50) NOT NULL,
-    graduate_type VARCHAR(50) NOT NULL
+    category VARCHAR(50),
+    volunteer_status VARCHAR(50),
+    graduate_type VARCHAR(50)
 );
 
 --选择
@@ -146,6 +143,9 @@ CREATE TABLE Assessment (
 CREATE TABLE Teaching (
     discipline_id INT NOT NULL,
     teacher_id INT NOT NULL,
+    academic_quota INT NOT NULL,
+    professional_quota INT NOT NULL,
+    direct_phd_quota INT NOT NULL,
     PRIMARY KEY (discipline_id, teacher_id),
     FOREIGN KEY (discipline_id) REFERENCES Discipline(id),
     FOREIGN KEY (teacher_id) REFERENCES Teacher(id)
@@ -171,8 +171,9 @@ CREATE TABLE Administrator (
 
 --用户
 CREATE TABLE User (
-    id INT NOT NULL PRIMARY KEY,
+    id INT NOT NULL,
     user_name VARCHAR(50) NOT NULL,
     password VARCHAR(100) NOT NULL,
-    user_identity ENUM NOT NULL
+user_identity ENUM NOT NULL,
+PRIMARY KEY(id, user_identity)
 );
