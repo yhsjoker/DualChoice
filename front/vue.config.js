@@ -1,9 +1,12 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = {
   devServer: {
+    client: {
+      overlay: false,
+    },
     proxy: {
       '/api': {
-        target: 'http://localhost:8081/api', // 后端接口地址
+        target: 'http://localhost:8080/api', // 后端接口地址
         changeOrigin: true,
         // secure: false,
         // pathRewrite: {

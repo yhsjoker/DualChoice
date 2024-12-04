@@ -9,6 +9,9 @@ import InterviewGroup from "../views/InterviewGroup.vue";
 import Supervisor from "../views/DisciplineHead.vue";
 import GraduateManagementSecretary from "../views/GraduateManagementSecretary.vue";
 import StudentForm from "../views/StudentForm.vue";
+// import SubjectInfo from '../views/SubjectInfo.vue';
+// import TeacherInfo from '../views/TeacherInfo.vue';
+// import Contact from '../views/Contact.vue';
 
 const routes = [
   {
@@ -45,7 +48,22 @@ const routes = [
     name: 'StudentForm',
     component: StudentForm,
     meta: { requiresAuth: true, role: 'student-form' }
-  }
+  },
+  // {
+  //   path: '/subject-info',
+  //   name: 'subject-info',
+  //   component: SubjectInfo,
+  // },
+  // {
+  //   path: '/teacher-info',
+  //   name: 'teacher-info',
+  //   component: TeacherInfo,
+  // },
+  // {
+  //   path: '/contact',
+  //   name: 'contact',
+  //   component: Contact,
+  // },
 ]
 
 // 创建并导出路由实例

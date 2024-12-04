@@ -1,4 +1,21 @@
 <template>
+  <el-menu
+      class="nav-bar"
+      mode="horizontal"
+      background-color="#FFFFFF"
+      text-color="#333333"
+      active-text-color="#409EFF"
+      router
+  >
+
+    <el-menu-item index="/subject-info" class="custom-menu-item subject-info">学科信息</el-menu-item>
+    <el-menu-item index="/teacher-info" class="custom-menu-item teacher-info">导师信息</el-menu-item>
+
+    <el-menu-item index="logout" class="logout-button" @click="handleLogout">
+      退出登录
+    </el-menu-item>
+  </el-menu>
+
   <div class="login-container">
     <el-form :model="loginForm" @submit.native.prevent="handleLogin">
       <el-form-item>
@@ -8,7 +25,7 @@
         <el-input v-model="loginForm.password" placeholder="密码" type="password" size="large"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleLogin" size="large">登录</el-button>
+        <el-button type="primary" @click="handleLogin" size="large" style="width: 100%">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -27,6 +44,7 @@ export default {
     }
   },
   methods: {
+
     async handleLogin() {
       try {
         //console.log(this.loginForm)
@@ -75,13 +93,40 @@ export default {
 }
 
 .el-input input {
-  font-size: 16px;
-  padding: 10px 15px;
+  font-size: 22px;
 }
 
-.el-button button{
+.nav-bar {
   width: 100%;
-  font-size: 18px;
-  padding: 12px;
+  border-bottom: 2px solid #1E90FF !important; /* 下边框 */
+}
+
+/* 自定义菜单项样式 */
+.custom-menu-item {
+  text-align: center;
+  font-size: 18px !important; /* 调整字体大小 */
+  font-family: '楷体', sans-serif;
+  font-weight: bold !important;
+}
+
+/* 学科信息的特定样式 */
+.subject-info {
+  color: #FF69B4 !important; /* 例如，粉色 */
+  margin-left: 25% !important;
+}
+
+/* 导师信息的特定样式 */
+.teacher-info {
+  color: #1E90FF !important; /* 例如，蓝色 */
+  margin-left: 15% !important;
+}
+
+/* 退出登录按钮样式 */
+.logout-button {
+  cursor: pointer;
+  margin-left: 15% !important;
+  font-family: '楷体', sans-serif;
+  font-size: 18px !important;
+  font-weight: bold !important;
 }
 </style>
