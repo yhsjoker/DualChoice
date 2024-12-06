@@ -11,4 +11,8 @@ public interface DisciplineService {
 
 
     int selectIdByName(String name);
+
+    int getQuotaIndicatorById(int disciplineId);
+
+    String getNameById(int disciplineId);
 }

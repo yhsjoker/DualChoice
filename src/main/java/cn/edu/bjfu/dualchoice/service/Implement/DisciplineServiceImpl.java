@@ -30,4 +30,13 @@ public class DisciplineServiceImpl implements DisciplineService {
     public int selectIdByName(String name){
         return disciplineMapper.selectIdByName(name);
     }
+
+    @Override
+    public int getQuotaIndicatorById(int disciplineId){
+        return disciplineMapper.selectById(disciplineId).getQuota();
+    }
+    @Override
+    public String getNameById(int disciplineId){
+        return disciplineMapper.selectById(disciplineId).getName();
+    }
 }
