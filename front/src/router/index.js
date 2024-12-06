@@ -9,6 +9,7 @@ import InterviewGroup from "../views/InterviewGroup.vue";
 import Supervisor from "../views/DisciplineHead.vue";
 import GraduateManagementSecretary from "../views/GraduateManagementSecretary.vue";
 import StudentForm from "../views/StudentForm.vue";
+import Teacher from "../views/Teacher.vue";
 // import SubjectInfo from '../views/SubjectInfo.vue';
 // import TeacherInfo from '../views/TeacherInfo.vue';
 // import Contact from '../views/Contact.vue';
@@ -49,6 +50,12 @@ const routes = [
     component: StudentForm,
     meta: { requiresAuth: true, role: 'student-form' }
   },
+  {
+    path: '/teacher',
+    name: 'Teacher',
+    component: Teacher,
+    meta: { requiresAuth: true, role: 'teacher' }
+  }
   // {
   //   path: '/subject-info',
   //   name: 'subject-info',

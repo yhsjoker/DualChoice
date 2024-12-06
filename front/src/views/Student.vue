@@ -180,7 +180,21 @@
             </el-select>
           </el-form-item>
         </template>
-        
+
+        <el-form-item label="上传个人简述" prop="personalStatement">
+          <el-upload
+              class="upload-demo"
+              action="/api/student/uploadPersonalStatement"
+          :show-file-list="false"
+          :before-upload="beforeUpload"
+          :on-success="handleUploadSuccess"
+          :on-error="handleUploadError"
+          :disabled="isReadOnly">
+            <el-button slot="trigger" size="small" type="primary">选择文件</el-button>
+            <span class="el-upload__tip" slot="tip">只支持上传 PDF、Word 文件</span>
+          </el-upload>
+        </el-form-item>
+
         <!-- 提交按钮 -->
         <el-form-item v-if="!isReadOnly">
           <el-button type="primary" @click="submitForm">提交</el-button>
@@ -218,8 +232,8 @@ export default {
         researchDirection: '', // 拟报研究方向（其他专业）
         graduateType: '', // 研究生类型
         subSubjectOptions: [], // 二级学科选项，从后端获取
-        //subSubjectOptions: ['全日制计算机技术（01方向）', '全日制软件工程（02方向）', '全日制软件工程国际联合培养（03方向）',
-        //  '全日制人工智能（04方向）', '全日制大数据技术与工程（05方向）'], // 电子信息专业下的五个二级学科
+
+        personalStatementFile: null,
       },
       isReadOnly: false,
       flag: false,
@@ -227,6 +241,25 @@ export default {
     };
   },
   methods: {
+    beforeUpload(file) {
+      const isPDF = file.type === 'application/pdf';
+      const isWord = file.type === 'application/sword' || file.type === 'application/vnd.malformations-office document.multiprocessing.document';
+      if (!isPDF && !isWord) {
+        this.$message.error('只能上传 PDF 或 Word 文件');
+      }
+      return isPDF || isWord;
+    },
+
+    handleUploadSuccess(response, file) {
+      this.$message.success('文件上传成功');
+      // 将文件信息存储到 formData
+      this.formData.personalStatementFile = file;
+    },
+
+    handleUploadError(error, file, fileList) {
+      this.$message.error('文件上传失败');
+    },
+
     async handleLogout() {
       this.$router.push('/');
     },
@@ -289,7 +322,7 @@ export default {
       try {
 
         const response = await axios.get('/api/student/info');
-        const data = response.data.data
+        const data = response.data.data;
 
         // 将返回的数据填充到 formData 中
         this.formData = {
@@ -331,14 +364,14 @@ export default {
             // 重新获取考生信息，更新页面
             await this.fetchStudentInfo();
           } catch (error) {
-            console.error('提交表单时发生错误:', error); // 捕获完整的错误对象
-            if (error.response) {
-              console.error('后端返回的错误:', error.response.data);
-            } else if (error.request) {
-              console.error('未收到后端响应:', error.request);
-            } else {
-              console.error('其他错误:', error.message);
-            }
+            // console.error('提交表单时发生错误:', error); // 捕获完整的错误对象
+            // if (error.response) {
+            //   console.error('后端返回的错误:', error.response.data);
+            // } else if (error.request) {
+            //   console.error('未收到后端响应:', error.request);
+            // } else {
+            //   console.error('其他错误:', error.message);
+            // }
             this.$message.error('提交失败，请重试');
           }
         } else {

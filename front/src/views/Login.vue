@@ -44,6 +44,9 @@ export default {
     }
   },
   methods: {
+    async handleLogout() {
+      this.$router.push('/');
+    },
 
     async handleLogin() {
       try {
@@ -65,6 +68,9 @@ export default {
         } else if(user_identity === 'GraduateManagementSecretary'){
           sessionStorage.setItem('graduateManagementSecretary_token', token);
           sessionStorage.setItem('graduateManagementSecretary_identity', user_identity);
+        } else if(user_identity === 'Teacher'){
+          sessionStorage.setItem('teacher_token', token);
+          sessionStorage.setItem('teacher_identity', user_identity);
         }
       } catch (error) {
         console.log(error)
@@ -90,10 +96,6 @@ export default {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   background-color: #ffffff;
-}
-
-.el-input input {
-  font-size: 22px;
 }
 
 .nav-bar {

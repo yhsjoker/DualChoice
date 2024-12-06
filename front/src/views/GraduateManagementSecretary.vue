@@ -97,7 +97,7 @@ export default {
     addRequestInterceptor() {
       axios.interceptors.request.use(
           (config) => {
-            const token = sessionStorage.getItem('token');
+            const token = sessionStorage.getItem('graduateManagementSecretary_token');
             if (token) {
               config.headers.Authorization = `Bearer ${token}`;
             }
