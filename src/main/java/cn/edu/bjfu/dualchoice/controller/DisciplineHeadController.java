@@ -1,16 +1,11 @@
 package cn.edu.bjfu.dualchoice.controller;
 
 import cn.edu.bjfu.dualchoice.pojo.*;
-import cn.edu.bjfu.dualchoice.service.DisciplineHeadService;
-import cn.edu.bjfu.dualchoice.service.DisciplineInfoService;
-import cn.edu.bjfu.dualchoice.service.DisciplineService;
-import cn.edu.bjfu.dualchoice.service.TeacherQuotaInfoService;
+import cn.edu.bjfu.dualchoice.service.*;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -26,6 +21,10 @@ public class DisciplineHeadController {
     DisciplineInfoService disciplineInfoService;
     @Autowired
     TeacherQuotaInfoService teacherQuotaInfoService;
+    @Autowired
+    TeacherService teacherService;
+    @Autowired
+    TeachingService teachingService;
     @GetMapping("/info")
     public Result info(){
         Map<String, Object> map = ThreadLocalUtil.get();
@@ -46,5 +45,18 @@ public class DisciplineHeadController {
         result.put("teacherQuota", teacherQuota);
 
         return Result.success(result);
+    }
+    @PostMapping("/submitQuota")
+    public Result submitQuota(@RequestBody DisHeadSubmitQuotaDTO disHeadSubmitQuotaDTO){
+        int disciplineId = disciplineService.selectIdByName(disHeadSubmitQuotaDTO.getPrimarySubject());
+
+        List<TeacherQuotaInfo> teacherQuotaInfos = disHeadSubmitQuotaDTO.getTeacherQuota();
+        for(TeacherQuotaInfo info : teacherQuotaInfos){
+            int teacherId = teacherService.getTeacherIdByName(info.getName());
+            teachingService.updateInfo(
+                    disciplineId, teacherId, info.getAcademicQuota(), info.getProfessionalQuota(), info.getPhdQuota()
+            );
+        }
+        return Result.success();
     }
 }
