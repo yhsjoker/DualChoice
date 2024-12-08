@@ -19,7 +19,7 @@
   <div class="login-container">
     <el-form :model="loginForm" @submit.native.prevent="handleLogin">
       <el-form-item>
-        <el-input v-model="loginForm.username" placeholder="用户名" size="large"></el-input>
+        <el-input v-model="loginForm.userName" placeholder="用户名" size="large"></el-input>
       </el-form-item>
       <el-form-item>
         <el-input v-model="loginForm.password" placeholder="密码" type="password" size="large"></el-input>
@@ -65,12 +65,15 @@ export default {
         } else if (user_identity === 'DisciplineHead'){
           sessionStorage.setItem('disciplineHead_token', token);
           sessionStorage.setItem('disciplineHead_identity', user_identity);
+          this.$router.push('/discipline-head');
         } else if(user_identity === 'GraduateManagementSecretary'){
           sessionStorage.setItem('graduateManagementSecretary_token', token);
           sessionStorage.setItem('graduateManagementSecretary_identity', user_identity);
+          this.$router.push('/graduate-manage-group');
         } else if(user_identity === 'Teacher'){
           sessionStorage.setItem('teacher_token', token);
           sessionStorage.setItem('teacher_identity', user_identity);
+          this.$router.push('/teacher');
         }
       } catch (error) {
         console.log(error)

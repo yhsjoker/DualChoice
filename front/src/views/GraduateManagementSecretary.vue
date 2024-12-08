@@ -119,7 +119,7 @@ export default {
     // 获取考生列表
     async fetchStudents() {
       try {
-        const response = await axios.get(`/api/graduateManagementSecretary/students/${this.college_id}`);
+        const response = await axios.get(`/api/graduateManagementSecretary/students`);
         this.students = response.data.data;
       } catch (error) {
         this.$message.error('获取考生列表失败');
@@ -128,7 +128,7 @@ export default {
     // 获取导师列表
     async fetchTeachers() {
       try {
-        const response = await axios.get(`/api/graduateManagementSecretary/teachers/${this.college_id}`);
+        const response = await axios.get(`/api/graduateManagementSecretary/teachers`);
         this.teachers = response.data.data;
       } catch (error) {
         this.$message.error('获取导师列表失败');

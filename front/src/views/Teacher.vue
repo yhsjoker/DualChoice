@@ -56,39 +56,39 @@ export default {
   data() {
     return {
       teacherInfo: {
-        name: '神农氏',
-        college: '信息学院',
-        email: 'shennong@qq.com',
-        phone: '13379096699',
-        title: '教授',
-        round: '第一轮',
-        secondarySubjects: [
-          {
-            name: "计算机科学与技术",
-            academicQuota: 3,
-            professionalQuota: 2,
-            phdQuota: 0,
-            students: [
-              { id: 1, name: "李明", type: "直博", volunteerLevel: "第一志愿", isSelected: false },
-              { id: 2, name: "王红", type: "专硕", volunteerLevel: "第一志愿", isSelected: false },
-              { id: 3, name: "赵刚", type: "直博", volunteerLevel: "第一志愿", isSelected: false },
-              { id: 4, name: "孙晓", type: "学硕", volunteerLevel: "第一志愿", isSelected: false },
-            ]
-          },
-          {
-            name: "电子工程",
-            academicQuota: 2,
-            professionalQuota: 3,
-            phdQuota: 2,
-            students: [
-              { id: 5, name: "刘涛", type: "学硕", volunteerLevel: "第一志愿", isSelected: false },
-              { id: 6, name: "周宇", type: "专硕", volunteerLevel: "第一志愿", isSelected: false },
-              { id: 7, name: "陈建", type: "学硕", volunteerLevel: "第一志愿", isSelected: false },
-              { id: 8, name: "杨丽", type: "专硕", volunteerLevel: "第一志愿", isSelected: false },
-              { id: 9, name: "郑阳", type: "学硕", volunteerLevel: "第一志愿", isSelected: false },
-            ]
-          }
-        ]
+        // name: '神农氏',
+        // college: '信息学院',
+        // email: 'shennong@qq.com',
+        // phone: '13379096699',
+        // title: '教授',
+        // round: '第一轮',
+        // secondarySubjects: [
+        //   {
+        //     name: "计算机科学与技术",
+        //     academicQuota: 3,
+        //     professionalQuota: 2,
+        //     phdQuota: 0,
+        //     students: [
+        //       { id: 1, name: "李明", type: "直博", volunteerLevel: "第一志愿", isSelected: false },
+        //       { id: 2, name: "王红", type: "专硕", volunteerLevel: "第一志愿", isSelected: false },
+        //       { id: 3, name: "赵刚", type: "直博", volunteerLevel: "第一志愿", isSelected: false },
+        //       { id: 4, name: "孙晓", type: "学硕", volunteerLevel: "第一志愿", isSelected: false },
+        //     ]
+        //   },
+        //   {
+        //     name: "电子工程",
+        //     academicQuota: 2,
+        //     professionalQuota: 3,
+        //     phdQuota: 2,
+        //     students: [
+        //       { id: 5, name: "刘涛", type: "学硕", volunteerLevel: "第一志愿", isSelected: false },
+        //       { id: 6, name: "周宇", type: "专硕", volunteerLevel: "第一志愿", isSelected: false },
+        //       { id: 7, name: "陈建", type: "学硕", volunteerLevel: "第一志愿", isSelected: false },
+        //       { id: 8, name: "杨丽", type: "专硕", volunteerLevel: "第一志愿", isSelected: false },
+        //       { id: 9, name: "郑阳", type: "学硕", volunteerLevel: "第一志愿", isSelected: false },
+        //     ]
+        //   }
+        // ]
       },
       selectedStudents: []
     };
@@ -109,10 +109,9 @@ export default {
 
     async fetchTeacherInfo() {
       try {
-        // const response = await axios.get('/api/teacher/info');
-        // const data = response.data.data
-        // this.teacherInfo = {...this.teacherInfo, ...data};
-
+        const response = await axios.get('/api/teacher/info');
+        const data = response.data.data
+        this.teacherInfo = {...this.teacherInfo, ...data};
       } catch (error) {
         this.$message.error('获取老师信息失败');
       }
@@ -183,7 +182,7 @@ export default {
   },
   created() {
     this.addRequestInterceptor();
-    // this.fetchTeacherInfo();
+    this.fetchTeacherInfo();
   },
 };
 </script>

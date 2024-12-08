@@ -10,6 +10,7 @@ import Supervisor from "../views/DisciplineHead.vue";
 import GraduateManagementSecretary from "../views/GraduateManagementSecretary.vue";
 import StudentForm from "../views/StudentForm.vue";
 import Teacher from "../views/Teacher.vue";
+import DrawLottery from "../views/DrawLottery.vue";
 // import SubjectInfo from '../views/SubjectInfo.vue';
 // import TeacherInfo from '../views/TeacherInfo.vue';
 // import Contact from '../views/Contact.vue';
@@ -55,6 +56,12 @@ const routes = [
     name: 'Teacher',
     component: Teacher,
     meta: { requiresAuth: true, role: 'teacher' }
+  },
+  {
+    path: '/draw-lottery',
+    name: 'DrawLottery',
+    component: DrawLottery,
+    meta: { requiresAuth: true, role: 'draw-lottery' }
   }
   // {
   //   path: '/subject-info',

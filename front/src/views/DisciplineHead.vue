@@ -15,14 +15,14 @@
       <el-card
           shadow="never"
           class="secondary-card"
-          v-for="(subject, index) in secondarySubjects"
+          v-for="(item, index) in quota"
           :key="index"
       >
         <div class="card-header">
-          <h3>{{ subject }}</h3>
+          <h3>{{ item.secondarySubjects }}</h3>
         </div>
         <el-table
-            :data="teacherQuota[index]"
+            :data="item.teacherQuota"
             class="center-table full-width-table"
             border
             stripe
@@ -95,10 +95,23 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      primarySubject: '', // 一级学科名称（字符串）
-      quotaIndicator: 0, // 名额指标（数字）
-      secondarySubjects: [], // 二级学科列表（字符串数组）
-      teacherQuota: [], // 导师名额列表（二维数组）
+      primarySubject: '计算机科学与技术', // 一级学科名称（字符串）
+      quotaIndicator: 100, // 名额指标（数字）
+      quota:[
+        {
+          secondarySubjects:"软件工程",
+          teacherQuota:[
+            {name: "张三",academicQuota: 10,professionalQuota: 5,phdQuota: 2},
+            {name: "李四",academicQuota: 8,professionalQuota: 7,phdQuota: 1}
+          ]
+        },
+        {
+          secondarySubjects:"计算机应用技术",
+          teacherQuota:[
+            {name: "王五",academicQuota: 15,professionalQuota: 10,phdQuota: 3}
+          ]
+        }
+      ],
       isReadOnly: false, // 页面是否只读
     };
   },
@@ -122,8 +135,9 @@ export default {
         const data = response.data.data;
         this.primarySubject = data.primarySubject;
         this.quotaIndicator = data.quotaIndicator;
-        this.secondarySubjects = data.secondarySubjects;
-        this.teacherQuota = data.teacherQuota;
+        this.quota = data.quota;
+        // this.secondarySubjects = data.secondarySubjects;
+        // this.teacherQuota = data.teacherQuota;
 
         // 检查是否需要设置为只读
         this.checkQuotaEquality();
@@ -143,8 +157,8 @@ export default {
     // 计算当前页面的总名额
     calculateTotalQuota() {
       let total = 0;
-      this.teacherQuota.forEach((subjectQuota) => {
-        subjectQuota.forEach((teacher) => {
+      this.quota.forEach((subject) => {
+        subject.teacherQuota.forEach((teacher) => {
           total +=
               (teacher.academicQuota || 0) +
               (teacher.professionalQuota || 0) +
@@ -160,11 +174,11 @@ export default {
         const difference = totalQuota - this.quotaIndicator;
         if (difference > 0) {
           this.$message.error(
-              `总名额超出指标 ${difference} 个，请调整后再提交`
+              `当前名额数超出总指标 ${difference} 个，请调整后再提交`
           );
         } else {
           this.$message.error(
-              `总名额少于指标 ${-difference} 个，请调整后再提交`
+              `当前名额数相差总指标 ${-difference} 个，请调整后再提交`
           );
         }
         return;
@@ -173,8 +187,7 @@ export default {
       try {
         await axios.post('/api/disciplineHead/submitQuota', {
           primarySubject: this.primarySubject,
-          secondarySubjects: this.secondarySubjects,
-          teacherQuota: this.teacherQuota,
+          quota: this.quota,
         });
         this.$message.success('名额分配提交成功');
         this.isReadOnly = true;
@@ -195,7 +208,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 100vh;
   padding: 20px;
   background-color: #f9f9f9;
@@ -203,7 +216,7 @@ export default {
 
 .header {
   margin-bottom: 20px;
-  width: 80%; /* 限制宽度，确保页面居中 */
+  width: 70%; /* 调整宽度 */
   margin-left: auto;
   margin-right: auto;
 }
@@ -226,9 +239,7 @@ export default {
 
 .content {
   margin-top: 20px;
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
+  width: 70%; /* 调整宽度 */
 }
 
 .full-width-table {
@@ -236,7 +247,11 @@ export default {
 }
 
 .secondary-card {
-  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px; /* 减少间距 */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 增加阴影 */
 }
 
 .card-header {
@@ -263,7 +278,9 @@ export default {
 }
 
 ::v-deep(.el-button) {
-  width: 200px;
+  width: auto; /* 自适应宽度 */
+  padding: 10px 20px;
+  font-size: 16px;
 }
 
 ::v-deep(.cell-center) {
@@ -276,5 +293,4 @@ export default {
   align-items: center;
   justify-content: center;
 }
-
 </style>
