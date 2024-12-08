@@ -3,6 +3,7 @@ package cn.edu.bjfu.dualchoice.controller;
 import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.*;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,11 @@ public class DisciplineHeadController {
     @Autowired
     DisciplineInfoService disciplineInfoService;
     @Autowired
-    TeacherQuotaInfoService teacherQuotaInfoService;
-    @Autowired
     TeacherService teacherService;
     @Autowired
     TeachingService teachingService;
+    @Autowired
+    TeacherQuotaInfoService teacherQuotaInfoService;
     @GetMapping("/info")
     public Result info(){
         Map<String, Object> map = ThreadLocalUtil.get();
@@ -34,28 +35,37 @@ public class DisciplineHeadController {
         int quotaIndicator = disciplineService.getQuotaIndicatorById(disciplineId);
         String disciplineName = disciplineService.getNameById(disciplineId);
 
-        List<String> secondarySubjects = disciplineInfoService.findNameByDiscipline(disciplineName);
-
-        List<TeacherQuotaInfo> teacherQuota = teacherQuotaInfoService.findTeacherQuotaInfoByDisciplineId(disciplineId);
+        List<Integer> secondarySubjects = disciplineInfoService.findSecIdByPriId(disciplineId);
+        JSONArray quota = new JSONArray();
+        for(Integer secId : secondarySubjects){
+            JSONObject info = new JSONObject();
+            info.put("secondarySubjects", disciplineService.getNameById(secId));
+            info.put("teacherQuota", teacherQuotaInfoService.findTeacherQuotaInfoByDisciplineId(secId));
+            quota.add(info);
+        }
 
         JSONObject result = new JSONObject();
         result.put("primarySubject", disciplineName);
         result.put("quotaIndicator", quotaIndicator);
-        result.put("secondarySubjects", secondarySubjects);
-        result.put("teacherQuota", teacherQuota);
+        result.put("quota", quota);
 
         return Result.success(result);
     }
     @PostMapping("/submitQuota")
     public Result submitQuota(@RequestBody DisHeadSubmitQuotaDTO disHeadSubmitQuotaDTO){
-        int disciplineId = disciplineService.selectIdByName(disHeadSubmitQuotaDTO.getPrimarySubject());
-
-        List<TeacherQuotaInfo> teacherQuotaInfos = disHeadSubmitQuotaDTO.getTeacherQuota();
-        for(TeacherQuotaInfo info : teacherQuotaInfos){
-            int teacherId = teacherService.getTeacherIdByName(info.getName());
-            teachingService.updateInfo(
-                    disciplineId, teacherId, info.getAcademicQuota(), info.getProfessionalQuota(), info.getPhdQuota()
-            );
+        System.out.println(disHeadSubmitQuotaDTO);
+        List<SecQuotaDTO> secInfos = disHeadSubmitQuotaDTO.getQuota();
+        for(SecQuotaDTO secInfo : secInfos){
+            int secondarySubjectsId = disciplineService.selectIdByName(secInfo.getSecondarySubjects());
+            List<TeacherQuotaInfoDTO> teacherQuotaInfos = secInfo.getTeacherQuota();
+            if(teacherQuotaInfos == null) continue;
+            for(TeacherQuotaInfoDTO teacherQuotaInfo : teacherQuotaInfos){
+                int teacherId = teacherService.getTeacherIdByName(teacherQuotaInfo.getName());
+                System.out.println(teacherId);
+                teachingService.updateInfo(
+                        secondarySubjectsId, teacherId, teacherQuotaInfo.getAcademicQuota(), teacherQuotaInfo.getProfessionalQuota(), teacherQuotaInfo.getPhdQuota()
+                );
+            }
         }
         return Result.success();
     }

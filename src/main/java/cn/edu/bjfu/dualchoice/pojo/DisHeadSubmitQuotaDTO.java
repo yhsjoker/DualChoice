@@ -7,6 +7,5 @@ import java.util.List;
 @Data
 public class DisHeadSubmitQuotaDTO {
     String primarySubject;
-    List<String> secondarySubjects;
-    List<TeacherQuotaInfo> teacherQuota;
+    List<SecQuotaDTO> quota;
 }
