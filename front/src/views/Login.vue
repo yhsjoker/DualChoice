@@ -19,7 +19,7 @@
   <div class="login-container">
     <el-form :model="loginForm" @submit.native.prevent="handleLogin">
       <el-form-item>
-        <el-input v-model="loginForm.userName" placeholder="用户名" size="large"></el-input>
+        <el-input v-model="loginForm.username" placeholder="用户名" size="large"></el-input>
       </el-form-item>
       <el-form-item>
         <el-input v-model="loginForm.password" placeholder="密码" type="password" size="large"></el-input>
@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       loginForm: {
-        userName: '',
+        username: '',
         password: ''
       }
     }
@@ -50,10 +50,9 @@ export default {
 
     async handleLogin() {
       try {
-        //console.log(this.loginForm)
         const response = await axios.post('/api/user/login', this.loginForm);
         const {user_identity, token} = response.data.data
-
+        console.log(response.data.data)
         if (user_identity === 'Student') {
           sessionStorage.setItem('student_token', token);
           sessionStorage.setItem('student_identity', user_identity);

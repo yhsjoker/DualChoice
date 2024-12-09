@@ -182,17 +182,35 @@
         </template>
 
         <el-form-item label="上传个人简述" prop="personalStatement">
-          <el-upload
-              class="upload-demo"
-              action="/api/student/uploadPersonalStatement"
-          :show-file-list="false"
-          :before-upload="beforeUpload"
-          :on-success="handleUploadSuccess"
-          :on-error="handleUploadError"
-          :disabled="isReadOnly">
-            <el-button slot="trigger" size="small" type="primary">选择文件</el-button>
-            <span class="el-upload__tip" slot="tip">只支持上传 PDF、Word 文件</span>
-          </el-upload>
+          <template v-if="isReadOnly">
+            <div>
+              <p>已上传的文件: {{ formData.personalStatementName }}</p>
+              <a :href="formData.personalStatementUrl" download :title="formData.personalStatementName">下载已上传的PDF</a>
+            </div>
+          </template>
+          <template v-else>
+            <el-upload
+                class="upload-demo"
+                ref="upload"
+                action="#"
+                :auto-upload="false"
+                :on-change="handleFileChange"
+                :on-remove="handleFileRemove"
+                :file-list="fileList"
+                :limit="1"
+                :on-exceed="handleExceed"
+            >
+              <el-button slot="trigger" size="small" type="primary">选择文件</el-button>
+              <div slot="tip" class="el-upload__tip" style="width: 290px">
+                只支持上传 PDF 文件
+              </div>
+            </el-upload>
+
+            <div v-if="previewUrl" style="margin-top: 45px">
+              <!-- 点击此链接在新标签页打开已选择的pdf -->
+              <a :href="previewUrl" target="_blank" rel="noopener" style="margin-left:10px;">查看文件</a>
+            </div>
+          </template>
         </el-form-item>
 
         <!-- 提交按钮 -->
@@ -233,31 +251,38 @@ export default {
         graduateType: '', // 研究生类型
         subSubjectOptions: [], // 二级学科选项，从后端获取
 
-        personalStatementFile: null,
+        personalStatementFile: null,      // 前端要上传的PDF文件
+        personalStatementName: '',        // 已上传文件的名称
+        personalStatementUrl: '',         // 已上传文件的可访问链接
       },
+      fileList:[],
       isReadOnly: false,
       flag: false,
-      rules: {}
+      rules: {},
+      previewUrl: ''
     };
   },
   methods: {
-    beforeUpload(file) {
-      const isPDF = file.type === 'application/pdf';
-      const isWord = file.type === 'application/sword' || file.type === 'application/vnd.malformations-office document.multiprocessing.document';
-      if (!isPDF && !isWord) {
-        this.$message.error('只能上传 PDF 或 Word 文件');
+    handleFileChange(file, fileList) {
+      const allowedType = 'application/pdf';
+
+      if (file.raw.type === allowedType) {
+        this.formData.personalStatementFile = file.raw;
+        this.fileList = fileList;
+        this.previewUrl = URL.createObjectURL(file.raw);
+      } else {
+        this.$message.error('只能上传 PDF 文件!');
+        this.formData.personalStatementFile = null;
+        this.fileList = fileList.filter(f => f.raw.type === allowedType);
+        this.previewUrl = '';
       }
-      return isPDF || isWord;
     },
-
-    handleUploadSuccess(response, file) {
-      this.$message.success('文件上传成功');
-      // 将文件信息存储到 formData
-      this.formData.personalStatementFile = file;
+    handleFileRemove(file, fileList){
+      this.previewUrl = '';
+      this.formData.personalStatementFile = null;
     },
-
-    handleUploadError(error, file, fileList) {
-      this.$message.error('文件上传失败');
+    handleExceed(files, fileList) {
+      this.$message.warning(`只能提交 1 个文件`);
     },
 
     async handleLogout() {
@@ -287,6 +312,7 @@ export default {
         singleSubSubject: [{required: this.flag, message: '请选择一个二级学科', trigger: 'change'}],
         researchDirection: [{required: this.flag.isReadOnly, message: '请选择拟报研究方向', trigger: 'change'}],
         preferredSubjects: [{validator: this.validatePreferredSubjects.bind(this), trigger: 'change'}],
+        personalStatementFile: {required: !this.isReadOnly, message: '请上传个人简述文件', trigger: 'change'}
       };
     },
 
@@ -330,6 +356,8 @@ export default {
           ...data,
           preferredSubjects: data.preferredSubjects || ['', '', '', ''], // 默认值
           singleSubSubject: data.singleSubSubject || '', // 默认值
+          personalStatementUrl: data.personalStatementUrl || '',
+          personalStatementName: data.personalStatementName || ''
         };
 
         // 如果准考证号不为空，则设置为只读
@@ -357,9 +385,36 @@ export default {
     async submitForm() {
       this.$refs.formRef.validate(async (valid) => {
         if (valid) {
+          if (!this.isReadOnly) {
+            if (!this.formData.personalStatementFile) {
+              this.$message.error('请上传个人简述文件');
+              return;
+            }
+            if (this.formData.personalStatementFile.type !== 'application/pdf') {
+              this.$message.error('上传的文件类型不正确，请上传 PDF 文件!');
+              return;
+            }
+          }
+
+          const submitData = new FormData();
+          for (const key in this.formData) {
+            if (this.formData.hasOwnProperty(key)) {
+              if (key === 'personalStatementFile' && this.formData[key]) {
+                submitData.append('personalStatementFile', this.formData[key]);
+              } else if (key !== 'personalStatementFile') {
+                // 将其他字段作为普通表单数据提交
+                submitData.append(key, this.formData[key] ? this.formData[key] : '');
+              }
+            }
+          }
+
           try {
             // 提交表单数据到后端
-            await axios.put('/api/student/submitForm', this.formData);
+            await axios.post('/api/student/submitForm', submitData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            });
             this.$message.success('信息提交成功');
             // 重新获取考生信息，更新页面
             await this.fetchStudentInfo();
