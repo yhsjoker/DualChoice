@@ -113,10 +113,10 @@ export default {
     async fetchData() {
       try {
         const teacherResponse = await axios.get('/api/teachers');
-        this.teachers = teacherResponse.data.data;
+        this.teachers = teacherResponse.data.data.teachers;
 
         const studentResponse = await axios.get('/api/students');
-        this.students = studentResponse.data.data;
+        this.students = studentResponse.data.data.students;
       } catch (error) {
         this.$message.error('数据加载失败');
       }

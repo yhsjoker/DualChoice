@@ -86,8 +86,7 @@ export default {
   data() {
     return {
       activeTab: '', // 当前激活的选项卡
-      college_id: '',
-      college: '', // 学院信息
+      collegeName: '', // 学院信息
       students: [], // 考生列表
       teachers: [], // 导师列表
     };
@@ -110,8 +109,7 @@ export default {
     async getCollege() {
       try {
         const response = await axios.get('/api/graduateManagementSecretary/getCollege');
-        this.college = response.data.data.collegeName;
-        this.college_id = response.data.data.college_id;
+        this.collegeName = response.data.data.collegeName;
       } catch (error) {
         this.$message.error('获取学院信息失败');
       }
@@ -120,7 +118,7 @@ export default {
     async fetchStudents() {
       try {
         const response = await axios.get(`/api/graduateManagementSecretary/students`);
-        this.students = response.data.data;
+        this.students = response.data.data.students;
       } catch (error) {
         this.$message.error('获取考生列表失败');
       }
@@ -129,7 +127,7 @@ export default {
     async fetchTeachers() {
       try {
         const response = await axios.get(`/api/graduateManagementSecretary/teachers`);
-        this.teachers = response.data.data;
+        this.teachers = response.data.data.teachers;
       } catch (error) {
         this.$message.error('获取导师列表失败');
       }
