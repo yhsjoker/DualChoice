@@ -63,7 +63,7 @@ CREATE TABLE Teacher (
     id INT NOT NULL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     phone VARCHAR(20) NOT NULL,
-    qualification VARCHAR(50) NOT NULL,
+    qualification VARCHAR(50),
     image VARCHAR(255),
     email VARCHAR(50) NOT NULL,
     title VARCHAR(50) NOT NULL,
