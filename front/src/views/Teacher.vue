@@ -122,13 +122,13 @@ export default {
     selectStudent(student, subject) {
       let quotaField;
       switch(student.type) {
-        case '学硕':
+        case '学术型':
           quotaField = 'academicQuota';
           break;
-        case '专硕':
+        case '专业型':
           quotaField = 'professionalQuota';
           break;
-        case '直博':
+        case '直博型':
           quotaField = 'phdQuota';
           break;
         default:
@@ -145,13 +145,13 @@ export default {
     isQuotaAvailable(student, subject) {
       let quotaField;
       switch(student.type) {
-        case '学硕':
+        case '学术型':
           quotaField = 'academicQuota';
           break;
-        case '专硕':
+        case '专业型':
           quotaField = 'professionalQuota';
           break;
-        case '直博':
+        case '直博型':
           quotaField = 'phdQuota';
           break;
         default:

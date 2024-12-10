@@ -214,12 +214,52 @@
         </el-form-item>
 
         <!-- 提交按钮 -->
-        <el-form-item v-if="!isReadOnly">
-          <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-form-item>
+          <template v-if="!isReadOnly">
+            <el-button type="primary" @click="submitForm">提交</el-button>
+          </template>
+          <template v-else>
+            <el-button type="primary" @click="handleCheckStatus">查看状态</el-button>
+          </template>
         </el-form-item>
       </el-form>
     </el-main>
   </el-container>
+
+  <!-- 状态显示的对话框 -->
+  <el-dialog
+      title=""
+      v-model="showStatusDialog"
+      width="50%"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      custom-class="status-dialog"
+  >
+    <div class="dialog-content">
+      <template v-if="formData.status === '已录取'">
+        <div class="status-header success">
+          <i class="el-icon-circle-check success-icon"></i>
+          <h2 class="success-text">恭喜你!</h2>
+        </div>
+        <p class="status-message">
+          你已被 <span class="highlight">{{ formData.admissionMajor }}</span> 专业的 <span class="highlight">{{ formData.admissionTeacherName }}</span> 老师录取
+        </p>
+      </template>
+      <template v-else>
+        <div class="status-header info">
+          <i class="el-icon-info info-icon"></i>
+          <h2 class="info-text">当前状态</h2>
+        </div>
+        <p class="status-message">
+          当前状态为：<span class="highlight">{{ formData.status }}</span>
+        </p>
+      </template>
+    </div>
+
+    <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="showStatusDialog = false">关闭</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
@@ -254,12 +294,17 @@ export default {
         personalStatementFile: null,      // 前端要上传的PDF文件
         personalStatementName: '',        // 已上传文件的名称
         personalStatementUrl: '',         // 已上传文件的可访问链接
+
+        status: '', // 状态（"提交阶段"、"审查阶段"、"已录取"、"未录取"）
+        admissionTeacherName: '', // 已录取时返回录取导师姓名
+        admissionMajor: '' // 已录取时返回录取专业
       },
       fileList:[],
       isReadOnly: false,
       flag: false,
       rules: {},
-      previewUrl: ''
+      previewUrl: '',
+      showStatusDialog: false // 控制查看状态对话框显示
     };
   },
   methods: {
@@ -287,6 +332,24 @@ export default {
 
     async handleLogout() {
       this.$router.push('/');
+    },
+
+    async handleCheckStatus() {
+      try {
+        const response = await axios.get('/api/student/currentStatus');
+        const data = response.data.data;
+        this.formData.status = data.status || this.formData.status;
+        this.formData.admissionTeacherName = data.admissionTeacherName || '';
+        this.formData.admissionMajor = data.admissionMajor || '';
+
+        // this.formData.status = '已录取';
+        // this.formData.admissionTeacherName = '张三';
+        // this.formData.admissionMajor = '计算机技术';
+
+        this.showStatusDialog = true;
+      } catch (error) {
+        this.$message.error('获取状态信息失败');
+      }
     },
 
     generateRules() {
@@ -346,7 +409,6 @@ export default {
     },
     async fetchStudentInfo() {
       try {
-
         const response = await axios.get('/api/student/info');
         const data = response.data.data;
 
@@ -357,7 +419,7 @@ export default {
           preferredSubjects: data.preferredSubjects || ['', '', '', ''], // 默认值
           singleSubSubject: data.singleSubSubject || '', // 默认值
           personalStatementUrl: data.personalStatementUrl || '',
-          personalStatementName: data.personalStatementName || ''
+          personalStatementName: data.personalStatementName || '',
         };
 
         // 如果准考证号不为空，则设置为只读
@@ -510,5 +572,63 @@ h2 {
 .logout-button {
   cursor: pointer;
   margin-left: 15% !important;
+}
+
+.status-dialog .el-dialog__header {
+  display: none; /* 隐藏默认标题栏，使我们自定义的内容更突出 */
+}
+
+.dialog-content {
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.success-icon, .info-icon {
+  font-size: 36px;
+  margin-right: 10px;
+}
+
+.success-icon {
+  color: #67C23A; /* 成功绿色 */
+}
+
+.info-icon {
+  color: #909399; /* 中性灰色 */
+}
+
+.success-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #67C23A;
+  margin: 0;
+}
+
+.info-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #909399;
+  margin: 0;
+}
+
+.status-message {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #409EFF; /* 强调用蓝色 */
+}
+
+.dialog-footer {
+  text-align: center;
 }
 </style>

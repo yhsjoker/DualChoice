@@ -11,7 +11,8 @@ import GraduateManagementSecretary from "../views/GraduateManagementSecretary.vu
 import StudentForm from "../views/StudentForm.vue";
 import Teacher from "../views/Teacher.vue";
 import DrawLottery from "../views/DrawLottery.vue";
-// import SubjectInfo from '../views/SubjectInfo.vue';
+import DisciplineInfo from "../views/DisciplineInfo.vue";
+import TeacherInfo from "../views/TeacherInfo.vue";
 // import TeacherInfo from '../views/TeacherInfo.vue';
 // import Contact from '../views/Contact.vue';
 
@@ -62,17 +63,18 @@ const routes = [
     name: 'DrawLottery',
     component: DrawLottery,
     meta: { requiresAuth: true, role: 'draw-lottery' }
-  }
-  // {
-  //   path: '/subject-info',
-  //   name: 'subject-info',
-  //   component: SubjectInfo,
-  // },
-  // {
-  //   path: '/teacher-info',
-  //   name: 'teacher-info',
-  //   component: TeacherInfo,
-  // },
+  },
+  {
+    path: '/discipline-info',
+    name: 'DisciplineInfo',
+    component: DisciplineInfo,
+    meta: { requiresAuth: true, role: 'discipline-info' }
+  },
+  {
+    path: '/teacher-info',
+    name: 'teacher-info',
+    component: TeacherInfo,
+  },
   // {
   //   path: '/contact',
   //   name: 'contact',

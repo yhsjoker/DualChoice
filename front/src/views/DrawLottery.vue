@@ -160,11 +160,11 @@ export default {
     // 获取名额字段
     getQuotaField(type) {
       switch(type) {
-        case '学硕':
+        case '学术型':
           return 'academicQuota';
-        case '专硕':
+        case '专业型':
           return 'professionalQuota';
-        case '直博':
+        case '直博型':
           return 'phdQuota';
         default:
           return 'academicQuota';
@@ -195,7 +195,7 @@ export default {
     },
 
     viewStudentDetail(studentId) {
-      this.$router.push({ name: 'StudentDetail', params: { id: studentId } });
+      this.$router.push({ name: 'StudentForm', params: { id: studentId } });
     },
 
     async submitSelections() {

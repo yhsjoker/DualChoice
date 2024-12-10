@@ -40,7 +40,6 @@
                   :disabled="isReadOnly"
                   :min="0"
                   size="small"
-                  @change="updateTotalQuota"
               ></el-input-number>
               </div>
             </template>
@@ -54,7 +53,6 @@
                   :disabled="isReadOnly"
                   :min="0"
                   size="small"
-                  @change="updateTotalQuota"
                   class-name="cell-center"
               ></el-input-number>
               </div>
@@ -69,7 +67,6 @@
                   :disabled="isReadOnly"
                   :min="0"
                   size="small"
-                  @change="updateTotalQuota"
                   class-name="cell-center"
               ></el-input-number>
               </div>
@@ -140,21 +137,21 @@ export default {
         // this.teacherQuota = data.teacherQuota;
 
         // 检查是否需要设置为只读
-        this.checkQuotaEquality();
+        // this.checkQuotaEquality();
       } catch (error) {
         this.$message.error('获取学科信息失败');
       }
     },
-    // 更新总名额数并检查是否只读
-    updateTotalQuota() {
-      this.checkQuotaEquality();
-    },
-    // 计算总名额并检查是否等于指标
-    checkQuotaEquality() {
-      const totalQuota = this.calculateTotalQuota();
-      this.isReadOnly = totalQuota === this.quotaIndicator;
-    },
-    // 计算当前页面的总名额
+    // // 更新总名额数并检查是否只读
+    // updateTotalQuota() {
+    //   this.checkQuotaEquality();
+    // },
+    // // 计算总名额并检查是否等于指标
+    // checkQuotaEquality() {
+    //   const totalQuota = this.calculateTotalQuota();
+    //   this.isReadOnly = totalQuota === this.quotaIndicator;
+    // },
+    // // 计算当前页面的总名额
     calculateTotalQuota() {
       let total = 0;
       this.quota.forEach((subject) => {
@@ -185,7 +182,7 @@ export default {
       }
 
       try {
-        await axios.post('/api/disciplineHead/submitQuota', {
+        await axios.put('/api/disciplineHead/submitQuota', {
           primarySubject: this.primarySubject,
           quota: this.quota,
         });

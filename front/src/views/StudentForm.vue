@@ -141,6 +141,12 @@
         </template>
 
         <el-divider></el-divider>
+        <el-form-item label="初试成绩">
+          <el-input
+              v-model="formData.examScore"
+              readonly
+          ></el-input>
+        </el-form-item>
         <el-form-item label="复试时间">
           <el-date-picker
               v-model="formData.reExamTime"
@@ -213,6 +219,7 @@ export default {
         subSubjectOptions: [], // 二级学科选项，从后端获取
 
         // 新增的复试信息
+        examScore: '', //初试成绩
         reExamTime: '', // 复试时间
         reExamLocation: '', // 复试地点
         overallEvaluation: '', // 综合评价
@@ -228,7 +235,7 @@ export default {
       const studentId = this.$route.params.studentId; // 获取路由参数中的 studentId
       try {
         // 从后端获取学生信息
-        const response = await axios.get(`/api/graduateManagementSecretary/studentForm/${studentId}`);
+        const response = await axios.get(`/api/studentForm/${studentId}`);
         const data = response.data.data;
 
         // 将返回的数据填充到 formData 中

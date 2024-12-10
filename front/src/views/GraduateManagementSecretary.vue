@@ -148,7 +148,7 @@ export default {
     // 设置导师资格
     async setQualification(teacher, qualification) {
       try {
-        await axios.post(`/api/graduateManagementSecretary/teachers/setQualification`, {
+        await axios.put(`/api/graduateManagementSecretary/teachers/setQualification`, {
           teacherId: teacher.id,
           qualification: qualification,
         });
