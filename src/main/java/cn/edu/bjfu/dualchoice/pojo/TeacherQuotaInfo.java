@@ -7,12 +7,14 @@ import lombok.Data;
 @Data
 @TableName("TeacherQuotaInfo")
 public class TeacherQuotaInfo {
-    private String name;
+    private int disciplineId;
 
-    @TableField("academic_quota")
+    private String disciplineName;
+
+    private String teacherName;
+
     private int academicQuota;
 
-    @TableField("professional_quota")
     private int professionalQuota;
 
     @TableField("direct_phd_quota")

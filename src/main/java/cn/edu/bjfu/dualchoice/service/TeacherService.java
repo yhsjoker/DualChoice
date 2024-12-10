@@ -6,4 +6,6 @@ public interface TeacherService {
     public Teacher findTeacherById(int id);
 
     int getTeacherIdByName(String name);
+
+    void increaseVolRound(int teacherId);
 }

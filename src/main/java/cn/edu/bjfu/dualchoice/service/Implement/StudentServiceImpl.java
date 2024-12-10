@@ -33,5 +33,8 @@ public class StudentServiceImpl implements StudentService {
         return studentMapper.selectDisciplineName(id);
     }
 
-
+    @Override
+    public String selectGraduateType(int id) {
+        return studentMapper.selectById(id).getGraduateType();
+    }
 }

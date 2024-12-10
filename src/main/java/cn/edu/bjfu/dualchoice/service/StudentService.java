@@ -13,4 +13,6 @@ public interface StudentService {
     String selectTeacherName(int id, int priority);
 
     List<String> selectDisciplineName(int id);
+
+    String selectGraduateType(int id);
 }

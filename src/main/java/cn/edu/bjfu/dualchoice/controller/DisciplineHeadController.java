@@ -51,7 +51,7 @@ public class DisciplineHeadController {
 
         return Result.success(result);
     }
-    @PostMapping("/submitQuota")
+    @PutMapping("/submitQuota")
     public Result submitQuota(@RequestBody DisHeadSubmitQuotaDTO disHeadSubmitQuotaDTO){
         System.out.println(disHeadSubmitQuotaDTO);
         List<SecQuotaDTO> secInfos = disHeadSubmitQuotaDTO.getQuota();
@@ -60,7 +60,7 @@ public class DisciplineHeadController {
             List<TeacherQuotaInfoDTO> teacherQuotaInfos = secInfo.getTeacherQuota();
             if(teacherQuotaInfos == null) continue;
             for(TeacherQuotaInfoDTO teacherQuotaInfo : teacherQuotaInfos){
-                int teacherId = teacherService.getTeacherIdByName(teacherQuotaInfo.getName());
+                int teacherId = teacherService.getTeacherIdByName(teacherQuotaInfo.getTeacherName());
                 System.out.println(teacherId);
                 teachingService.updateInfo(
                         secondarySubjectsId, teacherId, teacherQuotaInfo.getAcademicQuota(), teacherQuotaInfo.getProfessionalQuota(), teacherQuotaInfo.getPhdQuota()

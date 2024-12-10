@@ -20,4 +20,11 @@ public class TeacherQuotaInfoServiceImpl implements TeacherQuotaInfoService {
         wrapper.eq("discipline_id", disciplineId);
         return teacherQuotaInfoMapper.selectList(wrapper);
     }
+
+    @Override
+    public List<TeacherQuotaInfo> findByTeacherId(int teacherId) {
+        QueryWrapper<TeacherQuotaInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq("teacher_id", teacherId);
+        return teacherQuotaInfoMapper.selectList(wrapper);
+    }
 }

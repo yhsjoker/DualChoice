@@ -23,4 +23,19 @@ public class ChoiceServiceImpl implements ChoiceService {
     public void insertChoice(int teacher_id, int student_id, int priority){
         choiceMapper.insertChoice(teacher_id, student_id, priority);
     }
+
+    @Override
+    public void lockChoice(int teacher_id, int student_id) {
+        QueryWrapper<Choice> updateWrapper = new QueryWrapper<>();
+        updateWrapper.eq("teacher_id", teacher_id).eq("student_id", student_id);
+        Choice choiceToUpdate = new Choice();
+        choiceToUpdate.setPriority(4);
+        choiceMapper.update(choiceToUpdate, updateWrapper);
+
+        QueryWrapper<Choice> updateOtherWrapper = new QueryWrapper<>();
+        updateOtherWrapper.eq("student_id", student_id).ne("teacher_id", teacher_id);
+        Choice otherChoices = new Choice();
+        otherChoices.setPriority(-1);
+        choiceMapper.update(otherChoices, updateOtherWrapper);
+    }
 }
