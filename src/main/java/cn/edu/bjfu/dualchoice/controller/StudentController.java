@@ -2,15 +2,19 @@ package cn.edu.bjfu.dualchoice.controller;
 
 import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.*;
+import cn.edu.bjfu.dualchoice.utils.AliOssUtil;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/student")
@@ -41,9 +45,10 @@ public class StudentController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int studentId = (Integer) map.get("id");
 
+        System.out.println(studentId);
         //查找学生基本信息
         StuBaseInfo stuBaseInfo = stuBaseInfoService.getStuBaseInfoById(studentId);
-        //System.out.println(stuBaseInfo);
+        System.out.println(stuBaseInfo);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("subject", stuBaseInfo.getDiscipline());
         jsonObject.put("examNumber", stuBaseInfo.getExamNumber());
@@ -100,13 +105,18 @@ public class StudentController {
         List<String> disciplines = disciplineInfoService.findNameByDiscipline(stuBaseInfo.getDiscipline());
         jsonObject.put("subSubjectOptions", disciplines);
 
+        //查找url
+        String url = studentService.selectResumeById(studentId);
+        jsonObject.put("personalStatementUrl", url);
+
         return Result.success(jsonObject);
     }
 
-    @PutMapping("/submitForm")
-    public Result submitForm(@RequestBody StuDetailDTO stuDetailDTO){
+    @PostMapping("/submitForm")
+    public Result submitForm( StuDetailDTO stuDetailDTO, @RequestParam(value = "personalStatementFile") MultipartFile file) throws Exception {
         Map<String, Object> map = ThreadLocalUtil.get();
         int studentId = (Integer) map.get("id");
+
         //插入学生基本信息
         studentService.updateStudent(stuDetailDTO.getContact(), stuDetailDTO.getEmergencyContact(), stuDetailDTO.getEmail(), stuDetailDTO.getGraduatedMajor(), stuDetailDTO.getGraduationSchool(), stuDetailDTO.getOrigin(), stuDetailDTO.getGraduationTime(), stuDetailDTO.getExamNumber(), stuDetailDTO.getStudentType(), stuDetailDTO.getGraduateType(), studentId);
 
@@ -145,6 +155,13 @@ public class StudentController {
             applicationService.insertApplication(studentId, discipline_id, 1);
         }
 
+        //文件上传OSS
+        String originalFilename = file.getOriginalFilename();
+        //System.out.println(originalFilename);
+        String filename = studentId + "-" + UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
+        //System.out.println(filename);
+        String url = AliOssUtil.upload(filename, file.getInputStream());
+        studentService.updateResume(url, studentId);
         return Result.success("信息提交成功");
     }
 
