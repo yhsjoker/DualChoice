@@ -14,6 +14,8 @@ public interface StudentService {
 
     List<String> selectDisciplineName(int id);
 
+    String selectGraduateType(int id);
+
     void updateResume(String url, int id);
 
     String selectResumeById(int id);
