@@ -18,7 +18,7 @@ public class InterviewGroupController {
     private InterviewGroupService InterviewGroup;
 
     @Autowired
-    private StudentService StudentService;
+    private StuBaseInfoService stuBaseInfoService;
 
     @Autowired
     private SubjectService SubjectService;
@@ -38,14 +38,14 @@ public class InterviewGroupController {
         JSONObject info = new JSONObject();
         String primarySubject = InterviewGroup.selectDisNameById(InterviewGroupId);
         info.put("primarySubject", primarySubject);
-        List<Student> studentList = StudentService.selectAllStudents();
+        List<StuBaseInfo> studentList = stuBaseInfoService.getStuBaseInfoBydiscipline(primarySubject);
         List<JSONObject> stuInfoList = new ArrayList<>();
-        for (Student student : studentList) {
+        for (StuBaseInfo student : studentList) {
             JSONObject stuInfo = new JSONObject();
-            stuInfo.put("id", student.getId());
+            stuInfo.put("id", student.getStudentId());
             stuInfo.put("name", student.getName());
-            stuInfo.put("examNumber", student.getExamTicketNumber());
-            stuInfo.put("studentType", student.getCategory());
+            stuInfo.put("examNumber", student.getExamNumber());
+            stuInfo.put("studentType", student.getStudentType());
 
             stuInfoList.add(stuInfo);
         }
