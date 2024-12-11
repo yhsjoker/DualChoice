@@ -6,6 +6,8 @@ import cn.edu.bjfu.dualchoice.service.StuBaseInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StuBaseInfoServiceImpl implements StuBaseInfoService {
     @Autowired
@@ -14,5 +16,15 @@ public class StuBaseInfoServiceImpl implements StuBaseInfoService {
     @Override
     public StuBaseInfo getStuBaseInfoById(int id){
         return stuBaseInfoMapper.getStuBaseInfoById(id);
+    }
+
+    @Override
+    public List<StuBaseInfo> getStuBaseInfoBydiscipline(String discipline){
+        return stuBaseInfoMapper.getStuBaseInfoBydiscipline(discipline);
+    }
+
+    @Override
+    public List<StuBaseInfo> getStuBaseInfoByCollegeId(int id){
+        return stuBaseInfoMapper.getStuBaseInfoByCollegeId(id);
     }
 }
