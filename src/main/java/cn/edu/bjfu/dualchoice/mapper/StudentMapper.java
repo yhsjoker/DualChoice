@@ -24,5 +24,11 @@ public interface StudentMapper extends BaseMapper<Student> {
     @Select("SELECT d.name FROM Discipline d, Student s, Application a WHERE d.id = a.discipline_id AND a.student_id = s.id AND s.id = #{id} AND a.preference_order <> 0")
     List<String> selectDisciplineName(int id);
 
+    @Update("UPDATE Student SET resume = #{url} WHERE id = #{id}")
+    void updateResume(String url, int id);
+
+    @Select("SELECT resume FROM Student WHERE id = #{id}")
+    String selectResumeById(int id);
+
 
 }
