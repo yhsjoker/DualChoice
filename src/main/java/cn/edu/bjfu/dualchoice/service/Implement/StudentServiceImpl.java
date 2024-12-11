@@ -34,6 +34,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public String selectGraduateType(int id) {
+        return studentMapper.selectById(id).getGraduateType();
+    }
+
+    @Override
     public void updateResume(String url, int id){
         studentMapper.updateResume(url, id);
     }
@@ -42,6 +47,5 @@ public class StudentServiceImpl implements StudentService {
     public String selectResumeById(int id){
         return studentMapper.selectResumeById(id);
     }
-
-
 }
+
