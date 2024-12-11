@@ -39,9 +39,6 @@ public class GraduateManagementSecretaryController {
     @Autowired
     DisciplineInfoService disciplineInfoService;
 
-    @Autowired
-    CollegeStudentInfoService collegeStudentInfoService;
-
     @GetMapping("/getCollege")
     public Result getCollege(){
         Map<String, Object> map = ThreadLocalUtil.get();
@@ -61,15 +58,14 @@ public class GraduateManagementSecretaryController {
         System.out.println(graduateManagementSecretaryId);
         int collegeId = graduateManagementSecretaryService.selectCollegeIdById(graduateManagementSecretaryId);
         JSONObject info = new JSONObject();
-        List<CollegeStudentInfo> studentList = collegeStudentInfoService.getCollegeStudentInfoById(collegeId);
+        List<StuBaseInfo> studentList = stuBaseInfoService.getStuBaseInfoByCollegeId(collegeId);
         List<JSONObject> stuInfoList = new ArrayList<>();
-        for (CollegeStudentInfo student : studentList) {
+        for (StuBaseInfo student : studentList) {
             JSONObject stuInfo = new JSONObject();
             stuInfo.put("id", student.getStudentId());
-            stuInfo.put("name", student.getStudentName());
-            stuInfo.put("examNumber", student.getStudentExamTicketNumber());
-            System.out.println(student.getStudentCategory());
-            stuInfo.put("category", student.getStudentCategory());
+            stuInfo.put("name", student.getName());
+            stuInfo.put("examNumber", student.getExamNumber());
+            stuInfo.put("category", student.getStudentType());
 
             stuInfoList.add(stuInfo);
         }
