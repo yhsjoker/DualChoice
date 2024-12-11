@@ -14,4 +14,9 @@ public class ExamServiceImpl implements ExamService {
     public void insertExamInfo(int studentId, int subjectId, String type, float score, java.sql.Timestamp time, String location, String comment){
         examMapper.insertExamInfo(studentId, subjectId, type, score, time, location, comment);
     }
+
+    @Override
+    public float getScore(int id){
+        return examMapper.getScore(id);
+    }
 }

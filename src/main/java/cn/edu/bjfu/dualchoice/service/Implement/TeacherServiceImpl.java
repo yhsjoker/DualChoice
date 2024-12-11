@@ -3,9 +3,10 @@ package cn.edu.bjfu.dualchoice.service.Implement;
 import cn.edu.bjfu.dualchoice.mapper.TeacherMapper;
 import cn.edu.bjfu.dualchoice.pojo.Teacher;
 import cn.edu.bjfu.dualchoice.service.TeacherService;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
@@ -22,10 +23,17 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void increaseVolRound(int teacherId) {
-        UpdateWrapper<Teacher> wrapper = new UpdateWrapper<>();
-        wrapper.eq("teacher_id", teacherId);
-        wrapper.setSql("volunteer_round = volunteer_round + 1");
-        teacherMapper.update(null, wrapper);
+    public List<Teacher> getTeacherList(){
+        return teacherMapper.getTeacherList();
+    }
+
+    @Override
+    public void setQualificationById(int id, String qualification){
+        teacherMapper.setQualificationById(id, qualification);
+    }
+
+    @Override
+    public List<Teacher> getTeacherListById(int id){
+        return teacherMapper.getTeacherListById(id);
     }
 }
