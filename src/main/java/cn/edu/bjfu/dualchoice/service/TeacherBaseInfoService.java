@@ -8,6 +8,4 @@ public interface TeacherBaseInfoService {
     TeacherBaseInfo selectAllById(int teacherId);
 
     int selectMinimumVolunteerRoundByCollegeId(int collegeId);
-
-    List<TeacherBaseInfo> selectAllIdName();
 }

@@ -30,11 +30,4 @@ public class TeacherBaseInfoServiceImpl implements TeacherBaseInfoService {
         }
         return -1;
     }
-
-    @Override
-    public List<TeacherBaseInfo> selectAllIdName() {
-        QueryWrapper<TeacherBaseInfo> wrapper = new QueryWrapper<>();
-        wrapper.select("teacher_id", "teacher_name");
-        return teacherBaseInfoMapper.selectList(null);
-    }
 }

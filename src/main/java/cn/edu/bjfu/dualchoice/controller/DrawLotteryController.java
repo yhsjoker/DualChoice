@@ -1,10 +1,10 @@
 package cn.edu.bjfu.dualchoice.controller;
 
-import cn.edu.bjfu.dualchoice.pojo.Result;
-import cn.edu.bjfu.dualchoice.pojo.TeacherBaseInfo;
-import cn.edu.bjfu.dualchoice.pojo.TeacherQuotaInfo;
+import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.Implement.TeacherBaseInfoServiceImpl;
+import cn.edu.bjfu.dualchoice.service.StudentApplicationInfoService;
 import cn.edu.bjfu.dualchoice.service.TeacherBaseInfoService;
+import cn.edu.bjfu.dualchoice.service.TeacherPrimaryDisciplineInfoService;
 import cn.edu.bjfu.dualchoice.service.TeacherQuotaInfoService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -19,15 +19,17 @@ import java.util.List;
 @RequestMapping("/api/drawLottery")
 public class DrawLotteryController {
     @Autowired
-    TeacherBaseInfoService teacherBaseInfoService;
+    TeacherPrimaryDisciplineInfoService teacherPrimaryDisciplineInfoService;
     @Autowired
     TeacherQuotaInfoService teacherQuotaInfoService;
+    @Autowired
+    StudentApplicationInfoService studentApplicationInfoService;
     @GetMapping("teacher")
     public Result teacher(){
         JSONObject result = new JSONObject();
         JSONArray teachers = new JSONArray();
-        List<TeacherBaseInfo> teacherBaseInfos = teacherBaseInfoService.selectAllIdName();
-        for(TeacherBaseInfo teacherInfo : teacherBaseInfos){
+        List<TeacherPrimaryDisciplineInfo> teacherInfos = teacherPrimaryDisciplineInfoService.selectAllEleIdName();
+        for(TeacherPrimaryDisciplineInfo teacherInfo : teacherInfos){
             JSONObject teacher = new JSONObject();
             teacher.put("id", teacherInfo.getTeacherId());
             teacher.put("name", teacherInfo.getTeacherName());
@@ -49,6 +51,20 @@ public class DrawLotteryController {
     }
     @GetMapping("/student")
     public Result student(){
-        return Result.success();
+        JSONObject result = new JSONObject();
+        List<StudentApplicationInfo> studentInfos = studentApplicationInfoService.selectByDisciplineId(6);
+        JSONArray students = new JSONArray();
+
+        for(StudentApplicationInfo studentInfo : studentInfos){
+            JSONObject student = new JSONObject();
+            student.put("id", studentInfo.getStudentId());
+            student.put("name", studentInfo.getStudentName());
+            student.put("type", studentInfo.getGraduateType());
+            student.put("subjects", studentApplicationInfoService.selectDisByStuIdParentDis(studentInfo.getStudentId(), 6));
+            students.add(student);
+        }
+
+        result.put("students", students);
+        return Result.success(result);
     }
 }
