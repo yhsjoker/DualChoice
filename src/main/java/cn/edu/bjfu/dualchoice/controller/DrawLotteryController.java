@@ -1,17 +1,11 @@
 package cn.edu.bjfu.dualchoice.controller;
 
 import cn.edu.bjfu.dualchoice.pojo.*;
-import cn.edu.bjfu.dualchoice.service.Implement.TeacherBaseInfoServiceImpl;
-import cn.edu.bjfu.dualchoice.service.StudentApplicationInfoService;
-import cn.edu.bjfu.dualchoice.service.TeacherBaseInfoService;
-import cn.edu.bjfu.dualchoice.service.TeacherPrimaryDisciplineInfoService;
-import cn.edu.bjfu.dualchoice.service.TeacherQuotaInfoService;
+import cn.edu.bjfu.dualchoice.service.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +18,10 @@ public class DrawLotteryController {
     TeacherQuotaInfoService teacherQuotaInfoService;
     @Autowired
     StudentApplicationInfoService studentApplicationInfoService;
+    @Autowired
+    ChoiceService choiceService;
+    @Autowired
+    DisciplineService disciplineService;
     @GetMapping("teacher")
     public Result teacher(){
         JSONObject result = new JSONObject();
@@ -66,5 +64,13 @@ public class DrawLotteryController {
 
         result.put("students", students);
         return Result.success(result);
+    }
+    @PostMapping("submit")
+    public Result submit(@RequestBody StudentChoiceDTO studentChoiceDTO){
+        for(StudentChoiceBaseInfoDTO baseInfo : studentChoiceDTO.getSelections()){
+            int disciplineId = disciplineService.selectIdByName(baseInfo.getSubject());
+            choiceService.lockChoice(baseInfo.getTeacherId(), baseInfo.getStudentId());
+        }
+        return Result.success("提交成功");
     }
 }
