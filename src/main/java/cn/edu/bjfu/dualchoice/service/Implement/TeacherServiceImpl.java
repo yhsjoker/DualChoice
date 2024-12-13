@@ -3,6 +3,7 @@ package cn.edu.bjfu.dualchoice.service.Implement;
 import cn.edu.bjfu.dualchoice.mapper.TeacherMapper;
 import cn.edu.bjfu.dualchoice.pojo.Teacher;
 import cn.edu.bjfu.dualchoice.service.TeacherService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,5 +45,12 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<Teacher> getTeacherListById(int id){
         return teacherMapper.getTeacherListById(id);
+    }
+
+    @Override
+    public List<Teacher> selectTeacherByCollegeId(int collegeId) {
+        QueryWrapper<Teacher> wrapper = new QueryWrapper<>();
+        wrapper.eq("college_id", collegeId);
+        return teacherMapper.selectList(wrapper);
     }
 }

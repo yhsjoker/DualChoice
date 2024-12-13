@@ -3,8 +3,10 @@ package cn.edu.bjfu.dualchoice.controller;
 import cn.edu.bjfu.dualchoice.pojo.College;
 import cn.edu.bjfu.dualchoice.pojo.Discipline;
 import cn.edu.bjfu.dualchoice.pojo.Result;
+import cn.edu.bjfu.dualchoice.pojo.Teacher;
 import cn.edu.bjfu.dualchoice.service.CollegeService;
 import cn.edu.bjfu.dualchoice.service.DisciplineService;
+import cn.edu.bjfu.dualchoice.service.TeacherService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class NavController {
     CollegeService collegeService;
     @Autowired
     DisciplineService disciplineService;
+    @Autowired
+    TeacherService teacherService;
     @GetMapping("subjects")
     public Result subjects(){
         JSONObject result = new JSONObject();
@@ -52,6 +56,37 @@ public class NavController {
             }
             college.put("subjects", subjects);
 
+            allData.add(college);
+        }
+
+        result.put("allData", allData);
+        return Result.success(result);
+    }
+
+    @GetMapping("teachers")
+    public Result teachers(){
+        JSONObject result = new JSONObject();
+        JSONArray allData = new JSONArray();
+
+        List<College> collegeInfos = collegeService.selectAll();
+        for(College collegeInfo : collegeInfos){
+            JSONObject college = new JSONObject();
+            college.put("collegeName", collegeInfo.getName());
+
+            List<Teacher> teacherInfos = teacherService.selectTeacherByCollegeId(collegeInfo.getId());
+            JSONArray teachers = new JSONArray();
+            for(Teacher teacherInfo : teacherInfos){
+                JSONObject teacher = new JSONObject();
+                teacher.put("name", teacherInfo.getName());
+                teacher.put("position", teacherInfo.getTitle());
+                teacher.put("phone", teacherInfo.getPhone());
+                teacher.put("email", teacherInfo.getEmail());
+                teacher.put("hasAdmissionQualification", teacherInfo.getQualification() != null && teacherInfo.getQualification().equals("是"));
+                teacher.put("intro", teacherInfo.getProfile());
+
+                teachers.add(teacher);
+            }
+            college.put("teachers", teachers);
             allData.add(college);
         }
 

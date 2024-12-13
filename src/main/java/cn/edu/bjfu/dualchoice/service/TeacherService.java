@@ -15,4 +15,6 @@ public interface TeacherService {
     void setQualificationById(int id, String qualification);
 
     List<Teacher> getTeacherListById(int id);
+
+    List<Teacher> selectTeacherByCollegeId(int collegeId);
 }
