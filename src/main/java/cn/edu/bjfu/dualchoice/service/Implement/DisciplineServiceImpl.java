@@ -39,4 +39,11 @@ public class DisciplineServiceImpl implements DisciplineService {
     public String getNameById(int disciplineId){
         return disciplineMapper.selectById(disciplineId).getName();
     }
+
+    @Override
+    public List<Discipline> selectPrimaryDisciplineByCollegeId(int collegeId) {
+        QueryWrapper<Discipline> wrapper = new QueryWrapper<>();
+        wrapper.eq("level", 1).eq("college_id", collegeId);
+        return disciplineMapper.selectList(wrapper);
+    }
 }

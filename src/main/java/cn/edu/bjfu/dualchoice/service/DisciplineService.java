@@ -15,4 +15,6 @@ public interface DisciplineService {
     int getQuotaIndicatorById(int disciplineId);
 
     String getNameById(int disciplineId);
+
+    List<Discipline> selectPrimaryDisciplineByCollegeId(int collegeId);
 }
