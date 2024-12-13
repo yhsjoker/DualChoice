@@ -1,8 +1,10 @@
 package cn.edu.bjfu.dualchoice.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
+@TableName("DisciplineSecretary")
 public class DisciplineSecretary {
 
     private int id;

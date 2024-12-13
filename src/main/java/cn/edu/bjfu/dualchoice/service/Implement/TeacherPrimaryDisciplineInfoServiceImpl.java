@@ -15,9 +15,9 @@ public class TeacherPrimaryDisciplineInfoServiceImpl implements TeacherPrimaryDi
     @Autowired
     TeacherPrimaryDisciplineInfoMapper teacherPrimaryDisciplineInfoMapper;
     @Override
-    public List<TeacherPrimaryDisciplineInfo> selectAllEleIdName() {
+    public List<TeacherPrimaryDisciplineInfo> selectAllIdNameByCollegeId(int collegeId) {
         QueryWrapper<TeacherPrimaryDisciplineInfo> wrapper = new QueryWrapper<>();
-        wrapper.eq("discipline_id", 6);
+        wrapper.eq("discipline_id", collegeId);
         wrapper.select("teacher_id", "teacher_name");
         return teacherPrimaryDisciplineInfoMapper.selectList(wrapper);
     }

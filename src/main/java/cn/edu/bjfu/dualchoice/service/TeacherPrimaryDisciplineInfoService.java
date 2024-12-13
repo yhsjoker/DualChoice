@@ -6,5 +6,5 @@ import cn.edu.bjfu.dualchoice.pojo.TeacherPrimaryDisciplineInfo;
 import java.util.List;
 
 public interface TeacherPrimaryDisciplineInfoService {
-    List<TeacherPrimaryDisciplineInfo> selectAllEleIdName();
+    List<TeacherPrimaryDisciplineInfo> selectAllIdNameByCollegeId(int collegeId);
 }
