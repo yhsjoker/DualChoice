@@ -140,6 +140,16 @@
           </el-form-item>
         </template>
 
+
+        <el-form-item v-if="formData.personalStatementUrl" label="上传个人简述">
+          <template>
+            <div>
+              <a :href="formData.personalStatementUrl" download :title="this.personalStatementName">点击下载已上传的PDF</a>
+            </div>
+          </template>
+        </el-form-item>
+
+
         <el-divider></el-divider>
         <el-form-item label="初试成绩">
           <el-input
@@ -184,6 +194,14 @@
               readonly
           ></el-input>
         </el-form-item>
+
+        <el-form-item v-if="formData.photoUrl" label="云端照片">
+          <img
+              :src="formData.photoUrl"
+              alt="证件照片"
+              style="max-width:200px; height:auto; border:1px solid #ddd; border-radius:4px; margin-bottom:20px;"
+          />
+        </el-form-item>
       </el-form>
     </el-main>
   </el-container>
@@ -226,7 +244,11 @@ export default {
         englishScore: '', // 外语听力及口语成绩
         professionalScore: '', // 专业知识测试成绩
         interviewScore: '', // 综合素质面试成绩
+
+        personalStatementUrl: '',         // 已上传文件的可访问链接
+        photoUrl: ''
       },
+      personalStatementName: '',
     };
   },
   methods: {
@@ -234,13 +256,16 @@ export default {
     async fetchStudentInfo() {
       const studentId = this.$route.params.studentId; // 获取路由参数中的 studentId
       try {
+        console.log(studentId);
         // 从后端获取学生信息
         const response = await axios.get(`/api/studentForm/${studentId}`);
         const data = response.data.data;
 
         // 将返回的数据填充到 formData 中
         this.formData = { ...this.formData, ...data };
+        this.personalStatementName = this.formData.name + "-个人简介";
 
+        this.$message.success("下面是学生已有的信息");
       } catch (error) {
         this.$message.error('获取学生信息失败');
       }

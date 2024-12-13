@@ -1,10 +1,35 @@
 <template>
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="@/assets/bjfu-logo.png" alt="北京林业大学logo" class="logo" />
+
+      <div class="navbar-titles">
+        <span class="navbar-title">北京林业大学</span>
+        <span class="navbar-subtitle">研究生导师双选系统</span>
+      </div>
+
+      <div class="navbar-menu">
+        <router-link class="navbar-item" to="/school-intro">学校简介</router-link>
+        <router-link class="navbar-item" to="/discipline-info"
+          style="color:#00C5CD;text-decoration:overline"
+        >学科信息</router-link>
+        <router-link class="navbar-item" to="/teacher-info">导师信息</router-link>
+      </div>
+    </div>
+    <div class="navbar-right">
+      <el-input
+          class="search-input"
+          placeholder="搜索..."
+          suffix-icon="el-icon-search"
+          v-model="searchKeyword2"
+      >
+      </el-input>
+      <el-button type="text" class="login-link" @click="Logout">首页</el-button>
+    </div>
+  </header>
+
   <div class="discipline-info-page">
-    <el-row type="flex" justify="center" style="margin-top: 20px;">
-      <el-col :span="14">
-        <h2 style="text-align: center; color: #333;">学科信息</h2>
-      </el-col>
-    </el-row>
+
 
     <el-row type="flex" justify="center" style="margin-top: 20px;">
       <el-col :span="14">
@@ -112,10 +137,14 @@ export default {
       ],
       filteredData: [],
       searchKeyword: '',
+      searchKeyword2: '', // 新增
       activeCollegeNames: []
     };
   },
   methods: {
+    Logout() {
+      this.$router.push('/');
+    },
     async fetchData() {
       try {
         const response = await axios.get('/api/nav/subjects'); // 假设的接口
@@ -167,7 +196,7 @@ export default {
     }
   },
   created() {
-    // this.fetchData();
+    this.fetchData();
     this.filteredData = this.allData;
   }
 };
@@ -192,5 +221,102 @@ export default {
 
 .el-list-item {
   font-size: 14px;
+}
+
+.navbar {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 0 50px;
+  background-color: #FFFFE0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-menu {
+  display: flex;
+  margin-left: 40px;
+}
+
+.logo {
+  height: 50px;
+  margin-right: 20px;
+}
+
+.navbar-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 10px;
+  color: #228B22;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-subtitle {
+  font-size: 14px;
+  color: #666666;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-item {
+  font-size: 20px;
+  margin-left: 140px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333333;
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s;
+  text-decoration:none;
+  font-weight: bold;
+  position: relative;
+}
+
+.navbar-item::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #00C5CD;
+  transition: width 0.3s;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+}
+
+.navbar-item:hover {
+  color:#00C5CD;
+}
+
+.navbar-item:hover::after {
+  width: 100%;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  margin-right: 20px;
+}
+
+.login-link {
+  color: #409EFF;
+  font-weight: bold;
+}
+
+.login-link:hover {
+  color: #00C5CD;
 }
 </style>

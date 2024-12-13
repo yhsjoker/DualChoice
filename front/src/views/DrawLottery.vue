@@ -109,6 +109,19 @@ export default {
     },
   },
   methods: {
+    addRequestInterceptor() {
+      axios.interceptors.request.use(
+          (config) => {
+            const token = sessionStorage.getItem('disciplineSecretary_token');
+            if (token) {
+              config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+          },
+          (error) => Promise.reject(error)
+      );
+    },
+
     // 获取老师和学生数据
     async fetchData() {
       try {
@@ -213,6 +226,7 @@ export default {
     },
   },
   created() {
+    this.addRequestInterceptor();
     this.fetchData();
   },
 };

@@ -1,20 +1,30 @@
 <template>
-  <el-menu
-      class="nav-bar"
-      mode="horizontal"
-      background-color="#FFFFFF"
-      text-color="#333333"
-      active-text-color="#409EFF"
-      router
-  >
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="@/assets/bjfu-logo.png" alt="北京林业大学logo" class="logo" />
 
-    <el-menu-item index="/subject-info" class="custom-menu-item subject-info">学科信息</el-menu-item>
-    <el-menu-item index="/teacher-info" class="custom-menu-item teacher-info">导师信息</el-menu-item>
+      <div class="navbar-titles">
+        <span class="navbar-title">北京林业大学</span>
+        <span class="navbar-subtitle">研究生导师双选系统</span>
+      </div>
 
-    <el-menu-item index="logout" class="logout-button" @click="handleLogout">
-      退出登录
-    </el-menu-item>
-  </el-menu>
+      <div class="navbar-menu">
+        <router-link class="navbar-item" to="/school-intro">学校简介</router-link>
+        <router-link class="navbar-item" to="/discipline-info">学科信息</router-link>
+        <router-link class="navbar-item" to="/teacher-info">导师信息</router-link>
+      </div>
+    </div>
+    <div class="navbar-right">
+      <el-input
+          class="search-input"
+          placeholder="搜索..."
+          suffix-icon="el-icon-search"
+          v-model="searchKeyword"
+      >
+      </el-input>
+      <el-button type="text" class="login-link" @click="Logout">退出登录</el-button>
+    </div>
+  </header>
 
   <el-container class="student-info">
     <el-header class="info-header">
@@ -24,13 +34,13 @@
       <el-form :model="formData" :rules="rules" ref="formRef" label-width="120px">
         <!-- 所有信息都可编辑 -->
         <el-form-item label="复试学科专业" prop="subject">
-          <el-input v-model="formData.subject" :disabled="isReadOnly" placeholder="请输入复试学科专业"></el-input>
+          <el-input v-model="formData.subject" :readonly="isReadOnly" placeholder="请输入复试学科专业"></el-input>
         </el-form-item>
         <el-form-item label="准考证号" prop="examNumber">
-          <el-input v-model="formData.examNumber" :disabled="isReadOnly" placeholder="请输入准考证号"></el-input>
+          <el-input v-model="formData.examNumber" :readonly="isReadOnly" placeholder="请输入准考证号"></el-input>
         </el-form-item>
         <el-form-item label="姓名" prop="name">
-          <el-input v-model="formData.name" :disabled="isReadOnly" placeholder="请输入姓名"></el-input>
+          <el-input v-model="formData.name" :readonly="isReadOnly" placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="考生类别" prop="studentType">
           <el-select v-model="formData.studentType" :disabled="isReadOnly" placeholder="请选择考生类别">
@@ -42,41 +52,41 @@
           </el-select>
         </el-form-item>
         <el-form-item label="本科毕业学校" prop="graduationSchool">
-          <el-input v-model="formData.graduationSchool" :disabled="isReadOnly" placeholder="请输入本科毕业学校"></el-input>
+          <el-input v-model="formData.graduationSchool" :readonly="isReadOnly" placeholder="请输入本科毕业学校"></el-input>
         </el-form-item>
         <el-form-item label="毕业时间" prop="graduationTime">
           <el-date-picker v-model="formData.graduationTime" :disabled="isReadOnly" type="date" placeholder="请选择毕业时间"></el-date-picker>
         </el-form-item>
         <el-form-item label="本科专业" prop="graduatedMajor">
-          <el-input v-model="formData.graduatedMajor" :disabled="isReadOnly" placeholder="请输入本科专业"></el-input>
+          <el-input v-model="formData.graduatedMajor" :readonly="isReadOnly" placeholder="请输入本科专业"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
-          <el-input v-model="formData.email" :disabled="isReadOnly" placeholder="请输入邮箱"></el-input>
+          <el-input v-model="formData.email" :readonly="isReadOnly" placeholder="请输入邮箱"></el-input>
         </el-form-item>
         <el-form-item label="电话" prop="contact">
-          <el-input v-model="formData.contact" :disabled="isReadOnly" placeholder="请输入电话"></el-input>
+          <el-input v-model="formData.contact" :readonly="isReadOnly" placeholder="请输入电话"></el-input>
         </el-form-item>
         <el-form-item label="紧急电话" prop="emergencyContact">
-          <el-input v-model="formData.emergencyContact" :disabled="isReadOnly" placeholder="请输入紧急电话"></el-input>
+          <el-input v-model="formData.emergencyContact" :readonly="isReadOnly" placeholder="请输入紧急电话"></el-input>
         </el-form-item>
         <el-form-item label="生源地" prop="origin">
-          <el-input v-model="formData.origin" :disabled="isReadOnly" placeholder="请输入生源地"></el-input>
+          <el-input v-model="formData.origin" :readonly="isReadOnly" placeholder="请输入生源地"></el-input>
         </el-form-item>
         <el-form-item label="身份证号" prop="idNumber">
-          <el-input v-model="formData.idNumber" :disabled="isReadOnly" placeholder="请输入身份证号"></el-input>
+          <el-input v-model="formData.idNumber" :readonly="isReadOnly" placeholder="请输入身份证号"></el-input>
         </el-form-item>
         <el-form-item label="研究生类型" prop="graduateType">
-          <el-input v-model="formData.graduateType" :disabled="isReadOnly" placeholder="请输入研究生类型"></el-input>
+          <el-input v-model="formData.graduateType" :readonly="isReadOnly" placeholder="请输入研究生类型"></el-input>
         </el-form-item>
         <el-form-item label="报考导师优先意向">
           <el-form-item prop="supervisor1">
-            <el-input v-model="formData.supervisor1" :disabled="isReadOnly" placeholder="一志愿" ></el-input>
+            <el-input v-model="formData.supervisor1" :readonly="isReadOnly" placeholder="一志愿" ></el-input>
           </el-form-item>
           <el-form-item prop="supervisor2">
-            <el-input v-model="formData.supervisor2" :disabled="isReadOnly" placeholder="二志愿" ></el-input>
+            <el-input v-model="formData.supervisor2" :readonly="isReadOnly" placeholder="二志愿" ></el-input>
           </el-form-item>
           <el-form-item prop="supervisor3">
-            <el-input v-model="formData.supervisor3" :disabled="isReadOnly" placeholder="三志愿" ></el-input>
+            <el-input v-model="formData.supervisor3" :readonly="isReadOnly" placeholder="三志愿" ></el-input>
           </el-form-item>
         </el-form-item>
 
@@ -111,7 +121,7 @@
                   v-model="formData.preferredSubjects[1]"
                   :disabled="isReadOnly"
                   placeholder="第二志愿"
-                  style="margin-top: 10px; margin-left: 10px"
+                  style="margin-top: 10px;"
               >
                 <el-option
                     v-for="item in formData.subSubjectOptions"
@@ -141,7 +151,7 @@
                   v-model="formData.preferredSubjects[3]"
                   :disabled="isReadOnly"
                   placeholder="第四志愿"
-                  style="margin-top: 10px; margin-left: 10px"
+                  style="margin-top: 10px;"
               >
                 <el-option
                     v-for="item in formData.subSubjectOptions"
@@ -184,8 +194,7 @@
         <el-form-item label="上传个人简述" prop="personalStatement">
           <template v-if="isReadOnly">
             <div>
-              <p>已上传的文件: {{ formData.personalStatementName }}</p>
-              <a :href="formData.personalStatementUrl" download :title="formData.personalStatementName">下载已上传的PDF</a>
+              <a :href="formData.personalStatementUrl" download :title="this.personalStatementName">点击下载已上传的PDF</a>
             </div>
           </template>
           <template v-else>
@@ -214,7 +223,7 @@
         </el-form-item>
 
         <!-- 提交按钮 -->
-        <el-form-item>
+        <el-form-item label-width="47%">
           <template v-if="!isReadOnly">
             <el-button type="primary" @click="submitForm">提交</el-button>
           </template>
@@ -292,19 +301,20 @@ export default {
         subSubjectOptions: [], // 二级学科选项，从后端获取
 
         personalStatementFile: null,      // 前端要上传的PDF文件
-        personalStatementName: '',        // 已上传文件的名称
         personalStatementUrl: '',         // 已上传文件的可访问链接
 
         status: '', // 状态（"提交阶段"、"审查阶段"、"已录取"、"未录取"）
         admissionTeacherName: '', // 已录取时返回录取导师姓名
         admissionMajor: '' // 已录取时返回录取专业
       },
+      personalStatementName: '',        // 已上传文件的名称
       fileList:[],
       isReadOnly: false,
       flag: false,
       rules: {},
       previewUrl: '',
-      showStatusDialog: false // 控制查看状态对话框显示
+      showStatusDialog: false, // 控制查看状态对话框显示
+      searchKeyword: '', // 新增
     };
   },
   methods: {
@@ -330,8 +340,10 @@ export default {
       this.$message.warning(`只能提交 1 个文件`);
     },
 
-    async handleLogout() {
-      this.$router.push('/');
+    Logout() {
+      sessionStorage.clear(); // 清除所有 sessionStorage 信息
+      this.$router.push('/'); // 跳转到登录页面
+      this.$message.success('已退出登录');
     },
 
     async handleCheckStatus() {
@@ -419,11 +431,14 @@ export default {
           preferredSubjects: data.preferredSubjects || ['', '', '', ''], // 默认值
           singleSubSubject: data.singleSubSubject || '', // 默认值
           personalStatementUrl: data.personalStatementUrl || '',
-          personalStatementName: data.personalStatementName || '',
         };
 
         // 如果准考证号不为空，则设置为只读
         this.isReadOnly = this.formData.examNumber !== null;
+        if(this.isReadOnly){
+          this.$message.success("下面是您已填写好的信息表");
+        }
+        this.personalStatementName = this.formData.name + "-个人简介";
 
         if(this.formData.subject === '电子信息（全日制）'){
           this.flag = true;
@@ -512,7 +527,6 @@ export default {
   background-color: #f9f9f9;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  padding: 20px;
 }
 
 .info-header {
@@ -539,39 +553,7 @@ h2 {
 }
 
 ::v-deep(.el-button) {
-  font-size: 18px;
-  width: 100%;
   padding: 10px;
-}
-
-.nav-bar {
-  width: 100%;
-  border-bottom: 2px solid #1E90FF !important; /* 下边框 */
-}
-
-/* 自定义菜单项样式 */
-.custom-menu-item {
-  text-align: center;
-  font-size: 18px !important; /* 调整字体大小 */
-  font-weight: bold !important;
-}
-
-/* 学科信息的特定样式 */
-.subject-info {
-  color: #FF69B4 !important; /* 例如，粉色 */
-  margin-left: 25% !important;
-}
-
-/* 导师信息的特定样式 */
-.teacher-info {
-  color: #1E90FF !important; /* 例如，蓝色 */
-  margin-left: 15% !important;
-}
-
-/* 退出登录按钮样式 */
-.logout-button {
-  cursor: pointer;
-  margin-left: 15% !important;
 }
 
 .status-dialog .el-dialog__header {
@@ -631,4 +613,103 @@ h2 {
 .dialog-footer {
   text-align: center;
 }
+
+.navbar {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 0 50px;
+  background-color: #FFFFE0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-menu {
+  display: flex;
+  margin-left: 40px;
+}
+
+.logo {
+  height: 50px;
+  margin-right: 20px;
+}
+
+.navbar-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 10px;
+  color: #228B22;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-subtitle {
+  font-size: 14px;
+  color: #666666;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-item {
+  font-size: 20px;
+  margin-left: 140px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333333;
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s;
+  text-decoration:none;
+  font-weight: bold;
+  position: relative;
+}
+
+.navbar-item::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #00C5CD;
+  transition: width 0.3s;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+}
+
+.navbar-item:hover {
+  color:#00C5CD;
+}
+
+.navbar-item:hover::after {
+  width: 100%;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  font-size: 14px;
+  margin-right: 20px;
+}
+
+.login-link {
+  color: #409EFF;
+  font-weight: bold;
+}
+
+.login-link:hover {
+  color: #00C5CD;
+}
+
 </style>
