@@ -19,4 +19,11 @@ public class StudentChoiceInfoServiceImpl implements StudentChoiceInfoService {
         wrapper.eq("teacher_id", teacherId).eq("discipline_id", disciplineId).eq("priority", currentVolunteerRound);
         return studentChoiceInfoMapper.selectList(wrapper);
     }
+
+    @Override
+    public List<StudentChoiceInfo> selectAcceptedStuByDisId(int id) {
+        QueryWrapper<StudentChoiceInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq("discipline_id", id).eq("priority", 4);
+        return studentChoiceInfoMapper.selectList(wrapper);
+    }
 }

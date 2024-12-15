@@ -6,7 +6,13 @@ import lombok.Data;
 @Data
 @TableName("StudentChoiceInfo")
 public class StudentChoiceInfo {
-    int student_id;
-    String student_name;
-    String graduate_type;
+    int studentId;
+    String studentName;
+    String studentPhone;
+    String graduateType;
+    int disciplineId;
+    String disciplineName;
+    int teacherId;
+    String teacherName;
+    String teacherPhone;
 }

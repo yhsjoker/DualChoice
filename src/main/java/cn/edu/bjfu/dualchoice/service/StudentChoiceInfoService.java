@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface StudentChoiceInfoService {
     List<StudentChoiceInfo> selectStudentsByTeacherIdDisIdVolRound(int teacherId, int disciplineId, int currentVolunteerRound);
+
+    List<StudentChoiceInfo> selectAcceptedStuByDisId(int id);
 }

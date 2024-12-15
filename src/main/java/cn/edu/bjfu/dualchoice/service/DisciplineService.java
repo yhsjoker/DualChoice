@@ -17,4 +17,6 @@ public interface DisciplineService {
     String getNameById(int disciplineId);
 
     List<Discipline> selectPrimaryDisciplineByCollegeId(int collegeId);
+
+    List<Discipline> selectSecDisciplineByCollegeId(int collegeId);
 }

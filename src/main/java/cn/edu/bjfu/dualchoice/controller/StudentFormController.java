@@ -64,6 +64,9 @@ public class StudentFormController {
         jsonObject.put("idNumber", stuBaseInfo.getIdNumber());
         jsonObject.put("graduateType", stuBaseInfo.getGraduateType());
 
+        String url = studentService.selectResumeById(studentId);
+        jsonObject.put("personalStatementUrl", url);
+
         //查找学生选择老师情况
         String teacher1 = studentService.selectTeacherName(studentId, 1);
         String teacher2 = studentService.selectTeacherName(studentId, 2);

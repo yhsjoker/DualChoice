@@ -46,6 +46,7 @@ public class TeacherController {
         result.put("phone", teacherBaseInfo.getPhone());
         result.put("title", teacherBaseInfo.getTitle());
         result.put("round", current_volunteer_round);
+        result.put("imageUrl", teacherBaseInfo.getImage());
 
         JSONArray secondarySubjects = new JSONArray();
         List<TeacherQuotaInfo> teacherQuotaInfos = teacherQuotaInfoService.findByTeacherId(teacherId);
@@ -58,7 +59,7 @@ public class TeacherController {
             teacherInfo.put("phdQuota", teacherQuotaInfo.getPhdQuota());
             JSONArray students = new JSONArray();
 
-            if(current_volunteer_round == teacherBaseInfo.getVolunteer_round()){
+            if(current_volunteer_round == teacherBaseInfo.getVolunteerRound()){
                 List<StudentChoiceInfo> studentChoiceInfos = studentChoiceInfoService.selectStudentsByTeacherIdDisIdVolRound(teacherId, teacherQuotaInfo.getDisciplineId(), current_volunteer_round);
                 students = JSON.parseArray(JSONObject.toJSONString(studentChoiceInfos));
             }

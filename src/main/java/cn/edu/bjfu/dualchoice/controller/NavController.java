@@ -83,6 +83,7 @@ public class NavController {
                 teacher.put("email", teacherInfo.getEmail());
                 teacher.put("hasAdmissionQualification", teacherInfo.getQualification() != null && teacherInfo.getQualification().equals("是"));
                 teacher.put("intro", teacherInfo.getProfile());
+                teacher.put("imageUrl", teacherInfo.getImage());
 
                 teachers.add(teacher);
             }

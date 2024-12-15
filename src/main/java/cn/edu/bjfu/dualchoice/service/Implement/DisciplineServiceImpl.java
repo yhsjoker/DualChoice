@@ -46,4 +46,11 @@ public class DisciplineServiceImpl implements DisciplineService {
         wrapper.eq("level", 1).eq("college_id", collegeId);
         return disciplineMapper.selectList(wrapper);
     }
+
+    @Override
+    public List<Discipline> selectSecDisciplineByCollegeId(int collegeId) {
+        QueryWrapper<Discipline> wrapper = new QueryWrapper<>();
+        wrapper.ne("level", 1).eq("college_id", collegeId);
+        return disciplineMapper.selectList(wrapper);
+    }
 }

@@ -13,5 +13,6 @@ public class TeacherBaseInfo {
     String email;
     String phone;
     String title;
-    int volunteer_round;
+    int volunteerRound;
+    String image;
 }

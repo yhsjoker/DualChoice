@@ -2,14 +2,18 @@ package cn.edu.bjfu.dualchoice.controller;
 
 import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.*;
+import cn.edu.bjfu.dualchoice.utils.AliOssUtil;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/interviewGroup")
@@ -90,14 +94,25 @@ public class InterviewGroupController {
     }
 
     @PostMapping("/updateReExamInfo")
-    public Result insertReExamInfo(@RequestBody StuExamInfoDTO stuExamInfoDTO){
-        System.out.println(stuExamInfoDTO);
+    public Result insertReExamInfo(@RequestBody StuExamInfoDTO stuExamInfoDTO, @RequestParam(value = "signatureFile") MultipartFile file) throws Exception {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        int InterviewGroupId = (Integer) map.get("id");
+
         int eng_id = SubjectService.selectSubjectIdByName("外语听力及口语");
         int pro_id = SubjectService.selectSubjectIdByName("专业知识测试");
         int inter_id = SubjectService.selectSubjectIdByName("综合素质面试");
         ExamService.insertExamInfo(stuExamInfoDTO.getId(), eng_id, "复试", stuExamInfoDTO.getEnglishScore(), stuExamInfoDTO.getReExamTime(), stuExamInfoDTO.getReExamLocation(), stuExamInfoDTO.getOverallEvaluation());
         ExamService.insertExamInfo(stuExamInfoDTO.getId(), pro_id, "复试", stuExamInfoDTO.getProfessionalScore(), stuExamInfoDTO.getReExamTime(), stuExamInfoDTO.getReExamLocation(), stuExamInfoDTO.getOverallEvaluation());
         ExamService.insertExamInfo(stuExamInfoDTO.getId(), inter_id, "复试", stuExamInfoDTO.getInterviewScore(), stuExamInfoDTO.getReExamTime(), stuExamInfoDTO.getReExamLocation(), stuExamInfoDTO.getOverallEvaluation());
+
+        //文件上传OSS
+        String originalFilename = file.getOriginalFilename();
+        //System.out.println(originalFilename);
+        String filename = InterviewGroupId + "-" + UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
+        //System.out.println(filename);
+        String url = AliOssUtil.upload(filename, file.getInputStream());
+//        ExamService.updateResume(url, studentId);
+        //更新到哪里？
         return Result.success("复试信息增加成功");
     }
 
