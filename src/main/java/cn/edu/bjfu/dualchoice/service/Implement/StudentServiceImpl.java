@@ -3,6 +3,7 @@ package cn.edu.bjfu.dualchoice.service.Implement;
 import cn.edu.bjfu.dualchoice.mapper.StudentMapper;
 import cn.edu.bjfu.dualchoice.pojo.Student;
 import cn.edu.bjfu.dualchoice.service.StudentService;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,18 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public String selectResumeById(int id){
         return studentMapper.selectResumeById(id);
+    }
+
+    @Override
+    public void updateVolunteerStatus(int id, String status) {
+        UpdateWrapper<Student> wrapper = new UpdateWrapper<>();
+        wrapper.set("volunteer_status", status).eq("id", id);
+        studentMapper.update(null, wrapper);
+    }
+
+    @Override
+    public String selectVolunteerStatus(int id) {
+        return studentMapper.selectById(id).getVolunteerStatus();
     }
 }
 

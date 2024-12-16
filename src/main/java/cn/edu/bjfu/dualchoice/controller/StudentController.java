@@ -162,7 +162,28 @@ public class StudentController {
         //System.out.println(filename);
         String url = AliOssUtil.upload(filename, file.getInputStream());
         studentService.updateResume(url, studentId);
+        studentService.updateVolunteerStatus(studentId, "审查阶段");
         return Result.success("信息提交成功");
+    }
+
+    @GetMapping("/currentStatus")
+    public Result currentStatus(){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        int studentId = (Integer) map.get("id");
+
+        JSONObject result = new JSONObject();
+
+        String status = studentService.selectVolunteerStatus(studentId);
+        result.put("status", status);
+
+        if(status.equals("已录取")){
+
+        }
+        else{
+            result.put("admissionTeacherName", null);
+            result.put("admissionMajor", null);
+        }
+        return Result.success(result);
     }
 
 }

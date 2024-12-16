@@ -19,4 +19,8 @@ public interface StudentService {
     void updateResume(String url, int id);
 
     String selectResumeById(int id);
+
+    void updateVolunteerStatus(int id, String status);
+
+    String selectVolunteerStatus(int id);
 }
