@@ -40,6 +40,9 @@ public class StudentController {
     @Autowired
     DisciplineInfoService disciplineInfoService;
 
+    @Autowired
+    AdmissionService admissionService;
+
     @GetMapping("/info")
     public Result info(){
         Map<String, Object> map = ThreadLocalUtil.get();
@@ -177,7 +180,11 @@ public class StudentController {
         result.put("status", status);
 
         if(status.equals("已录取")){
-
+            Admission admission = admissionService.selectByStuId(studentId);
+            String teacher_name = teacherService.selectNameById(admission.getTeacherId());
+            String discipline = disciplineService.selectNameById(admission.getDisciplineId());
+            result.put("admissionTeacherName", teacher_name);
+            result.put("admissionMajor", discipline);
         }
         else{
             result.put("admissionTeacherName", null);

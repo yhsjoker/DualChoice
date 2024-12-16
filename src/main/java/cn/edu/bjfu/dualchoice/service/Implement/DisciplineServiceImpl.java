@@ -53,4 +53,9 @@ public class DisciplineServiceImpl implements DisciplineService {
         wrapper.ne("level", 1).eq("college_id", collegeId);
         return disciplineMapper.selectList(wrapper);
     }
+
+    @Override
+    public String selectNameById(int disciplineId) {
+        return disciplineMapper.selectById(disciplineId).getName();
+    }
 }

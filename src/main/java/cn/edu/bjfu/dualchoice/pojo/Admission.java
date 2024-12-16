@@ -8,4 +8,5 @@ import lombok.Data;
 public class Admission {
     private int studentId;
     private int teacherId;
+    private int disciplineId;
 }

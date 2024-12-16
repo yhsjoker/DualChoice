@@ -17,4 +17,6 @@ public interface TeacherService {
     List<Teacher> getTeacherListById(int id);
 
     List<Teacher> selectTeacherByCollegeId(int collegeId);
+
+    String selectNameById(int teacherId);
 }

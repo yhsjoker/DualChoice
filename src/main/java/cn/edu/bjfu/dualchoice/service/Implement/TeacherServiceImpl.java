@@ -53,4 +53,9 @@ public class TeacherServiceImpl implements TeacherService {
         wrapper.eq("college_id", collegeId);
         return teacherMapper.selectList(wrapper);
     }
+
+    @Override
+    public String selectNameById(int teacherId) {
+        return teacherMapper.selectById(teacherId).getName();
+    }
 }

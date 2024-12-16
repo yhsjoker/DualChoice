@@ -7,4 +7,6 @@ import java.util.List;
 public interface AdmissionService {
 
     List<Admission> selectAll();
+
+    Admission selectByStuId(int studentId);
 }
