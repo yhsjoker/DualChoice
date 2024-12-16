@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,7 +21,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void updateStudent(String phone, String emergency_phone,String email, String undergraduate_major, String undergraduate_school, String origin, java.sql.Date graduation_date, String exam_ticket_number, String category, String graduate_type,int id){
+    public void updateStudent(String phone, String emergency_phone, String email, String undergraduate_major, String undergraduate_school, String origin, Date graduation_date, String exam_ticket_number, String category, String graduate_type, int id){
         studentMapper.updateStudent(phone, emergency_phone,email, undergraduate_major, undergraduate_school, origin, graduation_date, exam_ticket_number, category, graduate_type, id);
     }
 
