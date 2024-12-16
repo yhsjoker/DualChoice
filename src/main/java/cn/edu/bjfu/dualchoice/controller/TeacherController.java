@@ -61,7 +61,15 @@ public class TeacherController {
 
             if(current_volunteer_round == teacherBaseInfo.getVolunteerRound()){
                 List<StudentChoiceInfo> studentChoiceInfos = studentChoiceInfoService.selectStudentsByTeacherIdDisIdVolRound(teacherId, teacherQuotaInfo.getDisciplineId(), current_volunteer_round);
-                students = JSON.parseArray(JSONObject.toJSONString(studentChoiceInfos));
+                for(StudentChoiceInfo studentChoiceInfo : studentChoiceInfos){
+                    JSONObject student = new JSONObject();
+                    student.put("studentId", studentChoiceInfo.getStudentId());
+                    student.put("studentName", studentChoiceInfo.getStudentName());
+                    student.put("graduateType", studentChoiceInfo.getGraduateType());
+                    student.put("studentPhone", studentChoiceInfo.getStudentPhone());
+                    student.put("isSelected", false);
+                    students.add(student);
+                }
             }
             teacherInfo.put("students", students);
             secondarySubjects.add(teacherInfo);
