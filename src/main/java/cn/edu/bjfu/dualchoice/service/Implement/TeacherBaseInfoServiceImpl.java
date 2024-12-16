@@ -23,7 +23,7 @@ public class TeacherBaseInfoServiceImpl implements TeacherBaseInfoService {
     @Override
     public int selectMinimumVolunteerRoundByCollegeId(int collegeId) {
         QueryWrapper<TeacherBaseInfo> wrapper = new QueryWrapper<>();
-        wrapper.eq("college_id", collegeId);
+        wrapper.eq("college_id", collegeId).eq("qualification", "是");
         List<Object> results = teacherBaseInfoMapper.selectObjs(wrapper.select("MIN(volunteer_round)"));
         if (results != null && !results.isEmpty()) {
             return (Integer) results.get(0);
