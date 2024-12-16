@@ -11,8 +11,8 @@ public class ExamServiceImpl implements ExamService {
     private ExamMapper examMapper;
 
     @Override
-    public void insertExamInfo(int studentId, int subjectId, String type, float score, java.sql.Timestamp time, String location, String comment){
-        examMapper.insertExamInfo(studentId, subjectId, type, score, time, location, comment);
+    public void insertExamInfo(int studentId, int subjectId, String type, float score, java.sql.Timestamp time, String location, String comment, String url){
+        examMapper.insertExamInfo(studentId, subjectId, type, score, time, location, comment, url);
     }
 
     @Override

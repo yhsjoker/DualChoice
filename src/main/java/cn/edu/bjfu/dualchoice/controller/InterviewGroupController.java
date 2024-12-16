@@ -76,19 +76,26 @@ public class InterviewGroupController {
             info.put("reExamTime", examInfos_know.getTime());
             info.put("reExamLocation", examInfos_know.getLocation());
             info.put("overallEvaluation", examInfos_know.getComment());
+            info.put("signatureUrl", examInfos_know.getSignature());
         }
 
         ExamInfo examInfos_eng = ExamInfoService.selectExamInfoById(studentId, "专业知识测试");
         if(examInfos_eng == null){
             info.put("professionalScore", null);
         }
-        else info.put("professionalScore", examInfos_eng.getScore());
+        else {
+            info.put("professionalScore", examInfos_eng.getScore());
+            info.put("signatureUrl", examInfos_eng.getSignature());
+        }
 
         ExamInfo examInfos_interview = ExamInfoService.selectExamInfoById(studentId, "综合素质面试");
         if(examInfos_interview == null){
             info.put("interviewScore", null);
         }
-        else info.put("interviewScore", examInfos_interview.getScore());
+        else {
+            info.put("interviewScore", examInfos_interview.getScore());
+            info.put("signatureUrl", examInfos_interview.getSignature());
+        }
 
         return Result.success(info);
     }
@@ -98,21 +105,17 @@ public class InterviewGroupController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int InterviewGroupId = (Integer) map.get("id");
 
+        String originalFilename = file.getOriginalFilename();
+        String filename = InterviewGroupId + "-" + UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
+        String url = AliOssUtil.upload(filename, file.getInputStream());
+
         int eng_id = SubjectService.selectSubjectIdByName("外语听力及口语");
         int pro_id = SubjectService.selectSubjectIdByName("专业知识测试");
         int inter_id = SubjectService.selectSubjectIdByName("综合素质面试");
-        ExamService.insertExamInfo(stuExamInfoDTO.getId(), eng_id, "复试", stuExamInfoDTO.getEnglishScore(), stuExamInfoDTO.getReExamTime(), stuExamInfoDTO.getReExamLocation(), stuExamInfoDTO.getOverallEvaluation());
-        ExamService.insertExamInfo(stuExamInfoDTO.getId(), pro_id, "复试", stuExamInfoDTO.getProfessionalScore(), stuExamInfoDTO.getReExamTime(), stuExamInfoDTO.getReExamLocation(), stuExamInfoDTO.getOverallEvaluation());
-        ExamService.insertExamInfo(stuExamInfoDTO.getId(), inter_id, "复试", stuExamInfoDTO.getInterviewScore(), stuExamInfoDTO.getReExamTime(), stuExamInfoDTO.getReExamLocation(), stuExamInfoDTO.getOverallEvaluation());
+        ExamService.insertExamInfo(stuExamInfoDTO.getId(), eng_id, "复试", stuExamInfoDTO.getEnglishScore(), stuExamInfoDTO.getReExamTime(), stuExamInfoDTO.getReExamLocation(), stuExamInfoDTO.getOverallEvaluation(), url);
+        ExamService.insertExamInfo(stuExamInfoDTO.getId(), pro_id, "复试", stuExamInfoDTO.getProfessionalScore(), stuExamInfoDTO.getReExamTime(), stuExamInfoDTO.getReExamLocation(), stuExamInfoDTO.getOverallEvaluation(), url);
+        ExamService.insertExamInfo(stuExamInfoDTO.getId(), inter_id, "复试", stuExamInfoDTO.getInterviewScore(), stuExamInfoDTO.getReExamTime(), stuExamInfoDTO.getReExamLocation(), stuExamInfoDTO.getOverallEvaluation(), url);
 
-        //文件上传OSS
-        String originalFilename = file.getOriginalFilename();
-        //System.out.println(originalFilename);
-        String filename = InterviewGroupId + "-" + UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
-        //System.out.println(filename);
-        String url = AliOssUtil.upload(filename, file.getInputStream());
-//        ExamService.updateResume(url, studentId);
-        //更新到哪里？
         return Result.success("复试信息增加成功");
     }
 

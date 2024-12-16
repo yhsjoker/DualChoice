@@ -125,19 +125,26 @@ public class StudentFormController {
             jsonObject.put("reExamTime", examInfos_know.getTime());
             jsonObject.put("reExamLocation", examInfos_know.getLocation());
             jsonObject.put("overallEvaluation", examInfos_know.getComment());
+            jsonObject.put("photoUrl", examInfos_know.getSignature());
         }
 
         ExamInfo examInfos_eng = ExamInfoService.selectExamInfoById(studentId, "专业知识测试");
         if(examInfos_eng == null){
             jsonObject.put("professionalScore", null);
         }
-        else jsonObject.put("professionalScore", examInfos_eng.getScore());
+        else {
+            jsonObject.put("professionalScore", examInfos_eng.getScore());
+            jsonObject.put("photoUrl", examInfos_eng.getSignature());
+        }
 
         ExamInfo examInfos_interview = ExamInfoService.selectExamInfoById(studentId, "综合素质面试");
         if(examInfos_interview == null){
             jsonObject.put("interviewScore", null);
         }
-        else jsonObject.put("interviewScore", examInfos_interview.getScore());
+        else {
+            jsonObject.put("interviewScore", examInfos_interview.getScore());
+            jsonObject.put("photoUrl", examInfos_interview.getSignature());
+        }
 
         return Result.success(jsonObject);
 

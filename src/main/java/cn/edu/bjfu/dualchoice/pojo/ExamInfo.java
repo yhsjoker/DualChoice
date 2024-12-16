@@ -11,4 +11,5 @@ public class ExamInfo {
     private String location;
     private String comment;
     private float score;
+    private String signature;
 }
