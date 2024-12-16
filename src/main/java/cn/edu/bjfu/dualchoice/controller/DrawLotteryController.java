@@ -83,7 +83,7 @@ public class DrawLotteryController {
     public Result submit(@RequestBody StudentChoiceDTO studentChoiceDTO){
         for(StudentChoiceBaseInfoDTO baseInfo : studentChoiceDTO.getSelections()){
             int disciplineId = disciplineService.selectIdByName(baseInfo.getSubject());
-            choiceService.lockChoice(baseInfo.getTeacherId(), baseInfo.getStudentId());
+            choiceService.lockChoice(baseInfo.getTeacherId(), baseInfo.getStudentId(), disciplineId);
         }
         return Result.success("提交成功");
     }

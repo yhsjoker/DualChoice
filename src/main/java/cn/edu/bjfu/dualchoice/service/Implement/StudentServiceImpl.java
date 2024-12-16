@@ -61,5 +61,10 @@ public class StudentServiceImpl implements StudentService {
     public String selectVolunteerStatus(int id) {
         return studentMapper.selectById(id).getVolunteerStatus();
     }
+
+    @Override
+    public Student selectById(int studentId) {
+        return studentMapper.selectById(studentId);
+    }
 }
 

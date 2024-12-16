@@ -18,7 +18,12 @@ public class AdmissionServiceImpl implements AdmissionService {
     public List<Admission> selectAll() {
         return admissionMapper.selectList(null);
     }
-
+    @Override
+    public List<Admission> selectByDisciplineId(int disciplineId) {
+        QueryWrapper<Admission> qw = new QueryWrapper<>();
+        qw.eq("discipline_id", disciplineId);
+        return admissionMapper.selectList(qw);
+    }
     @Override
     public Admission selectByStuId(int studentId) {
         QueryWrapper<Admission> wrapper = new QueryWrapper<>();

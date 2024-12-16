@@ -3,7 +3,6 @@ package cn.edu.bjfu.dualchoice.service.Implement;
 import cn.edu.bjfu.dualchoice.mapper.AdmissionMapper;
 import cn.edu.bjfu.dualchoice.mapper.ChoiceMapper;
 import cn.edu.bjfu.dualchoice.pojo.Admission;
-import cn.edu.bjfu.dualchoice.pojo.Application;
 import cn.edu.bjfu.dualchoice.pojo.Choice;
 import cn.edu.bjfu.dualchoice.service.ChoiceService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -29,11 +28,13 @@ public class ChoiceServiceImpl implements ChoiceService {
         choiceMapper.insertChoice(teacher_id, student_id, priority);
     }
 
+
     @Override
-    public void lockChoice(int teacher_id, int student_id) {
+    public void lockChoice(int teacher_id, int student_id, int discipline_id) {
         Admission admission = new Admission();
         admission.setTeacherId(teacher_id);
         admission.setStudentId(student_id);
+        admission.setDisciplineId(discipline_id);
         admissionMapper.insert(admission);
     }
 }

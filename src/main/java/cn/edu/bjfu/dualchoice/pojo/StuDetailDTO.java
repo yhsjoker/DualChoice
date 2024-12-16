@@ -2,8 +2,10 @@ package cn.edu.bjfu.dualchoice.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -13,8 +15,8 @@ public class StuDetailDTO {
     private String name  ;
     private String studentType;
     private String graduationSchool  ;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
-    private Timestamp graduationTime  ;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date graduationTime  ;
     private String graduatedMajor;
     private String email ;
     private String contact  ;

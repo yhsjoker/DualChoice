@@ -2,6 +2,7 @@ package cn.edu.bjfu.dualchoice.controller;
 
 import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.*;
+import cn.edu.bjfu.dualchoice.service.Implement.StudentApplicationInfoServiceImpl;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -31,6 +32,13 @@ public class TeacherController {
     DisciplineService disciplineService;
     @Autowired
     TeacherService teacherService;
+    @Autowired
+    StudentApplicationInfoService studentApplicationInfoService;
+    @Autowired
+    private StudentApplicationInfoServiceImpl studentApplicationInfoServiceImpl;
+    @Autowired
+    AdmissionService admissionService;
+
     @GetMapping("/info")
     public Result info(){
         Map<String, Object> map = ThreadLocalUtil.get();
@@ -59,7 +67,21 @@ public class TeacherController {
             teacherInfo.put("phdQuota", teacherQuotaInfo.getPhdQuota());
             JSONArray students = new JSONArray();
 
-            if(current_volunteer_round == teacherBaseInfo.getVolunteerRound()){
+            if(teacherBaseInfo.getVolunteerRound()==4){
+                List<Admission> admissions = admissionService.selectByDisciplineId(teacherQuotaInfo.getDisciplineId());
+                System.out.println(teacherQuotaInfo.getDisciplineId());
+                for(Admission admission : admissions){
+                    JSONObject student = new JSONObject();
+                    Student stu = studentService.selectById(admission.getStudentId());
+                    student.put("studentId", stu.getId());
+                    student.put("studentName", stu.getName());
+                    student.put("graduateType", stu.getGraduateType());
+                    student.put("studentPhone", stu.getPhone());
+                    student.put("isSelected", true);
+                    students.add(student);
+                }
+            }
+            else if(current_volunteer_round == teacherBaseInfo.getVolunteerRound()){
                 List<StudentChoiceInfo> studentChoiceInfos = studentChoiceInfoService.selectStudentsByTeacherIdDisIdVolRound(teacherId, teacherQuotaInfo.getDisciplineId(), current_volunteer_round);
                 for(StudentChoiceInfo studentChoiceInfo : studentChoiceInfos){
                     JSONObject student = new JSONObject();
@@ -83,9 +105,11 @@ public class TeacherController {
     public Result submitSelections(@RequestBody SelectionsDTO selectionsDTO){
         Map<String, Object> map = ThreadLocalUtil.get();
         int teacherId = (Integer) map.get("id");
+        System.out.println(selectionsDTO);
 
         for(int studentId : selectionsDTO.getSelectedStudents()){
-            choiceService.lockChoice(teacherId, studentId);
+            int disciplineId = studentApplicationInfoService.selectSecondDisciplineId(studentId);
+            choiceService.lockChoice(teacherId, studentId, disciplineId);
         }
 
         for(TeachingQuotaUpdateDTO teachingQuotaUpdateInfo : selectionsDTO.getSecondarySubjects()){

@@ -8,4 +8,6 @@ public interface StudentApplicationInfoService {
     List<StudentApplicationInfo> selectByDisciplineId(int disciplineId);
 
     List<String> selectDisByStuIdParentDis(int studentId, int parentDisciplineId);
+
+    int selectSecondDisciplineId(int studentId);
 }

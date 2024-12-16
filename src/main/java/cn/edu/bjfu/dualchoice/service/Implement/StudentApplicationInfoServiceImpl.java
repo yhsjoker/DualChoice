@@ -34,4 +34,11 @@ public class StudentApplicationInfoServiceImpl implements StudentApplicationInfo
                 .map(obj -> (String) obj)
                 .toList();
     }
+
+    @Override
+    public int selectSecondDisciplineId(int studentId) {
+        QueryWrapper<StudentApplicationInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq("student_id", studentId).eq("preference_order", 1).select("discipline_id");
+        return studentApplicationInfoMapper.selectOne(wrapper).getDisciplineId();
+    }
 }

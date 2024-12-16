@@ -8,5 +8,7 @@ public interface AdmissionService {
 
     List<Admission> selectAll();
 
+    List<Admission> selectByDisciplineId(int disciplineId);
+
     Admission selectByStuId(int studentId);
 }

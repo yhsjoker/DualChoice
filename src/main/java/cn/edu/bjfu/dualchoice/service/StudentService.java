@@ -24,4 +24,6 @@ public interface StudentService {
     void updateVolunteerStatus(int id, String status);
 
     String selectVolunteerStatus(int id);
+
+    Student selectById(int studentId);
 }
