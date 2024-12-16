@@ -101,10 +101,9 @@ public class InterviewGroupController {
     }
 
     @PostMapping("/updateReExamInfo")
-    public Result insertReExamInfo(@RequestBody StuExamInfoDTO stuExamInfoDTO, @RequestParam(value = "signatureFile") MultipartFile file) throws Exception {
+    public Result insertReExamInfo(StuExamInfoDTO stuExamInfoDTO, @RequestParam(value = "signatureFile") MultipartFile file) throws Exception {
         Map<String, Object> map = ThreadLocalUtil.get();
         int InterviewGroupId = (Integer) map.get("id");
-
         String originalFilename = file.getOriginalFilename();
         String filename = InterviewGroupId + "-" + UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
         String url = AliOssUtil.upload(filename, file.getInputStream());
