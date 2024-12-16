@@ -27,7 +27,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public void increaseVolRound(int teacherId) {
         UpdateWrapper<Teacher> wrapper = new UpdateWrapper<>();
-        wrapper.eq("teacher_id", teacherId);
+        wrapper.eq("id", teacherId);
         wrapper.setSql("volunteer_round = volunteer_round + 1");
         teacherMapper.update(null, wrapper);
     }

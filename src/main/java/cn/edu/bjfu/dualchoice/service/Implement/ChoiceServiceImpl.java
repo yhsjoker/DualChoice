@@ -1,6 +1,8 @@
 package cn.edu.bjfu.dualchoice.service.Implement;
 
+import cn.edu.bjfu.dualchoice.mapper.AdmissionMapper;
 import cn.edu.bjfu.dualchoice.mapper.ChoiceMapper;
+import cn.edu.bjfu.dualchoice.pojo.Admission;
 import cn.edu.bjfu.dualchoice.pojo.Application;
 import cn.edu.bjfu.dualchoice.pojo.Choice;
 import cn.edu.bjfu.dualchoice.service.ChoiceService;
@@ -12,6 +14,9 @@ import org.springframework.stereotype.Service;
 public class ChoiceServiceImpl implements ChoiceService {
     @Autowired
     ChoiceMapper choiceMapper;
+    @Autowired
+    private AdmissionMapper admissionMapper;
+
     @Override
     public Choice findChoiceByStuIdPri(int id, int pri){
         QueryWrapper<Choice> wrapper = new QueryWrapper<>();
@@ -26,14 +31,9 @@ public class ChoiceServiceImpl implements ChoiceService {
 
     @Override
     public void lockChoice(int teacher_id, int student_id) {
-        QueryWrapper<Choice> deleteWrapper = new QueryWrapper<>();
-        deleteWrapper.eq("student_id", student_id);
-        choiceMapper.delete(deleteWrapper);
-
-        Choice newChoice = new Choice();
-        newChoice.setTeacherId(teacher_id);
-        newChoice.setStudentId(student_id);
-        newChoice.setPriority(4);
-        choiceMapper.insert(newChoice);
+        Admission admission = new Admission();
+        admission.setTeacherId(teacher_id);
+        admission.setStudentId(student_id);
+        admissionMapper.insert(admission);
     }
 }

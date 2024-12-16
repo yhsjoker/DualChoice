@@ -1,12 +1,9 @@
 package cn.edu.bjfu.dualchoice.controller;
 
-import cn.edu.bjfu.dualchoice.pojo.Discipline;
-import cn.edu.bjfu.dualchoice.pojo.GraduateManagerInfo;
-import cn.edu.bjfu.dualchoice.pojo.Result;
-import cn.edu.bjfu.dualchoice.pojo.StudentChoiceInfo;
-import cn.edu.bjfu.dualchoice.service.DisciplineService;
-import cn.edu.bjfu.dualchoice.service.GraduateManagerInfoService;
-import cn.edu.bjfu.dualchoice.service.StudentChoiceInfoService;
+import cn.edu.bjfu.dualchoice.mapper.AdmissionMapper;
+import cn.edu.bjfu.dualchoice.pojo.*;
+import cn.edu.bjfu.dualchoice.service.*;
+import cn.edu.bjfu.dualchoice.service.Implement.TeacherBaseInfoServiceImpl;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -27,6 +24,13 @@ public class GraduateManagerController {
     DisciplineService disciplineService;
     @Autowired
     StudentChoiceInfoService studentChoiceInfoService;
+    @Autowired
+    AdmissionService admissionService;
+    @Autowired
+    StuBaseInfoService stuBaseInfoService;
+    @Autowired
+    TeacherBaseInfoService teacherBaseInfoService;
+
     @GetMapping("admission")
     public Result admission(){
         Map<String, Object> map = ThreadLocalUtil.get();
@@ -39,20 +43,21 @@ public class GraduateManagerController {
         String college_name = graduateManagerInfo.getCollegeName();
         result.put("collegeName", college_name);
 
-        List<Discipline> disciplines = disciplineService.selectSecDisciplineByCollegeId(college_id);
+        List<Admission> admissions = admissionService.selectAll();
         JSONArray admissionList = new JSONArray();
 
-        for(Discipline discipline : disciplines){
-            List<StudentChoiceInfo> studentChoiceInfos = studentChoiceInfoService.selectAcceptedStuByDisId(discipline.getId());
-            for(StudentChoiceInfo studentChoiceInfo : studentChoiceInfos){
-                JSONObject admission = new JSONObject();
-                admission.put("name", studentChoiceInfo.getStudentName());
-                admission.put("phone", studentChoiceInfo.getStudentPhone());
-                admission.put("discipline", studentChoiceInfo.getDisciplineName());
-                admission.put("graduateType", studentChoiceInfo.getGraduateType());
-                admission.put("teacherName", studentChoiceInfo.getTeacherName());
-                admission.put("teacherPhone", studentChoiceInfo.getTeacherPhone());
-                admissionList.add(admission);
+        for(Admission admission : admissions){
+            StuBaseInfo student = stuBaseInfoService.getStuBaseInfoById(admission.getStudentId());
+            if(student != null && student.getCollegeId() == college_id){
+                TeacherBaseInfo teacher = teacherBaseInfoService.selectAllById(admission.getTeacherId());
+                JSONObject object = new JSONObject();
+                object.put("name", student.getName());
+                object.put("phone",student.getContact());
+                object.put("discipline",student.getDiscipline());
+                object.put("graduateType",student.getGraduateType());
+                object.put("teacherName",teacher.getTeacherName());
+                object.put("teacherPhone",teacher.getPhone());
+                admissionList.add(object);
             }
         }
 

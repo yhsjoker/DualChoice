@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class StuBaseInfo {
+    private int collegeId;
+
     private String discipline;
     private String examNumber;
     int studentId;

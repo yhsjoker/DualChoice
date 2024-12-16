@@ -81,6 +81,7 @@ public class TeacherController {
         }
 
         for(TeachingQuotaUpdateDTO teachingQuotaUpdateInfo : selectionsDTO.getSecondarySubjects()){
+            System.out.println(teachingQuotaUpdateInfo.getDisciplineName());
             int discipline_id = disciplineService.selectIdByName(teachingQuotaUpdateInfo.getDisciplineName());
             teachingService.updateInfo(discipline_id, teacherId, teachingQuotaUpdateInfo.getAcademicQuota(), teachingQuotaUpdateInfo.getProfessionalQuota(), teachingQuotaUpdateInfo.getPhdQuota());
         }
