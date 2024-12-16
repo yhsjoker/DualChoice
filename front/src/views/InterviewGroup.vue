@@ -201,6 +201,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 export default {
   name: 'ReExamGroup',
@@ -268,7 +269,7 @@ export default {
 
     // 处理签名文件变化
     handleSignatureChange(file, fileList) {
-      const allowedTypes = ['image/jpeg', 'image/png'];
+      const allowedTypes = ['image/jpg', 'image/png'];
       if (allowedTypes.includes(file.raw.type)) {
         this.formData.signatureFile = file.raw;
         this.signatureFileList = fileList;
@@ -367,6 +368,9 @@ export default {
             }
           }
 
+          this.formData.id = this.currentStudent.id;
+          this.formData.reExamTime = moment(this.currentStudent.reExamTime).format('YYYY-MM-DD hh:mm:ss');
+
           const submitData = new FormData();
           for (const key in this.formData) {
             if (this.formData.hasOwnProperty(key)) {
@@ -382,11 +386,8 @@ export default {
 
           try {
             // 提交数据到后端
-            this.formData.id = this.currentStudent.id;
-            await axios.post(`/api/interviewGroup/updateReExamInfo`, this.formData,{
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
+            await axios.post(`/api/interviewGroup/updateReExamInfo`, submitData,{
+
             });
             this.$message.success('复试信息提交成功');
             this.dialogVisible = false;

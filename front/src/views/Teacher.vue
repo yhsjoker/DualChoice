@@ -39,7 +39,7 @@
           <p>电话：{{ teacherInfo.phone }}</p>
           <p>邮箱：{{ teacherInfo.email }}</p>
           <br></br><br></br>
-          <h3>当前选择轮次：{{teacherInfo.round}}</h3>
+          <h3>当前选择轮次：第{{teacherInfo.round}}轮</h3>
         </div>
       </el-card>
     </aside>
@@ -59,12 +59,12 @@
         </div>
 
         <el-table :data="subject.students" class="student-table">
-          <el-table-column prop="name" label="姓名"></el-table-column>
-          <el-table-column prop="type" label="研究生类型"></el-table-column>
-          <el-table-column prop="volunteerLevel" label="志愿级别"></el-table-column>
+          <el-table-column prop="studentName" label="姓名"></el-table-column>
+          <el-table-column prop="graduateType" label="研究生类型"></el-table-column>
+          <el-table-column prop="studentPhone" label="联系方式"></el-table-column>
           <el-table-column label="操作">
             <template #default="scope">
-              <el-button type="primary" size="small" @click="viewStudent(scope.row.id)">查看</el-button>
+              <el-button type="primary" size="small" @click="viewStudent(scope.row.studentId)">查看</el-button>
               <el-button
                   type="success"
                   size="small"
@@ -76,7 +76,9 @@
         </el-table>
       </el-card>
       <div class="footer">
-        <el-button type="primary" size="large" @click="submitSelections">确认提交</el-button>
+        <el-button type="primary" size="large"
+                   :disabled="teacherInfo.round>=4"
+                   @click="submitSelections">确认提交</el-button>
       </div>
     </main>
   </div>
@@ -159,7 +161,7 @@ export default {
     },
     selectStudent(student, subject) {
       let quotaField;
-      switch(student.type) {
+      switch(student.graduateType) {
         case '学术型':
           quotaField = 'academicQuota';
           break;
@@ -174,7 +176,7 @@ export default {
       }
       if (subject[quotaField] > 0) {
         subject[quotaField]--;
-        this.selectedStudents.push(student.id);
+        this.selectedStudents.push(student.studentId);
         student.isSelected = true;
       } else {
         this.$message.warning('该类型的名额已满，无法选择该学生');
@@ -182,7 +184,7 @@ export default {
     },
     isQuotaAvailable(student, subject) {
       let quotaField;
-      switch(student.type) {
+      switch(student.graduateType) {
         case '学术型':
           quotaField = 'academicQuota';
           break;
@@ -200,7 +202,7 @@ export default {
     async submitSelections() {
       const submissionData = {
         secondarySubjects: this.teacherInfo.secondarySubjects.map(subject => ({
-          name: subject.name,
+          disciplineName: subject.name,
           academicQuota: subject.academicQuota,
           professionalQuota: subject.professionalQuota,
           phdQuota: subject.phdQuota,

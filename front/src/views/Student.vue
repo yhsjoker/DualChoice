@@ -75,9 +75,19 @@
         <el-form-item label="身份证号" prop="idNumber">
           <el-input v-model="formData.idNumber" :readonly="isReadOnly" placeholder="请输入身份证号"></el-input>
         </el-form-item>
+<!--        <el-form-item label="研究生类型" prop="graduateType">-->
+<!--          <el-input v-model="formData.graduateType" :readonly="isReadOnly" placeholder="请输入研究生类型"></el-input>-->
+<!--        </el-form-item>-->
+
         <el-form-item label="研究生类型" prop="graduateType">
-          <el-input v-model="formData.graduateType" :readonly="isReadOnly" placeholder="请输入研究生类型"></el-input>
+          <el-select v-model="formData.graduateType" :disabled="isReadOnly" placeholder="请输入研究生类型">
+            <el-option label="学术型" value="学术型"></el-option>
+            <el-option label="专业型" value="专业型"></el-option>
+            <el-option label="直博型" value="直博型"></el-option>
+          </el-select>
         </el-form-item>
+
+
         <el-form-item label="报考导师优先意向">
           <el-form-item prop="supervisor1">
             <el-input v-model="formData.supervisor1" :readonly="isReadOnly" placeholder="一志愿" ></el-input>
@@ -273,6 +283,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 export default {
   data() {
@@ -379,7 +390,7 @@ export default {
         emergencyContact: [{ required: true, message: '请输入紧急电话', trigger: 'blur' }],
         origin: [{ required: true, message: '请输入生源地', trigger: 'blur' }],
         idNumber: [{ required: true, message: '请输入身份证号', trigger: 'blur' }],
-        graduateType: [{ required: true, message: '请输入研究生类型', trigger: 'blur' }],
+        graduateType: [{ required: true, message: '请输入研究生类型', trigger: 'change' }],
         supervisor1: [{ required: true, message: '请输入一志愿导师', trigger: 'blur' }],
         supervisor2: [{ required: true, message: '请输入二志愿导师', trigger: 'blur' }],
         supervisor3: [{ required: true, message: '请输入三志愿导师', trigger: 'blur' }],
@@ -474,6 +485,8 @@ export default {
           }
 
           const submitData = new FormData();
+          this.formData.graduationTime = moment(this.formData.graduationTime).format('YYYY-MM-DD');
+
           for (const key in this.formData) {
             if (this.formData.hasOwnProperty(key)) {
               if (key === 'personalStatementFile' && this.formData[key]) {
@@ -611,6 +624,7 @@ h2 {
 }
 
 .dialog-footer {
+
   text-align: center;
 }
 
