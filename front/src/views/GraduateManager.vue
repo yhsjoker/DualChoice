@@ -155,10 +155,10 @@ export default {
         this.admissionList = data.admissionList.map(item => {
           return {
             name: item.name,
+            phone: item.phone,
             discipline: item.discipline,
-            admissionMajor: item.admissionMajor,
             graduateType: item.graduateType,
-            admissionTeacherName: item.admissionTeacherName,
+            teacherName: item.teacherName,
             teacherPhone: item.teacherPhone
           };
         });
