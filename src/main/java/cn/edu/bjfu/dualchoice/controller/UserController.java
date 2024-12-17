@@ -33,8 +33,7 @@ public class UserController {
         if(!user.getPassword().equals(loginUser.getPassword())){
             return Result.error("密码错误");
         }
-        System.out.println(user.getUserName());
-        System.out.println(user.getPassword());
+
         // 根据id和身份获得token
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", loginUser.getId());

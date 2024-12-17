@@ -48,7 +48,6 @@ public class StudentFormController {
 
         //查找学生基本信息
         StuBaseInfo stuBaseInfo = stuBaseInfoService.getStuBaseInfoById(studentId);
-        //System.out.println(stuBaseInfo);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("subject", stuBaseInfo.getDiscipline());
         jsonObject.put("examNumber", stuBaseInfo.getExamNumber());

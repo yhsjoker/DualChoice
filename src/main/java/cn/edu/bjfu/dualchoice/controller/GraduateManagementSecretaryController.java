@@ -43,6 +43,11 @@ public class GraduateManagementSecretaryController {
     public Result getCollege(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int graduateManagementSecretaryId = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("GraduateManagementSecretary")){
+            return Result.error("permission denied");
+        }
+
         String collegeName = graduateManagementSecretaryService.selectCollegeById(graduateManagementSecretaryId);
 
         JSONObject jsonObject = new JSONObject();
@@ -55,7 +60,11 @@ public class GraduateManagementSecretaryController {
     public Result getStudents(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int graduateManagementSecretaryId = (Integer) map.get("id");
-        System.out.println(graduateManagementSecretaryId);
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("GraduateManagementSecretary")){
+            return Result.error("permission denied");
+        }
+
         int collegeId = graduateManagementSecretaryService.selectCollegeIdById(graduateManagementSecretaryId);
         JSONObject info = new JSONObject();
         List<StuBaseInfo> studentList = stuBaseInfoService.getStuBaseInfoByCollegeId(collegeId);
@@ -79,6 +88,11 @@ public class GraduateManagementSecretaryController {
     public Result getTeachers(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int graduateManagementSecretaryId = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("GraduateManagementSecretary")){
+            return Result.error("permission denied");
+        }
+
         int collegeId = graduateManagementSecretaryService.selectCollegeIdById(graduateManagementSecretaryId);
         JSONObject info = new JSONObject();
         List<Teacher> teacherList = teacherService.getTeacherListById(collegeId);
@@ -101,10 +115,14 @@ public class GraduateManagementSecretaryController {
 
     @PutMapping("/teachers/setQualification")
     public Result setQualification(@RequestBody Teacher teacher){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("GraduateManagementSecretary")){
+            return Result.error("permission denied");
+        }
+
         int teacherId = teacher.getId();
-        System.out.println(teacherId);
         String qualification = teacher.getQualification();
-        System.out.println(qualification);
         teacherService.setQualificationById(teacherId, qualification);
         return Result.success();
     }

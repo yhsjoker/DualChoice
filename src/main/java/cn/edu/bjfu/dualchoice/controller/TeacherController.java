@@ -43,6 +43,10 @@ public class TeacherController {
     public Result info(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int teacherId = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("Teacher")){
+            return Result.error("permission denied");
+        }
 
         JSONObject result = new JSONObject();
 
@@ -69,7 +73,6 @@ public class TeacherController {
 
             if(teacherBaseInfo.getVolunteerRound()==4){
                 List<Admission> admissions = admissionService.selectByDisciplineId(teacherQuotaInfo.getDisciplineId());
-                System.out.println(teacherQuotaInfo.getDisciplineId());
                 for(Admission admission : admissions){
                     JSONObject student = new JSONObject();
                     Student stu = studentService.selectById(admission.getStudentId());
@@ -105,7 +108,10 @@ public class TeacherController {
     public Result submitSelections(@RequestBody SelectionsDTO selectionsDTO){
         Map<String, Object> map = ThreadLocalUtil.get();
         int teacherId = (Integer) map.get("id");
-        System.out.println(selectionsDTO);
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("Teacher")){
+            return Result.error("permission denied");
+        }
 
         for(int studentId : selectionsDTO.getSelectedStudents()){
             int disciplineId = studentApplicationInfoService.selectSecondDisciplineId(studentId);
@@ -113,7 +119,6 @@ public class TeacherController {
         }
 
         for(TeachingQuotaUpdateDTO teachingQuotaUpdateInfo : selectionsDTO.getSecondarySubjects()){
-            System.out.println(teachingQuotaUpdateInfo.getDisciplineName());
             int discipline_id = disciplineService.selectIdByName(teachingQuotaUpdateInfo.getDisciplineName());
             teachingService.updateInfo(discipline_id, teacherId, teachingQuotaUpdateInfo.getAcademicQuota(), teachingQuotaUpdateInfo.getProfessionalQuota(), teachingQuotaUpdateInfo.getPhdQuota());
         }

@@ -37,7 +37,10 @@ public class InterviewGroupController {
     public Result list(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int InterviewGroupId = (Integer) map.get("id");
-        System.out.println(InterviewGroupId);
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("InterviewGroup")){
+            return Result.error("permission denied");
+        }
 
         JSONObject info = new JSONObject();
         String primarySubject = InterviewGroup.selectDisNameById(InterviewGroupId);
@@ -61,7 +64,12 @@ public class InterviewGroupController {
 
     @GetMapping("/reExamInfo/{studentId}")
     public Result reExamInfo(@PathVariable("studentId") int studentId){
-        System.out.println(studentId);
+        Map<String, Object> map = ThreadLocalUtil.get();
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("InterviewGroup")){
+            return Result.error("permission denied");
+        }
+
         JSONObject info = new JSONObject();
 
         ExamInfo examInfos_know = ExamInfoService.selectExamInfoById(studentId, "外语听力及口语");
@@ -104,6 +112,10 @@ public class InterviewGroupController {
     public Result insertReExamInfo(StuExamInfoDTO stuExamInfoDTO, @RequestParam(value = "signatureFile") MultipartFile file) throws Exception {
         Map<String, Object> map = ThreadLocalUtil.get();
         int InterviewGroupId = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("InterviewGroup")){
+            return Result.error("permission denied");
+        }
 
         String originalFilename = file.getOriginalFilename();
         String filename = InterviewGroupId + "-" + UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));

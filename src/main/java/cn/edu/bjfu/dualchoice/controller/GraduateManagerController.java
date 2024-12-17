@@ -35,6 +35,10 @@ public class GraduateManagerController {
     public Result admission(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int graduateManagerId = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("GraduateManager")){
+            return Result.error("permission denied");
+        }
 
         JSONObject result = new JSONObject();
 

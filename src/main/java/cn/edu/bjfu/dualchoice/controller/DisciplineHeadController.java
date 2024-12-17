@@ -31,6 +31,11 @@ public class DisciplineHeadController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int disciplineHeadId = (Integer) map.get("id");
 
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("DisciplineHead")){
+            return Result.error("permission denied");
+        }
+
         int disciplineId = disciplineHeadService.getDisciplineIdById(disciplineHeadId);
         int quotaIndicator = disciplineService.getQuotaIndicatorById(disciplineId);
         String disciplineName = disciplineService.getNameById(disciplineId);
@@ -53,7 +58,12 @@ public class DisciplineHeadController {
     }
     @PutMapping("/submitQuota")
     public Result submitQuota(@RequestBody DisHeadSubmitQuotaDTO disHeadSubmitQuotaDTO){
-        System.out.println(disHeadSubmitQuotaDTO);
+        Map<String, Object> map = ThreadLocalUtil.get();
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("DisciplineHead")){
+            return Result.error("permission denied");
+        }
+
         List<SecQuotaDTO> secInfos = disHeadSubmitQuotaDTO.getQuota();
         for(SecQuotaDTO secInfo : secInfos){
             int secondarySubjectsId = disciplineService.selectIdByName(secInfo.getSecondarySubjects());
@@ -61,7 +71,6 @@ public class DisciplineHeadController {
             if(teacherQuotaInfos == null) continue;
             for(TeacherQuotaInfoDTO teacherQuotaInfo : teacherQuotaInfos){
                 int teacherId = teacherService.getTeacherIdByName(teacherQuotaInfo.getTeacherName());
-                System.out.println(teacherId);
                 teachingService.updateInfo(
                         secondarySubjectsId, teacherId, teacherQuotaInfo.getAcademicQuota(), teacherQuotaInfo.getProfessionalQuota(), teacherQuotaInfo.getPhdQuota()
                 );

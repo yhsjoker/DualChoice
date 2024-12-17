@@ -47,11 +47,13 @@ public class StudentController {
     public Result info(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int studentId = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("Student")){
+            return Result.error("permission denied");
+        }
 
-        System.out.println(studentId);
         //查找学生基本信息
         StuBaseInfo stuBaseInfo = stuBaseInfoService.getStuBaseInfoById(studentId);
-        System.out.println(stuBaseInfo);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("subject", stuBaseInfo.getDiscipline());
         jsonObject.put("examNumber", stuBaseInfo.getExamNumber());
@@ -119,6 +121,10 @@ public class StudentController {
     public Result submitForm( StuDetailDTO stuDetailDTO, @RequestParam(value = "personalStatementFile") MultipartFile file) throws Exception {
         Map<String, Object> map = ThreadLocalUtil.get();
         int studentId = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("Student")){
+            return Result.error("permission denied");
+        }
 
         //插入学生基本信息
         studentService.updateStudent(stuDetailDTO.getContact(), stuDetailDTO.getEmergencyContact(), stuDetailDTO.getEmail(), stuDetailDTO.getGraduatedMajor(), stuDetailDTO.getGraduationSchool(), stuDetailDTO.getOrigin(), stuDetailDTO.getGraduationTime(), stuDetailDTO.getExamNumber(), stuDetailDTO.getStudentType(), stuDetailDTO.getGraduateType(), studentId);
@@ -160,9 +166,7 @@ public class StudentController {
 
         //文件上传OSS
         String originalFilename = file.getOriginalFilename();
-        //System.out.println(originalFilename);
         String filename = studentId + "-" + UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
-        //System.out.println(filename);
         String url = AliOssUtil.upload(filename, file.getInputStream());
         studentService.updateResume(url, studentId);
         studentService.updateVolunteerStatus(studentId, "审查阶段");
@@ -173,6 +177,10 @@ public class StudentController {
     public Result currentStatus(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int studentId = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("Student")){
+            return Result.error("permission denied");
+        }
 
         JSONObject result = new JSONObject();
 

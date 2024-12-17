@@ -32,6 +32,11 @@ public class SupervisorController {
     public Result studentStatus(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int supervisorId = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("Supervisor")){
+            return Result.error("permission denied");
+        }
+
         SupervisorInfo supervisorInfo = supervisorInfoService.selectById(supervisorId);
 
         List<StuBaseInfo> studentInfos = stuBaseInfoService.getStuInfoByCollegeId(supervisorInfo.getCollegeId());

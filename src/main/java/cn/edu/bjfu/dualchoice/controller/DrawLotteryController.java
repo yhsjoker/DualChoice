@@ -30,6 +30,11 @@ public class DrawLotteryController {
     public Result teacher(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int securityId = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("DisciplineSecretary")){
+            return Result.error("permission denied");
+        }
+
         DisciplineSecretary disciplineSecretaryInfo = disciplineSecretaryService.selectById(securityId);
         int collegeId = disciplineSecretaryInfo.getDisciplineId();
 
@@ -60,6 +65,11 @@ public class DrawLotteryController {
     public Result student(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int securityId = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("DisciplineSecretary")){
+            return Result.error("permission denied");
+        }
+
         DisciplineSecretary disciplineSecretaryInfo = disciplineSecretaryService.selectById(securityId);
         int collegeId = disciplineSecretaryInfo.getDisciplineId();
 
@@ -81,6 +91,12 @@ public class DrawLotteryController {
     }
     @PostMapping("submit")
     public Result submit(@RequestBody StudentChoiceDTO studentChoiceDTO){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        String user_identity = (String) map.get("user_identity");
+        if(!user_identity.equals("DisciplineSecretary")){
+            return Result.error("permission denied");
+        }
+
         for(StudentChoiceBaseInfoDTO baseInfo : studentChoiceDTO.getSelections()){
             int disciplineId = disciplineService.selectIdByName(baseInfo.getSubject());
             choiceService.lockChoice(baseInfo.getTeacherId(), baseInfo.getStudentId(), disciplineId);
