@@ -34,7 +34,7 @@ public class SupervisorController {
         int supervisorId = (Integer) map.get("id");
         SupervisorInfo supervisorInfo = supervisorInfoService.selectById(supervisorId);
 
-        List<StuBaseInfo> studentInfos = stuBaseInfoService.getStuBaseInfoByCollegeId(supervisorInfo.getCollegeId());
+        List<StuBaseInfo> studentInfos = stuBaseInfoService.getStuInfoByCollegeId(supervisorInfo.getCollegeId());
         JSONArray admissionList = new JSONArray();
         for(StuBaseInfo stuBaseInfo : studentInfos){
             JSONObject admission = new JSONObject();
@@ -47,7 +47,7 @@ public class SupervisorController {
         }
 
         JSONObject result = new JSONObject();
-        result.put("collegeName", supervisorInfo.getSupervisorName());
+        result.put("collegeName", supervisorInfo.getCollegeName());
         result.put("admissionList", admissionList);
         return Result.success(result);
     }

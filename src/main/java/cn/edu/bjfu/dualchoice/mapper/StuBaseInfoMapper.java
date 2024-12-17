@@ -16,4 +16,7 @@ public interface StuBaseInfoMapper {
 
     @Select("SELECT studentId, name, examNumber, studentType FROM StuBaseInfo WHERE college_id = #{id}")
     List<StuBaseInfo> getStuBaseInfoByCollegeId(int id);
+
+    @Select("SELECT studentId, name, examNumber, studentType, graduateType, contact, college_id FROM StuBaseInfo WHERE college_id = #{id}")
+    List<StuBaseInfo> getStuInfoByCollegeId(int id);
 }

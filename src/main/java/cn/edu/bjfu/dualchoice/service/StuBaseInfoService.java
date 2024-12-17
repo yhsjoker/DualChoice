@@ -11,4 +11,6 @@ public interface StuBaseInfoService {
     List<StuBaseInfo> getStuBaseInfoBydiscipline(String discipline);
 
     List<StuBaseInfo> getStuBaseInfoByCollegeId(int id);
+
+    List<StuBaseInfo> getStuInfoByCollegeId(int id);
 }

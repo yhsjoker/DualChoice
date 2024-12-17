@@ -27,4 +27,9 @@ public class StuBaseInfoServiceImpl implements StuBaseInfoService {
     public List<StuBaseInfo> getStuBaseInfoByCollegeId(int id){
         return stuBaseInfoMapper.getStuBaseInfoByCollegeId(id);
     }
+
+    @Override
+    public List<StuBaseInfo> getStuInfoByCollegeId(int id) {
+        return stuBaseInfoMapper.getStuInfoByCollegeId(id);
+    }
 }

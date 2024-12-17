@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 public class SupervisorInfoServiceImpl implements SupervisorInfoService {
     @Autowired
     SupervisorInfoMapper supervisorInfoMapper;
+
     @Override
     public SupervisorInfo selectById(int id) {
-        return supervisorInfoMapper.selectById(id);
+        return supervisorInfoMapper.selectBySupervisorId(id);
     }
 }
