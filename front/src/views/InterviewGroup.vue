@@ -387,7 +387,9 @@ export default {
           try {
             // 提交数据到后端
             await axios.post(`/api/interviewGroup/updateReExamInfo`, submitData,{
-
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
             });
             this.$message.success('复试信息提交成功');
             this.dialogVisible = false;

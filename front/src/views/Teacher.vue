@@ -30,8 +30,8 @@
       <el-card class="card">
         <div class="card-content">
           <h2>身份：导师</h2>
-
           <img v-if="teacherInfo.imageUrl" :src="teacherInfo.imageUrl" class="image" alt="导师照片"/>
+
 
           <p>姓名：{{ teacherInfo.name }}</p>
           <p>学院：{{teacherInfo.college}}</p>
@@ -39,7 +39,8 @@
           <p>电话：{{ teacherInfo.phone }}</p>
           <p>邮箱：{{ teacherInfo.email }}</p>
           <br></br><br></br>
-          <h3>当前选择轮次：第{{teacherInfo.round}}轮</h3>
+          <h3 v-if="teacherInfo.round<4">当前选择轮次：第{{teacherInfo.round}}轮</h3>
+          <h3 v-if="teacherInfo.round===4">最终结果</h3>
         </div>
       </el-card>
     </aside>
@@ -389,11 +390,11 @@ export default {
 }
 
 image {
-  max-width: 100%;
-  height: auto;
-  margin-top: 10px;
-  border: 1px solid #dcdfe6;
+  width: 60px; /* 可根据需要调整 */
+  height: 60px; /* 可根据需要调整 */
+  object-fit: cover;
   border-radius: 4px;
+  margin-left:10px;
 }
 
 ::v-deep .el-table th {
