@@ -39,7 +39,7 @@ public class DrawLotteryController {
         }
 
         DisciplineSecretary disciplineSecretaryInfo = disciplineSecretaryService.selectById(securityId);
-        int collegeId = disciplineSecretaryInfo.getDisciplineId();
+        int disciplineId = disciplineSecretaryInfo.getDisciplineId();
 
         JSONObject result = new JSONObject();
         JSONArray teachers = new JSONArray();
