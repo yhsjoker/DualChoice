@@ -9,7 +9,7 @@
       </div>
 
       <div class="navbar-menu">
-        <router-link class="navbar-item" to="/school-intro">学校简介</router-link>
+        <a class="navbar-item" href="http://www.bjfu.edu.cn/index.htm" target="_blank" rel="noopener noreferrer">学校简介</a>
         <router-link class="navbar-item" to="/discipline-info">学科信息</router-link>
         <router-link class="navbar-item" to="/teacher-info"
                      style="color:#00C5CD;text-decoration:overline"
@@ -121,24 +121,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      allData: [
-        {
-          collegeName: "信息科学与工程学院",
-          teachers: [
-            {name: "李老师", position: "教授", imageUrl:'', phone: "13800000000", email: "li@example.com", hasAdmissionQualification: true,
-              intro: "李老师简介..."},
-            {name: "王老师", position: "副教授", imageUrl:'', phone: "13900000000", email: "wang@example.com", hasAdmissionQualification: false,
-              intro: "王老师简介..."}
-          ]
-        },
-        {
-          collegeName: "计算机学院",
-          teachers: [
-            {name: "张老师", position: "讲师", imageUrl:'', phone: "13600000000", email: "zhang@example.com", hasAdmissionQualification: true,
-              intro: "张老师简介..."}
-          ]
-        }
-      ],
+      allData: [],
       filteredData: [],
       searchKeyword: '',
       searchKeyword2: '', // 新增

@@ -195,7 +195,7 @@
           ></el-input>
         </el-form-item>
 
-        <el-form-item v-if="formData.photoUrl" label="云端照片">
+        <el-form-item v-if="formData.photoUrl" label="电子签名">
           <img
               :src="formData.photoUrl"
               alt="证件照片"

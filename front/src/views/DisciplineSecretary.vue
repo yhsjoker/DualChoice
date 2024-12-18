@@ -9,7 +9,7 @@
       </div>
 
       <div class="navbar-menu">
-        <router-link class="navbar-item" to="/school-intro">学校简介</router-link>
+        <a class="navbar-item" href="http://www.bjfu.edu.cn/index.htm" target="_blank" rel="noopener noreferrer">学校简介</a>
         <router-link class="navbar-item" to="/discipline-info">学科信息</router-link>
         <router-link class="navbar-item" to="/teacher-info">导师信息</router-link>
       </div>
@@ -79,7 +79,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      primarySubject: '计算机科学', // 一级学科名称
+      primarySubject: '', // 一级学科名称
       searchKeyword: '',  // 搜索关键词（如需要）
     };
   },

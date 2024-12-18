@@ -9,7 +9,7 @@
       </div>
 
       <div class="navbar-menu">
-        <router-link class="navbar-item" to="/school-intro">学校简介</router-link>
+        <a class="navbar-item" href="http://www.bjfu.edu.cn/index.htm" target="_blank" rel="noopener noreferrer">学校简介</a>
         <router-link class="navbar-item" to="/discipline-info"
           style="color:#00C5CD;text-decoration:overline"
         >学科信息</router-link>
@@ -93,48 +93,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      allData: [
-        {
-          collegeName: "信息科学与工程学院",
-          subjects: [
-            {
-              name: "电子信息（全日制）",
-              intro: "本一级学科简介...",
-              children: [
-                {name: "全日制计算机技术（01方向）", intro: "二级学科简介..."},
-                {name: "全日制软件工程（02方向）", intro: "二级学科简介..."}
-              ]
-            },
-            {
-              name: "控制科学与工程（全日制）",
-              intro: "另一个一级学科简介...",
-              children: [
-                {name: "智能控制与系统优化", intro: "二级学科简介..."}
-              ]
-            },
-            {
-              name: "控制科学与工程（全日制）",
-              intro: "另一个一级学科简介...",
-              children: [
-                {name: "智能控制与系统优化", intro: "二级学科简介..."}
-              ]
-            }
-          ]
-        },
-        {
-          collegeName: "计算机学院",
-          subjects: [
-            {
-              name: "计算机科学与技术",
-              intro: "一级学科简介...",
-              children: [
-                {name: "人工智能", intro: "二级学科简介..."},
-                {name: "网络安全", intro: "二级学科简介..."}
-              ]
-            }
-          ]
-        }
-      ],
+      allData: [],
       filteredData: [],
       searchKeyword: '',
       searchKeyword2: '', // 新增

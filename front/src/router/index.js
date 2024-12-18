@@ -95,11 +95,6 @@ const routes = [
     component: DisciplineSecretary,
     meta: { requiresAuth: true, role: 'disciplineSecretary' }
   }
-  // {
-  //   path: '/contact',
-  //   name: 'contact',
-  //   component: Contact,
-  // },
 ]
 
 // 创建并导出路由实例

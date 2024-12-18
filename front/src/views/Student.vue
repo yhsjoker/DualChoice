@@ -9,7 +9,7 @@
       </div>
 
       <div class="navbar-menu">
-        <router-link class="navbar-item" to="/school-intro">学校简介</router-link>
+        <a class="navbar-item" href="http://www.bjfu.edu.cn/index.htm" target="_blank" rel="noopener noreferrer">学校简介</a>
         <router-link class="navbar-item" to="/discipline-info">学科信息</router-link>
         <router-link class="navbar-item" to="/teacher-info">导师信息</router-link>
       </div>
@@ -275,9 +275,9 @@
       </template>
     </div>
 
-    <span slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="showStatusDialog = false">关闭</el-button>
-    </span>
+    </div>
   </el-dialog>
 </template>
 

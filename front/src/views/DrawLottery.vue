@@ -125,10 +125,10 @@ export default {
     // 获取老师和学生数据
     async fetchData() {
       try {
-        const teacherResponse = await axios.get('/api/teachers');
+        const teacherResponse = await axios.get('/api/drawLottery/teacher');
         this.teachers = teacherResponse.data.data.teachers;
 
-        const studentResponse = await axios.get('/api/students');
+        const studentResponse = await axios.get('/api/drawLottery/student');
         this.students = studentResponse.data.data.students;
       } catch (error) {
         this.$message.error('数据加载失败');
@@ -208,7 +208,7 @@ export default {
     },
 
     viewStudentDetail(studentId) {
-      this.$router.push({ name: 'StudentForm', params: { id: studentId } });
+      this.$router.push({ name: 'StudentForm', params: { studentId: studentId } });
     },
 
     async submitSelections() {
@@ -218,7 +218,7 @@ export default {
       }
 
       try {
-        await axios.post('/api/submitSelections', { selections: this.selectedStudents });
+        await axios.post('/api/drawLottery/submit', { selections: this.selectedStudents });
         this.$message.success('提交成功');
       } catch (error) {
         this.$message.error('提交失败，请重试');
