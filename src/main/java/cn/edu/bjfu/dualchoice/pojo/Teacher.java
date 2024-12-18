@@ -15,7 +15,7 @@ public class Teacher {
 
     private String qualification;
 
-    private byte[] image;
+    private String image;
 
     private String email;
 

@@ -146,9 +146,10 @@ public class StudentController {
         choiceService.insertChoice(supervisor2Id, studentId, 2);
         choiceService.insertChoice(supervisor3Id, studentId, 3);
 
+        System.out.println(stuDetailDTO);
         //插入学生选择学科情况
         String acceptAdjustment = stuDetailDTO.getAcceptAdjustment();
-        if(acceptAdjustment != null){
+        if(acceptAdjustment != null && !acceptAdjustment.equals("")){
             if(acceptAdjustment.equals("是")){
                 List<String> preferredSubjects = stuDetailDTO.getPreferredSubjects();
                 int preference_order = 1;
