@@ -3,6 +3,7 @@ package cn.edu.bjfu.dualchoice.controller;
 import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.*;
 import cn.edu.bjfu.dualchoice.service.Implement.StudentApplicationInfoServiceImpl;
+import cn.edu.bjfu.dualchoice.utils.Logger;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -44,7 +45,9 @@ public class TeacherController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int teacherId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, teacherId, "", Logger.LogType.INFO, "/api/teacher/info");
         if(!user_identity.equals("Teacher")){
+            Logger.log(user_identity, teacherId, "", Logger.LogType.ERROR, "/api/teacher/info");
             return Result.error("permission denied");
         }
 
@@ -101,6 +104,7 @@ public class TeacherController {
         }
         result.put("secondarySubjects", secondarySubjects);
 
+        Logger.log(user_identity, teacherId, result, Logger.LogType.SUCCESS, "/api/teacher/info");
         return Result.success(result);
     }
 
@@ -109,7 +113,9 @@ public class TeacherController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int teacherId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, teacherId, selectionsDTO, Logger.LogType.INFO, "/api/teacher/submitSelections");
         if(!user_identity.equals("Teacher")){
+            Logger.log(user_identity, teacherId, selectionsDTO, Logger.LogType.ERROR, "/api/teacher/submitSelections");
             return Result.error("permission denied");
         }
 
@@ -125,6 +131,7 @@ public class TeacherController {
 
         teacherService.increaseVolRound(teacherId);
 
+        Logger.log(user_identity, teacherId, "", Logger.LogType.SUCCESS, "/api/teacher/submitSelections");
         return Result.success();
     }
 

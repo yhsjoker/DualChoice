@@ -3,6 +3,7 @@ package cn.edu.bjfu.dualchoice.controller;
 import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.*;
 import cn.edu.bjfu.dualchoice.utils.AliOssUtil;
+import cn.edu.bjfu.dualchoice.utils.Logger;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,9 @@ public class InterviewGroupController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int InterviewGroupId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, InterviewGroupId, "", Logger.LogType.INFO, "/api/interviewGroup/list");
         if(!user_identity.equals("InterviewGroup")){
+            Logger.log(user_identity, InterviewGroupId, "", Logger.LogType.ERROR, "/api/interviewGroup/list");
             return Result.error("permission denied");
         }
 
@@ -58,15 +61,18 @@ public class InterviewGroupController {
         }
 
         info.put("studentList", stuInfoList);
-
+        Logger.log(user_identity, InterviewGroupId, info, Logger.LogType.SUCCESS, "/api/interviewGroup/list");
         return Result.success(info);
     }
 
     @GetMapping("/reExamInfo/{studentId}")
     public Result reExamInfo(@PathVariable("studentId") int studentId){
         Map<String, Object> map = ThreadLocalUtil.get();
+        int InterviewGroupId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, InterviewGroupId, studentId, Logger.LogType.INFO, "/api/interviewGroup/reExamInfo/{studentId}");
         if(!user_identity.equals("InterviewGroup")){
+            Logger.log(user_identity, InterviewGroupId, studentId, Logger.LogType.ERROR, "/api/interviewGroup/reExamInfo/{studentId}");
             return Result.error("permission denied");
         }
 
@@ -105,6 +111,7 @@ public class InterviewGroupController {
             info.put("signatureUrl", examInfos_interview.getSignature());
         }
 
+        Logger.log(user_identity, InterviewGroupId, info, Logger.LogType.SUCCESS, "/api/interviewGroup/reExamInfo/{studentId}");
         return Result.success(info);
     }
 
@@ -113,7 +120,9 @@ public class InterviewGroupController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int InterviewGroupId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, InterviewGroupId, stuExamInfoDTO, Logger.LogType.INFO, "/api/interviewGroup/updateReExamInfo");
         if(!user_identity.equals("InterviewGroup")){
+            Logger.log(user_identity, InterviewGroupId, stuExamInfoDTO, Logger.LogType.ERROR, "/api/interviewGroup/updateReExamInfo");
             return Result.error("permission denied");
         }
 
@@ -128,6 +137,7 @@ public class InterviewGroupController {
         ExamService.insertExamInfo(stuExamInfoDTO.getId(), pro_id, "复试", stuExamInfoDTO.getProfessionalScore(), stuExamInfoDTO.getReExamTime(), stuExamInfoDTO.getReExamLocation(), stuExamInfoDTO.getOverallEvaluation(), url);
         ExamService.insertExamInfo(stuExamInfoDTO.getId(), inter_id, "复试", stuExamInfoDTO.getInterviewScore(), stuExamInfoDTO.getReExamTime(), stuExamInfoDTO.getReExamLocation(), stuExamInfoDTO.getOverallEvaluation(), url);
 
+        Logger.log(user_identity, InterviewGroupId, "复试信息增加成功", Logger.LogType.SUCCESS, "/api/interviewGroup/updateReExamInfo");
         return Result.success("复试信息增加成功");
     }
 

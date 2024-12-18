@@ -7,6 +7,8 @@ import cn.edu.bjfu.dualchoice.pojo.Teacher;
 import cn.edu.bjfu.dualchoice.service.CollegeService;
 import cn.edu.bjfu.dualchoice.service.DisciplineService;
 import cn.edu.bjfu.dualchoice.service.TeacherService;
+import cn.edu.bjfu.dualchoice.utils.Logger;
+import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/nav")
@@ -27,6 +30,15 @@ public class NavController {
     TeacherService teacherService;
     @GetMapping("subjects")
     public Result subjects(){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        int user_id = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, user_id, "", Logger.LogType.INFO, "/api/nav/subjects");
+        if(!user_identity.equals("InterviewGroup")){
+            Logger.log(user_identity, user_id, "", Logger.LogType.ERROR, "/api/nav/subjects");
+            return Result.error("permission denied");
+        }
+
         JSONObject result = new JSONObject();
         JSONArray allData = new JSONArray();
 
@@ -60,11 +72,21 @@ public class NavController {
         }
 
         result.put("allData", allData);
+        Logger.log(user_identity, user_id, result, Logger.LogType.SUCCESS, "/api/nav/subjects");
         return Result.success(result);
     }
 
     @GetMapping("teachers")
     public Result teachers(){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        int user_id = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, user_id, "", Logger.LogType.INFO, "/api/nav/teachers");
+        if(!user_identity.equals("InterviewGroup")){
+            Logger.log(user_identity, user_id, "", Logger.LogType.ERROR, "/api/nav/teachers");
+            return Result.error("permission denied");
+        }
+
         JSONObject result = new JSONObject();
         JSONArray allData = new JSONArray();
 
@@ -92,6 +114,7 @@ public class NavController {
         }
 
         result.put("allData", allData);
+        Logger.log(user_identity, user_id, result, Logger.LogType.SUCCESS, "/api/nav/teachers");
         return Result.success(result);
     }
 }

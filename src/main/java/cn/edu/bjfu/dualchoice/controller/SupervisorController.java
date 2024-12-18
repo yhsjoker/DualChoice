@@ -6,6 +6,7 @@ import cn.edu.bjfu.dualchoice.pojo.SupervisorInfo;
 import cn.edu.bjfu.dualchoice.service.StuBaseInfoService;
 import cn.edu.bjfu.dualchoice.service.StudentService;
 import cn.edu.bjfu.dualchoice.service.SupervisorInfoService;
+import cn.edu.bjfu.dualchoice.utils.Logger;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -33,7 +34,9 @@ public class SupervisorController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int supervisorId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, supervisorId, "", Logger.LogType.INFO, "/api/supervisor/studentStatus");
         if(!user_identity.equals("Supervisor")){
+            Logger.log(user_identity, supervisorId, "", Logger.LogType.ERROR, "/api/supervisor/studentStatus");
             return Result.error("permission denied");
         }
 
@@ -54,6 +57,8 @@ public class SupervisorController {
         JSONObject result = new JSONObject();
         result.put("collegeName", supervisorInfo.getCollegeName());
         result.put("admissionList", admissionList);
+
+        Logger.log(user_identity, supervisorId, result, Logger.LogType.SUCCESS, "/api/supervisor/studentStatus");
         return Result.success(result);
     }
 }

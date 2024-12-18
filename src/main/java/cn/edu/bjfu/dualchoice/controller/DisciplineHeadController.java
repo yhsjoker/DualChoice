@@ -2,6 +2,7 @@ package cn.edu.bjfu.dualchoice.controller;
 
 import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.*;
+import cn.edu.bjfu.dualchoice.utils.Logger;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -30,9 +31,10 @@ public class DisciplineHeadController {
     public Result info(){
         Map<String, Object> map = ThreadLocalUtil.get();
         int disciplineHeadId = (Integer) map.get("id");
-
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, disciplineHeadId, "", Logger.LogType.INFO, "/api/disciplineHead/info");
         if(!user_identity.equals("DisciplineHead")){
+            Logger.log(user_identity, disciplineHeadId, "", Logger.LogType.ERROR, "/api/disciplineHead/info");
             return Result.error("permission denied");
         }
 
@@ -54,13 +56,17 @@ public class DisciplineHeadController {
         result.put("quotaIndicator", quotaIndicator);
         result.put("quota", quota);
 
+        Logger.log(user_identity, disciplineHeadId, result, Logger.LogType.SUCCESS, "/api/disciplineHead/info");
         return Result.success(result);
     }
     @PutMapping("/submitQuota")
     public Result submitQuota(@RequestBody DisHeadSubmitQuotaDTO disHeadSubmitQuotaDTO){
         Map<String, Object> map = ThreadLocalUtil.get();
+        int disciplineHeadId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, disciplineHeadId, disHeadSubmitQuotaDTO, Logger.LogType.INFO, "/api/disciplineHead/submitQuota");
         if(!user_identity.equals("DisciplineHead")){
+            Logger.log(user_identity, disciplineHeadId, disHeadSubmitQuotaDTO, Logger.LogType.ERROR, "/api/disciplineHead/submitQuota");
             return Result.error("permission denied");
         }
 
@@ -76,6 +82,8 @@ public class DisciplineHeadController {
                 );
             }
         }
+
+        Logger.log(user_identity, disciplineHeadId, "", Logger.LogType.SUCCESS, "/api/disciplineHead/submitQuota");
         return Result.success();
     }
 }

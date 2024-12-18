@@ -4,6 +4,7 @@ import cn.edu.bjfu.dualchoice.mapper.AdmissionMapper;
 import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.*;
 import cn.edu.bjfu.dualchoice.service.Implement.TeacherBaseInfoServiceImpl;
+import cn.edu.bjfu.dualchoice.utils.Logger;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -36,7 +37,9 @@ public class GraduateManagerController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int graduateManagerId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, graduateManagerId, "", Logger.LogType.INFO, "/api/graduateManager/admission");
         if(!user_identity.equals("GraduateManager")){
+            Logger.log(user_identity, graduateManagerId, "", Logger.LogType.ERROR, "/api/graduateManager/admission");
             return Result.error("permission denied");
         }
 
@@ -66,6 +69,7 @@ public class GraduateManagerController {
         }
 
         result.put("admissionList", admissionList);
+        Logger.log(user_identity, graduateManagerId, result, Logger.LogType.SUCCESS, "/api/graduateManager/admission");
         return Result.success(result);
 
     }

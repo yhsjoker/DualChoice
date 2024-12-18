@@ -2,6 +2,7 @@ package cn.edu.bjfu.dualchoice.controller;
 
 import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.*;
+import cn.edu.bjfu.dualchoice.utils.Logger;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,9 @@ public class GraduateManagementSecretaryController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int graduateManagementSecretaryId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, graduateManagementSecretaryId, "", Logger.LogType.INFO, "/api/graduateManagementSecretary/getCollege");
         if(!user_identity.equals("GraduateManagementSecretary")){
+            Logger.log(user_identity, graduateManagementSecretaryId, "", Logger.LogType.ERROR, "/api/graduateManagementSecretary/getCollege");
             return Result.error("permission denied");
         }
 
@@ -53,6 +56,7 @@ public class GraduateManagementSecretaryController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("collegeName", collegeName);
 
+        Logger.log(user_identity, graduateManagementSecretaryId, jsonObject, Logger.LogType.SUCCESS, "/api/graduateManagementSecretary/getCollege");
         return Result.success(jsonObject);
     }
 
@@ -61,7 +65,9 @@ public class GraduateManagementSecretaryController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int graduateManagementSecretaryId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, graduateManagementSecretaryId, "", Logger.LogType.INFO, "/api/graduateManagementSecretary/students");
         if(!user_identity.equals("GraduateManagementSecretary")){
+            Logger.log(user_identity, graduateManagementSecretaryId, "", Logger.LogType.ERROR, "/api/graduateManagementSecretary/students");
             return Result.error("permission denied");
         }
 
@@ -81,6 +87,7 @@ public class GraduateManagementSecretaryController {
 
         info.put("students", stuInfoList);
 
+        Logger.log(user_identity, graduateManagementSecretaryId, info, Logger.LogType.SUCCESS, "/api/graduateManagementSecretary/students");
         return Result.success(info);
     }
 
@@ -89,7 +96,9 @@ public class GraduateManagementSecretaryController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int graduateManagementSecretaryId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, graduateManagementSecretaryId, "", Logger.LogType.INFO, "/api/graduateManagementSecretary/teachers");
         if(!user_identity.equals("GraduateManagementSecretary")){
+            Logger.log(user_identity, graduateManagementSecretaryId, "", Logger.LogType.ERROR, "/api/graduateManagementSecretary/teachers");
             return Result.error("permission denied");
         }
 
@@ -110,20 +119,26 @@ public class GraduateManagementSecretaryController {
 
         info.put("teachers", teaInfoList);
 
+        Logger.log(user_identity, graduateManagementSecretaryId, info, Logger.LogType.SUCCESS, "/api/graduateManagementSecretary/teachers");
         return Result.success(info);
     }
 
     @PutMapping("/teachers/setQualification")
     public Result setQualification(@RequestBody Teacher teacher){
         Map<String, Object> map = ThreadLocalUtil.get();
+        int graduateManagementSecretaryId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, graduateManagementSecretaryId, teacher, Logger.LogType.INFO, "/api/graduateManagementSecretary/teachers/setQualification");
         if(!user_identity.equals("GraduateManagementSecretary")){
+            Logger.log(user_identity, graduateManagementSecretaryId, teacher, Logger.LogType.ERROR, "/api/graduateManagementSecretary/teachers/setQualification");
             return Result.error("permission denied");
         }
 
         int teacherId = teacher.getId();
         String qualification = teacher.getQualification();
         teacherService.setQualificationById(teacherId, qualification);
+
+        Logger.log(user_identity, graduateManagementSecretaryId, "", Logger.LogType.SUCCESS, "/api/graduateManagementSecretary/teachers/setQualification");
         return Result.success();
     }
 

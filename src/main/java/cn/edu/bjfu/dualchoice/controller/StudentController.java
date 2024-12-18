@@ -3,6 +3,7 @@ package cn.edu.bjfu.dualchoice.controller;
 import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.*;
 import cn.edu.bjfu.dualchoice.utils.AliOssUtil;
+import cn.edu.bjfu.dualchoice.utils.Logger;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -48,7 +49,9 @@ public class StudentController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int studentId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, studentId, "", Logger.LogType.INFO, "/api/student/info");
         if(!user_identity.equals("Student")){
+            Logger.log(user_identity, studentId, "", Logger.LogType.ERROR, "/api/student/info");
             return Result.error("permission denied");
         }
 
@@ -114,6 +117,7 @@ public class StudentController {
         String url = studentService.selectResumeById(studentId);
         jsonObject.put("personalStatementUrl", url);
 
+        Logger.log(user_identity, studentId, jsonObject, Logger.LogType.SUCCESS, "/api/student/info");
         return Result.success(jsonObject);
     }
 
@@ -122,7 +126,9 @@ public class StudentController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int studentId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, studentId, stuDetailDTO, Logger.LogType.INFO, "/api/student/submitForm");
         if(!user_identity.equals("Student")){
+            Logger.log(user_identity, studentId, stuDetailDTO, Logger.LogType.ERROR, "/api/student/submitForm");
             return Result.error("permission denied");
         }
 
@@ -170,6 +176,8 @@ public class StudentController {
         String url = AliOssUtil.upload(filename, file.getInputStream());
         studentService.updateResume(url, studentId);
         studentService.updateVolunteerStatus(studentId, "审查阶段");
+
+        Logger.log(user_identity, studentId, "信息提交成功", Logger.LogType.SUCCESS, "/api/student/submitForm");
         return Result.success("信息提交成功");
     }
 
@@ -178,7 +186,9 @@ public class StudentController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int studentId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, studentId, "", Logger.LogType.INFO, "/api/student/currentStatus");
         if(!user_identity.equals("Student")){
+            Logger.log(user_identity, studentId, "", Logger.LogType.ERROR, "/api/student/currentStatus");
             return Result.error("permission denied");
         }
 
@@ -198,6 +208,8 @@ public class StudentController {
             result.put("admissionTeacherName", null);
             result.put("admissionMajor", null);
         }
+
+        Logger.log(user_identity, studentId, result, Logger.LogType.SUCCESS, "/api/student/currentStatus");
         return Result.success(result);
     }
 

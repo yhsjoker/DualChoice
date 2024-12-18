@@ -2,6 +2,7 @@ package cn.edu.bjfu.dualchoice.controller;
 
 import cn.edu.bjfu.dualchoice.pojo.*;
 import cn.edu.bjfu.dualchoice.service.*;
+import cn.edu.bjfu.dualchoice.utils.Logger;
 import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -31,7 +32,9 @@ public class DrawLotteryController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int securityId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, securityId, "", Logger.LogType.INFO, "/api/drawLottery/teacher");
         if(!user_identity.equals("DisciplineSecretary")){
+            Logger.log(user_identity, securityId, "", Logger.LogType.ERROR, "/api/drawLottery/teacher");
             return Result.error("permission denied");
         }
 
@@ -59,6 +62,8 @@ public class DrawLotteryController {
             teachers.add(teacher);
         }
         result.put("teachers", teachers);
+
+        Logger.log(user_identity, securityId, result, Logger.LogType.SUCCESS, "/api/drawLottery/teacher");
         return Result.success(result);
     }
     @GetMapping("/student")
@@ -66,7 +71,9 @@ public class DrawLotteryController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int securityId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, securityId, "", Logger.LogType.INFO, "/api/drawLottery/student");
         if(!user_identity.equals("DisciplineSecretary")){
+            Logger.log(user_identity, securityId, "", Logger.LogType.ERROR, "/api/drawLottery/student");
             return Result.error("permission denied");
         }
 
@@ -87,13 +94,17 @@ public class DrawLotteryController {
         }
 
         result.put("students", students);
+        Logger.log(user_identity, securityId, result, Logger.LogType.SUCCESS, "/api/drawLottery/student");
         return Result.success(result);
     }
     @PostMapping("submit")
     public Result submit(@RequestBody StudentChoiceDTO studentChoiceDTO){
         Map<String, Object> map = ThreadLocalUtil.get();
+        int securityId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, securityId, studentChoiceDTO, Logger.LogType.INFO, "/api/drawLottery/submit");
         if(!user_identity.equals("DisciplineSecretary")){
+            Logger.log(user_identity, securityId, studentChoiceDTO, Logger.LogType.ERROR, "/api/drawLottery/submit");
             return Result.error("permission denied");
         }
 
@@ -101,6 +112,8 @@ public class DrawLotteryController {
             int disciplineId = disciplineService.selectIdByName(baseInfo.getSubject());
             choiceService.lockChoice(baseInfo.getTeacherId(), baseInfo.getStudentId(), disciplineId);
         }
+
+        Logger.log(user_identity, securityId, "提交成功", Logger.LogType.ERROR, "/api/drawLottery/submit");
         return Result.success("提交成功");
     }
 }

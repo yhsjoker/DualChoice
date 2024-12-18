@@ -5,6 +5,7 @@ import cn.edu.bjfu.dualchoice.pojo.User;
 import cn.edu.bjfu.dualchoice.service.UserService;
 import cn.edu.bjfu.dualchoice.utils.AddSalt;
 import cn.edu.bjfu.dualchoice.utils.JwtUtil;
+import cn.edu.bjfu.dualchoice.utils.Logger;
 import com.alibaba.fastjson.JSONObject;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -31,7 +32,7 @@ public class UserController {
         if(loginUser == null){
             return Result.error("用户名错误");
         }
-        if(!user.getPassword().equals(AddSalt.hashPasswordWithSalt(loginUser.getPassword()))){
+        if(!AddSalt.hashPasswordWithSalt(user.getPassword()).equals(loginUser.getPassword())){
             return Result.error("密码错误");
         }
 
@@ -46,6 +47,7 @@ public class UserController {
         data.put("token", token);
         data.put("user_identity", loginUser.getUserIdentity());
 
+        Logger.log(loginUser.getUserIdentity(), loginUser.getId(), "登录成功！", Logger.LogType.SUCCESS, "/api/user/login");
         return Result.success(data);
     }
 }

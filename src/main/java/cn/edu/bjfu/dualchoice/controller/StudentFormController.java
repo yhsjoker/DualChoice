@@ -4,6 +4,8 @@ import cn.edu.bjfu.dualchoice.pojo.ExamInfo;
 import cn.edu.bjfu.dualchoice.pojo.Result;
 import cn.edu.bjfu.dualchoice.pojo.StuBaseInfo;
 import cn.edu.bjfu.dualchoice.service.*;
+import cn.edu.bjfu.dualchoice.utils.Logger;
+import cn.edu.bjfu.dualchoice.utils.ThreadLocalUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/studentForm")
@@ -45,6 +48,14 @@ public class StudentFormController {
 
     @GetMapping("/{studentId}")
     public Result getStudentForm(@PathVariable("studentId") int studentId) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        int user_id = (Integer) map.get("id");
+        String user_identity = (String) map.get("user_identity");
+        Logger.log(user_identity, user_id, studentId, Logger.LogType.INFO, "/api/studentForm/{studentId}");
+        if(!user_identity.equals("InterviewGroup")){
+            Logger.log(user_identity, user_id, studentId, Logger.LogType.ERROR, "/api/studentForm/{studentId}");
+            return Result.error("permission denied");
+        }
 
         //查找学生基本信息
         StuBaseInfo stuBaseInfo = stuBaseInfoService.getStuBaseInfoById(studentId);
@@ -145,6 +156,7 @@ public class StudentFormController {
             jsonObject.put("photoUrl", examInfos_interview.getSignature());
         }
 
+        Logger.log(user_identity, user_id, jsonObject, Logger.LogType.SUCCESS, "/api/studentForm/{studentId}");
         return Result.success(jsonObject);
 
     }
