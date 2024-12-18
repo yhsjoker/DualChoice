@@ -52,6 +52,7 @@ public class GraduateManagerController {
 
         List<Admission> admissions = admissionService.selectAll();
         JSONArray admissionList = new JSONArray();
+        System.out.println(admissions);
 
         for(Admission admission : admissions){
             StuBaseInfo student = stuBaseInfoService.getStuBaseInfoById(admission.getStudentId());

@@ -77,6 +77,8 @@ public class TeacherController {
             if(teacherBaseInfo.getVolunteerRound()==4){
                 List<Admission> admissions = admissionService.selectByDisciplineId(teacherQuotaInfo.getDisciplineId());
                 for(Admission admission : admissions){
+                    if(admission.getTeacherId()!=teacherId)
+                        continue;
                     JSONObject student = new JSONObject();
                     Student stu = studentService.selectById(admission.getStudentId());
                     student.put("studentId", stu.getId());
@@ -115,7 +117,6 @@ public class TeacherController {
         String user_identity = (String) map.get("user_identity");
         Logger.log(user_identity, teacherId, selectionsDTO, Logger.LogType.INFO, "/api/teacher/submitSelections");
         if(!user_identity.equals("Teacher")){
-            Logger.log(user_identity, teacherId, selectionsDTO, Logger.LogType.ERROR, "/api/teacher/submitSelections");
             return Result.error("permission denied");
         }
 

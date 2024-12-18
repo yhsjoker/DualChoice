@@ -8,4 +8,6 @@ public interface TeacherQuotaInfoService {
     List<TeacherQuotaInfo> findTeacherQuotaInfoByDisciplineId(int DisciplineId);
 
     List<TeacherQuotaInfo> findByTeacherId(int teacherId);
+
+    List<TeacherQuotaInfo> selectAllIdNTeaNameByParentDIsId(int disciplineId);
 }

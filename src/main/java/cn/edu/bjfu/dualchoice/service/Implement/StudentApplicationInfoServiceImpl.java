@@ -14,9 +14,9 @@ public class StudentApplicationInfoServiceImpl implements StudentApplicationInfo
     @Autowired
     StudentApplicationInfoMapper studentApplicationInfoMapper;
     @Override
-    public List<StudentApplicationInfo> selectByDisciplineId(int disciplineId) {
+    public List<StudentApplicationInfo> selectByDisciplineIdStatus(int disciplineId, String status) {
         QueryWrapper<StudentApplicationInfo> wrapper = new QueryWrapper<>();
-        wrapper.eq("discipline_id", disciplineId).eq("preference_order", 0);
+        wrapper.eq("discipline_id", disciplineId).eq("preference_order", 0).eq("volunteer_status", status);
         return studentApplicationInfoMapper.selectList(wrapper);
     }
 

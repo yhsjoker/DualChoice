@@ -43,8 +43,8 @@ public class DrawLotteryController {
 
         JSONObject result = new JSONObject();
         JSONArray teachers = new JSONArray();
-        List<TeacherPrimaryDisciplineInfo> teacherInfos = teacherPrimaryDisciplineInfoService.selectAllIdNameByCollegeId(collegeId);
-        for(TeacherPrimaryDisciplineInfo teacherInfo : teacherInfos){
+        List<TeacherQuotaInfo> teacherInfos = teacherQuotaInfoService.selectAllIdNTeaNameByParentDIsId(disciplineId);
+        for(TeacherQuotaInfo teacherInfo : teacherInfos){
             JSONObject teacher = new JSONObject();
             teacher.put("id", teacherInfo.getTeacherId());
             teacher.put("name", teacherInfo.getTeacherName());
@@ -62,8 +62,6 @@ public class DrawLotteryController {
             teachers.add(teacher);
         }
         result.put("teachers", teachers);
-
-        Logger.log(user_identity, securityId, result, Logger.LogType.SUCCESS, "/api/drawLottery/teacher");
         return Result.success(result);
     }
     @GetMapping("/student")
@@ -71,17 +69,15 @@ public class DrawLotteryController {
         Map<String, Object> map = ThreadLocalUtil.get();
         int securityId = (Integer) map.get("id");
         String user_identity = (String) map.get("user_identity");
-        Logger.log(user_identity, securityId, "", Logger.LogType.INFO, "/api/drawLottery/student");
         if(!user_identity.equals("DisciplineSecretary")){
-            Logger.log(user_identity, securityId, "", Logger.LogType.ERROR, "/api/drawLottery/student");
             return Result.error("permission denied");
         }
 
         DisciplineSecretary disciplineSecretaryInfo = disciplineSecretaryService.selectById(securityId);
-        int collegeId = disciplineSecretaryInfo.getDisciplineId();
+        int disciplineId = disciplineSecretaryInfo.getDisciplineId();
 
         JSONObject result = new JSONObject();
-        List<StudentApplicationInfo> studentInfos = studentApplicationInfoService.selectByDisciplineId(collegeId);
+        List<StudentApplicationInfo> studentInfos = studentApplicationInfoService.selectByDisciplineIdStatus(disciplineId,"审查阶段");
         JSONArray students = new JSONArray();
 
         for(StudentApplicationInfo studentInfo : studentInfos){
@@ -89,12 +85,11 @@ public class DrawLotteryController {
             student.put("id", studentInfo.getStudentId());
             student.put("name", studentInfo.getStudentName());
             student.put("type", studentInfo.getGraduateType());
-            student.put("subjects", studentApplicationInfoService.selectDisByStuIdParentDis(studentInfo.getStudentId(), 6));
+            student.put("subjects", studentApplicationInfoService.selectDisByStuIdParentDis(studentInfo.getStudentId(), disciplineId));
             students.add(student);
         }
 
         result.put("students", students);
-        Logger.log(user_identity, securityId, result, Logger.LogType.SUCCESS, "/api/drawLottery/student");
         return Result.success(result);
     }
     @PostMapping("submit")
@@ -104,7 +99,6 @@ public class DrawLotteryController {
         String user_identity = (String) map.get("user_identity");
         Logger.log(user_identity, securityId, studentChoiceDTO, Logger.LogType.INFO, "/api/drawLottery/submit");
         if(!user_identity.equals("DisciplineSecretary")){
-            Logger.log(user_identity, securityId, studentChoiceDTO, Logger.LogType.ERROR, "/api/drawLottery/submit");
             return Result.error("permission denied");
         }
 
@@ -112,8 +106,6 @@ public class DrawLotteryController {
             int disciplineId = disciplineService.selectIdByName(baseInfo.getSubject());
             choiceService.lockChoice(baseInfo.getTeacherId(), baseInfo.getStudentId(), disciplineId);
         }
-
-        Logger.log(user_identity, securityId, "提交成功", Logger.LogType.ERROR, "/api/drawLottery/submit");
         return Result.success("提交成功");
     }
 }

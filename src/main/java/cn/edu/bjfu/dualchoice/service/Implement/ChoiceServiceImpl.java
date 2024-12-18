@@ -2,9 +2,11 @@ package cn.edu.bjfu.dualchoice.service.Implement;
 
 import cn.edu.bjfu.dualchoice.mapper.AdmissionMapper;
 import cn.edu.bjfu.dualchoice.mapper.ChoiceMapper;
+import cn.edu.bjfu.dualchoice.mapper.StudentMapper;
 import cn.edu.bjfu.dualchoice.pojo.Admission;
 import cn.edu.bjfu.dualchoice.pojo.Choice;
 import cn.edu.bjfu.dualchoice.service.ChoiceService;
+import cn.edu.bjfu.dualchoice.service.StudentService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class ChoiceServiceImpl implements ChoiceService {
     ChoiceMapper choiceMapper;
     @Autowired
     private AdmissionMapper admissionMapper;
+    @Autowired
+    StudentService studentService;
 
     @Override
     public Choice findChoiceByStuIdPri(int id, int pri){
@@ -36,5 +40,7 @@ public class ChoiceServiceImpl implements ChoiceService {
         admission.setStudentId(student_id);
         admission.setDisciplineId(discipline_id);
         admissionMapper.insert(admission);
+
+        studentService.updateVolunteerStatus(student_id, "已录取");
     }
 }

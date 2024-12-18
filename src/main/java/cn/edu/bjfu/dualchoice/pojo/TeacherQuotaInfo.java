@@ -10,6 +10,7 @@ public class TeacherQuotaInfo {
     private int disciplineId;
 
     private String disciplineName;
+    private int teacherId;
 
     private String teacherName;
 

@@ -17,7 +17,7 @@ public class TeacherPrimaryDisciplineInfoServiceImpl implements TeacherPrimaryDi
     @Override
     public List<TeacherPrimaryDisciplineInfo> selectAllIdNameByCollegeId(int collegeId) {
         QueryWrapper<TeacherPrimaryDisciplineInfo> wrapper = new QueryWrapper<>();
-        wrapper.eq("discipline_id", collegeId);
+        wrapper.eq("college_id", collegeId);
         wrapper.select("teacher_id", "teacher_name");
         return teacherPrimaryDisciplineInfoMapper.selectList(wrapper);
     }
