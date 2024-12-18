@@ -30,15 +30,6 @@ public class NavController {
     TeacherService teacherService;
     @GetMapping("subjects")
     public Result subjects(){
-        Map<String, Object> map = ThreadLocalUtil.get();
-        int user_id = (Integer) map.get("id");
-        String user_identity = (String) map.get("user_identity");
-        Logger.log(user_identity, user_id, "", Logger.LogType.INFO, "/api/nav/subjects");
-        if(!user_identity.equals("InterviewGroup")){
-            Logger.log(user_identity, user_id, "", Logger.LogType.ERROR, "/api/nav/subjects");
-            return Result.error("permission denied");
-        }
-
         JSONObject result = new JSONObject();
         JSONArray allData = new JSONArray();
 
@@ -72,21 +63,11 @@ public class NavController {
         }
 
         result.put("allData", allData);
-        Logger.log(user_identity, user_id, result, Logger.LogType.SUCCESS, "/api/nav/subjects");
         return Result.success(result);
     }
 
     @GetMapping("teachers")
     public Result teachers(){
-        Map<String, Object> map = ThreadLocalUtil.get();
-        int user_id = (Integer) map.get("id");
-        String user_identity = (String) map.get("user_identity");
-        Logger.log(user_identity, user_id, "", Logger.LogType.INFO, "/api/nav/teachers");
-        if(!user_identity.equals("InterviewGroup")){
-            Logger.log(user_identity, user_id, "", Logger.LogType.ERROR, "/api/nav/teachers");
-            return Result.error("permission denied");
-        }
-
         JSONObject result = new JSONObject();
         JSONArray allData = new JSONArray();
 
@@ -114,7 +95,6 @@ public class NavController {
         }
 
         result.put("allData", allData);
-        Logger.log(user_identity, user_id, result, Logger.LogType.SUCCESS, "/api/nav/teachers");
         return Result.success(result);
     }
 }

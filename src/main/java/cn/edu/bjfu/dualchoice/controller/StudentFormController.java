@@ -48,15 +48,6 @@ public class StudentFormController {
 
     @GetMapping("/{studentId}")
     public Result getStudentForm(@PathVariable("studentId") int studentId) {
-        Map<String, Object> map = ThreadLocalUtil.get();
-        int user_id = (Integer) map.get("id");
-        String user_identity = (String) map.get("user_identity");
-        Logger.log(user_identity, user_id, studentId, Logger.LogType.INFO, "/api/studentForm/{studentId}");
-        if(!user_identity.equals("InterviewGroup")){
-            Logger.log(user_identity, user_id, studentId, Logger.LogType.ERROR, "/api/studentForm/{studentId}");
-            return Result.error("permission denied");
-        }
-
         //查找学生基本信息
         StuBaseInfo stuBaseInfo = stuBaseInfoService.getStuBaseInfoById(studentId);
         JSONObject jsonObject = new JSONObject();
@@ -156,7 +147,6 @@ public class StudentFormController {
             jsonObject.put("photoUrl", examInfos_interview.getSignature());
         }
 
-        Logger.log(user_identity, user_id, jsonObject, Logger.LogType.SUCCESS, "/api/studentForm/{studentId}");
         return Result.success(jsonObject);
 
     }
