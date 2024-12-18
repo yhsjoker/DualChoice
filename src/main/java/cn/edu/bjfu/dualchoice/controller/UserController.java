@@ -3,6 +3,7 @@ package cn.edu.bjfu.dualchoice.controller;
 import cn.edu.bjfu.dualchoice.pojo.Result;
 import cn.edu.bjfu.dualchoice.pojo.User;
 import cn.edu.bjfu.dualchoice.service.UserService;
+import cn.edu.bjfu.dualchoice.utils.AddSalt;
 import cn.edu.bjfu.dualchoice.utils.JwtUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.auth0.jwt.JWT;
@@ -30,7 +31,7 @@ public class UserController {
         if(loginUser == null){
             return Result.error("用户名错误");
         }
-        if(!user.getPassword().equals(loginUser.getPassword())){
+        if(!user.getPassword().equals(AddSalt.hashPasswordWithSalt(loginUser.getPassword()))){
             return Result.error("密码错误");
         }
 
